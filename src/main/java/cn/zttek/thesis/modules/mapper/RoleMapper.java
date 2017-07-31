@@ -4,12 +4,14 @@ import cn.zttek.thesis.common.base.BaseMapper;
 import cn.zttek.thesis.modules.model.Permission;
 import cn.zttek.thesis.modules.model.Role;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 由MyBatis Generator工具自动生成
  */
+@Repository
 public interface RoleMapper extends BaseMapper<Role> {
 
     /**

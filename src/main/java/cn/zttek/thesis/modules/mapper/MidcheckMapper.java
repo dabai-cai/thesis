@@ -4,12 +4,14 @@ import cn.zttek.thesis.common.base.BaseMapper;
 import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.model.Midcheck;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 由MyBatis Generator工具自动生成
  */
+@Repository
 public interface MidcheckMapper extends BaseMapper<Midcheck> {
 
     /**
