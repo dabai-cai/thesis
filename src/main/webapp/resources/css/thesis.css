@@ -1,0 +1,94 @@
+html, body { font:12px/1.2em Microsoft YaHei;}
+
+a,
+a:link { text-decoration:none; outline:none;}
+a:hover,
+a:focus { text-decoration:none; /*color:#39f;*/}
+a:active, a:visited{color:rgb(0, 0, 238);}
+
+.pd3 { padding:3px;}
+.pd5 { padding:5px;}
+.pd10 { padding:10px;}
+
+table input,
+table select
+{
+    width: 200px;
+}
+
+label,
+span,
+button,
+input,
+select,
+textarea { font-size:12px; vertical-align: middle;}
+
+input,
+button,
+select,
+textarea { font:12px/1.2em Microsoft YaHei;}
+
+select,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="radio"],
+input[type="checkbox"] { cursor: pointer;}
+
+pre{
+    margin: 2px 0px;
+}
+
+.tabs-tool { border-top:0;}
+.ui-text,
+.ui-textarea { padding:3px; border:1px #95b8e7 solid; width:260px;}
+.ui-text { height:14px; line-height:14px; }
+
+.ui-header { height:55px; position:relative; z-index:0; overflow:hidden; border-bottom:1px #95b8e7 solid; /*background:lightskyblue;*/}
+.ui-header-left { position:absolute; z-index:1; left:15px; top:0;}
+.ui-header-left h1 { color:#000; font-family: 楷体;margin: 10px 0px; font-size: 33px;}
+.ui-header-right { position:absolute; z-index:1; right:5px; top:0; color:#000; text-align:right; line-height: 51px;}
+.ui-header-right p { /*line-height:0.7em;*/}
+.ui-header-right a { color:#000; margin:0 5px;}
+
+.ui-sidebar { width:160px;}
+.ui-side-tree .tree-node { padding:3px 0px; }
+.ui-side-tree a { display:block;}
+.ui-side-tree .tree-node-selected { padding:2px 0; border:1px #fade23 solid;}
+
+.ui-toolbar-button,
+.ui-toolbar-search { padding:3px 5px;}
+
+.ui-footer { height:20px; padding:5px; text-align:center; overflow:hidden; background:#e0ecff;}
+
+table.form-table{
+    border: 1px solid #95B8E7;
+    border-collapse: collapse;
+}
+table.form-table>tbody>tr, table.form-table>tbody>tr>td{
+    border: 1px solid #95B8E7;
+    padding: 10px 8px;
+}
+table.form-table>tbody>tr>td.higher {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+table.form-table>tbody>tr>td:nth-child(odd){
+    /*background-color: #9cc8f7;*/
+    text-align: right;
+}
+
+.info, .error{
+    padding: 4px;
+}
+.info{
+    color:#95B8E7;
+}
+.error{
+    color: red;
+}
+.hint{
+    font-size: 12px;
+}

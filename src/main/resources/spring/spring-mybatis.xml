@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                         http://www.springframework.org/schema/aop
+                         http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <description>spring和MyBatis完美整合，不需要mybatis的配置映射文件</description>
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:mybatis/mappers/**/*.xml" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <description>Mapper接口所在包名，Spring会自动查找其下的类</description>
+        <property name="basePackage" value="cn.zttek.thesis" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+    <!-- 缓存 -->
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:config/ehcache-mybatis.xml" />
+    </bean>
+    <!-- 事务 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" order="10"/>-->
+
+
+    <!-- 建立一个切面，指明什么时候要调用事务管理器 -->
+    <aop:config>
+        <aop:pointcut id="productServiceMethods" expression="execution(* cn.zttek.thesis..service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"/>
+    </aop:config>
+
+    <!-- 估计是为事务管理器做某些说明，指明一些方法的权限（只读OR读写） -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+            <!-- 以下方法都是可能涉及修改的方法，就无法设置为只读 -->
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="copy*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="batch*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+</beans>

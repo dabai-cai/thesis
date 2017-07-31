@@ -1,0 +1,60 @@
+body{margin:0px;padding:0px; background-color: #ededed}
+form{margin:0px;padding:0px;}
+.login_top{width: 100%;height: 150px;background-color: #0060A9;display: block;float:left;}
+.login_title{
+    width: 400px;height: 50px;display:block;text-align: center;color:#fff;
+    margin: 100px auto auto;
+    line-height: 50px;font-family: "黑体";font-size: 24px;
+    background: url("../img/logo_ico.png") no-repeat 20px 0px;
+}
+.login_main{
+    background: url('../img/login_bg.png');
+    width:423px;height:366px;display: block;
+    margin: 30px auto auto;
+}
+.login_main_top{
+    width:133px;height:36px;background: url("../img/member_title.png");
+    float:left;display:block;margin:25px 0 0 135px;
+}
+.login_main_errortip{
+    float:left;display:block;clear: both;width:100%;padding-left:95px;padding-top:5px; color: red;font-size: 12px;
+}
+.login_main_ln{width:100%;height:45px;float:left;display:block;margin-top:5px;}
+.login_main_ln input{
+    width:300px;height: 45px;margin-left: 65px;text-indent: 30px;border:1px solid #bbb;font-size:17px;
+    background: url("../img/ln.png") no-repeat left;
+    line-height: 45px;
+}
+.login_main_pw{width:100%;height:45px;float:left;display:block;margin-top:10px;}
+.login_main_pw input{width:300px;height: 45px;margin-left: 65px;text-indent: 30px;border:1px solid #bbb;font-size:14px;
+    background: url("../img/pw.png") no-repeat left;;line-height: 45px;
+}
+.login_main_yzm{width:100%;height:45px;float:left;display:block;margin-top:10px;}
+.login_main_yzm input{
+    width:173px;
+    height: 45px;
+    margin-left: 65px;
+    text-indent: 10px;
+    border:1px solid #bbb;
+    font-size:17px;
+    line-height: 45px;
+}
+
+.login_main_submit{
+    width:100%;
+    height:45px;
+    float:left;
+    display:block;
+    margin-top:10px;
+}
+.login_main_submit button{
+    width:150px;
+    height:55px;
+    display:block;
+    background: url("../img/button.png");
+    border: none;
+    margin-left: 135px;
+    outline: none;
+    cursor: pointer;
+}
+

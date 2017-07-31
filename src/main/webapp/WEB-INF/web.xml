@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0" metadata-complete="false">
+
+    <session-config>
+        <!--session的超时时间为30min-->
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <!-- 设置servlet编码开始 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- 设置servlet编码结束 -->
+
+    <!--log4j配置文件开始-->
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath:config/log4j.properties</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    <!--log4j配置文件结束-->
+
+    <!-- Spring配置文件开始  -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring-config.xml,
+            classpath:spring/spring-shiro.xml
+        </param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <!-- Spring配置文件结束 -->
+    <!--<filter>
+        &lt;!&ndash;增加这个过滤器只是为了做一些初始化操作，比如把导航栏放到application中&ndash;&gt;
+        <filter-name>initFilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+        <init-param>
+            &lt;!&ndash;设置为true表示执行InitFilter的init()、destroy()&ndash;&gt;
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            &lt;!&ndash;设置被代理的filter在spring容器中的bean名字&ndash;&gt;
+            <param-name>targetBeanName</param-name>
+            <param-value>initFilter</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>initFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+    <!-- shiro 安全过滤器 -->
+    <!-- filter-name 必须与 shiro.xml 中 Shiro的Web过滤器的 id 一致 -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <!-- shiro 的过滤器需要在 spring mvc 之前-->
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- spring mvc -->
+    <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>webapps.thesis</param-value>
+    </context-param>
+
+</web-app>
+

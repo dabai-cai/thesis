@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://echcache.org/echcache.xsd"
+        monitoring="autodetect" dynamicConfig="true"
+        name="ehcache-shiro"  updateCheck="false">
+
+    <!--如果缓存中的对象存储超过指定的缓存数量的对象存储的磁盘地址-->
+    <!--这个路径会在控制台打印出来的，搜索"The diskStore path for this CacheManager will be set to"即可-->
+    <diskStore path="java.io.tmpdir"/>
+
+    <!-- 登录次数记录缓存 锁定10分钟 -->
+    <cache name="passwordRetryCache"
+           eternal="false"
+           maxElementsInMemory="100"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 角色权限缓存 锁定10分钟 -->
+    <cache name="authorizationCache"
+           eternal="false"
+           maxElementsInMemory="500"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 账号密码缓存 锁定10分钟 -->
+    <cache name="authenticationCache"
+           eternal="false"
+           maxElementsInMemory="100"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 锁定10分钟 -->
+    <cache name="shiro-activeSessionCache"
+           eternal="false"
+           maxElementsInMemory="100"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+</ehcache>
