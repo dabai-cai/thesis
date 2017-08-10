@@ -45,8 +45,7 @@ public class ThesisUploadController {
     }
 
 
-    public void haha()
-    {
+    public void haha() {
         System.out.println("黄锦荣");
     }
 }
