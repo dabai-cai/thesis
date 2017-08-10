@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://echcache.org/echcache.xsd"
+          xsi:noNamespaceSchemaLocation="http://echcache.org/echcache.xsd"
          monitoring="autodetect" dynamicConfig="true"
          name="ehcache-mybatis" updateCheck="false">
     <diskStore path="java.io.tmpdir"/>
