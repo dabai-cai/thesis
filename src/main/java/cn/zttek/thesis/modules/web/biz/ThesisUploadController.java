@@ -43,4 +43,10 @@ public class ThesisUploadController {
         model.addAttribute("expands", taskbookService.listOfTask(project.getId(), teacher.getId()));
         return "console/thesis/upload/";
     }
+
+
+    public void haha()
+    {
+        System.out.println("黄锦荣");
+    }
 }
