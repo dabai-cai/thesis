@@ -96,10 +96,11 @@ public class OrgController extends BaseController {
             List<Long> idsArry = Arrays.asList(CommonUtils.getIdsArray(ids));
             try {
                 result.setStatus(EUResult.OK);
-                String msg = "";
+                String msg = "组织删除成功！";
                 for (Long id : idsArry) {
                     //TODO 完善delete方法
                     //msg = msg + orgService.deleteOnCheck(id) + "<br> ";
+
                 }
                 result.setMsg(msg);
             } catch (Exception e) {

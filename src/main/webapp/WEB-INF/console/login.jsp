@@ -22,10 +22,10 @@
                 <div class="login_main_top"></div>
                 <div class="login_main_errortip">&nbsp;${message}</div>
                 <div class="login_main_ln">
-                    <input type="text" id="account" name="account" value="201330330419" required/>
+                    <input type="text" id="account" name="account" value="admin" required/>
                 </div>
                 <div class="login_main_pw">
-                    <input type="password" id="password" name="password" value="201330330419" required />
+                    <input type="password" id="password" name="password" value="123456" required />
                 </div>
                 <div class="login_main_yzm">
                     <div>

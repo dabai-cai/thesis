@@ -50,7 +50,9 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param rid
      * @throws Exception
      */
-    void deleteRolePerms(@Param("rid") Long rid) throws Exception;
+    void  deleteRolePerms(@Param("rid") Long rid) throws Exception;
+
+
 
     /**
      * 插入角色与权限的关联关系

@@ -79,6 +79,9 @@ public class PermController extends BaseController {
         return result;
     }
 
+
+
+    //
     @RequestMapping(value = "/tree.json", produces = "application/json;charset=utf-8")
     @ResponseBody
     public List<EUTreeNode> getTree() throws Exception {

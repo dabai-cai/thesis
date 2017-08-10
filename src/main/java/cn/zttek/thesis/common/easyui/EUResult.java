@@ -96,7 +96,7 @@ public class EUResult {
         try {
             if (clazz == null) {
                 return MAPPER.readValue(jsonData, EUResult.class);
-            }
+        }
             JsonNode jsonNode = MAPPER.readTree(jsonData);
             JsonNode data = jsonNode.get("data");
             Object obj = null;
