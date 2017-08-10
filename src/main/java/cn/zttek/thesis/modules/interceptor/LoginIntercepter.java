@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
  * @日期: 2016-08-30 15:05
  * @版本: v1.0
  */
+//拦截器
 public class LoginIntercepter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

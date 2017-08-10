@@ -200,6 +200,7 @@ public class ThesisController extends BaseController {
         return result;
     }
 
+    //删除论文工作
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public EUResult delete(String ids) {

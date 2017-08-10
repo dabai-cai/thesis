@@ -2,6 +2,7 @@ package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @日期: 2016-10-14 20:27
  * @版本: v1.0
  */
+@Repository
 public interface ThesisResultMapper {
 
 
