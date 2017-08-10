@@ -35,9 +35,9 @@
 
     <!-- 建立一个切面，指明什么时候要调用事务管理器 -->
     <aop:config>
-        <aop:pointcut id="productServiceMethods" expression="execution(* cn.zttek.thesis..service.*.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"/>
-    </aop:config>
+       <aop:pointcut id="productServiceMethods" expression="execution(* cn.zttek.thesis..service.*.*(..))"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="productServiceMethods"/>
+</aop:config>
 
     <!-- 估计是为事务管理器做某些说明，指明一些方法的权限（只读OR读写） -->
     <tx:advice id="txAdvice" transaction-manager="txManager">

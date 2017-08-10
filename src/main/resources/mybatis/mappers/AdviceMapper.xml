@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zttek.thesis.modules.mapper.AdviceMapper" >
+    <resultMap id="BaseResultMap" type="cn.zttek.thesis.modules.model.Advice" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="orgid" property="orgid" jdbcType="BIGINT" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+        <result column="target" property="target" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+        <result column="creator" property="creator" jdbcType="BIGINT" />
+        <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
+        <result column="valid" property="valid" jdbcType="BIT" />
+        <result column="top" property="top" jdbcType="BIT" />
+        <result column="mdate" property="mdate" jdbcType="TIMESTAMP" />
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, orgid, topic, target, creator, cdate, valid, top, mdate
+    </sql>
+    <sql id="Blob_Column_List" >
+        content
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from advice
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from advice
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="cn.zttek.thesis.modules.model.Advice" >
+        insert into advice (id, orgid, topic,
+        target, creator, cdate,
+        valid, top, mdate,
+        content)
+        values (#{id,jdbcType=BIGINT}, #{orgid,jdbcType=BIGINT}, #{topic,jdbcType=VARCHAR},
+        #{target,typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler}, #{creator,jdbcType=BIGINT}, #{cdate,jdbcType=TIMESTAMP},
+        #{valid,jdbcType=BIT}, #{top,jdbcType=BIT}, #{mdate,jdbcType=TIMESTAMP},
+        #{content,jdbcType=LONGVARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.Advice" >
+        update advice
+        set orgid = #{orgid,jdbcType=BIGINT},
+        topic = #{topic,jdbcType=VARCHAR},
+        target = #{target,typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler},
+        creator = #{creator,jdbcType=BIGINT},
+        cdate = #{cdate,jdbcType=TIMESTAMP},
+        valid = #{valid,jdbcType=BIT},
+        top = #{top,jdbcType=BIT},
+        mdate = #{mdate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

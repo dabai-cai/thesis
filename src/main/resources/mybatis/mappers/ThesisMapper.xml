@@ -23,7 +23,7 @@
         <result column="cdate" property="cdate" jdbcType="TIMESTAMP"/>
         <result column="mdate" property="mdate" jdbcType="TIMESTAMP"/>
         <result column="profile" property="profile" jdbcType="LONGVARCHAR"/>
-    </resultMap>
+</resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         <!--
           WARNING - @mbggenerated

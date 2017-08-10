@@ -6,12 +6,14 @@ import cn.zttek.thesis.modules.enums.UserType;
 import cn.zttek.thesis.modules.model.Role;
 import cn.zttek.thesis.modules.model.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 由MyBatis Generator工具自动生成
  */
+@Repository
 public interface UserMapper extends BaseMapper<User> {
 
     /**

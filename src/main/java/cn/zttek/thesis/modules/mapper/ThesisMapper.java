@@ -5,12 +5,14 @@ import cn.zttek.thesis.modules.expand.ThesisCountExpand;
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.model.Thesis;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * 由MyBatis Generator工具自动生成
  */
+@Repository
 public interface ThesisMapper extends BaseMapper<Thesis> {
 
     /**

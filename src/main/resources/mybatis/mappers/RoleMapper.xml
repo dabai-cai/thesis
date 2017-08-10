@@ -93,4 +93,18 @@
         select p.*
         from role_permission rp, permission p where rp.rid = #{rid} and rp.pid = p.id
     </select>
+
+    <delete id="deleteRolePerms" parameterType="java.lang.Long">
+        delete from role_permission
+        where rid = #{rid,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="addRolePerms">
+        insert into role_permission(rid, pid)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{rid}, #{item})
+        </foreach>
+    </insert>
+
 </mapper>

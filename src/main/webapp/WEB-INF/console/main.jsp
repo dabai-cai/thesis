@@ -53,6 +53,7 @@
                     <li><a href="${ctx}/console/tmidcheck/list">论文中期检查</a></li>
                     <li><a href="${ctx}/console/tscore/list1">指导教师自评</a></li>
                     <li><a href="${ctx}/console/tscore/list2">评阅教师评分</a></li>
+                    <li><a href="${ctx}/console/tupload/list">论文上传</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() eq 1}">
                     <li><a href="${ctx}/console/project/list">论文工作管理</a></li>
