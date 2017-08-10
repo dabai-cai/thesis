@@ -43,7 +43,7 @@ public class ThesisUploadController {
         model.addAttribute("expands", taskbookService.listOfTask(project.getId(), teacher.getId()));
         return "console/thesis/upload/";
     }
-    public String A(Model model){
+    public String A(Model model) {
         System.out.println("A");
         return "A";
     }
