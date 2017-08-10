@@ -37,6 +37,13 @@ public class MyRealm extends AuthorizingRealm {
     @Autowired
     private RoleMapper roleMapper;
 
+    /**
+     *  userRealm.cachingEnabled：启用缓存，默认false；
+     *  userRealm.authenticationCachingEnabled：启用身份验证缓存，即缓存AuthenticationInfo信息，默认false；
+     *  userRealm.authenticationCacheName：缓存AuthenticationInfo信息的缓存名称；
+     *  userRealm. authorizationCachingEnabled：启用授权缓存，即缓存AuthorizationInfo信息，默认false；
+     *  userRealm. authorizationCacheName：缓存AuthorizationInfo信息的缓存名称；
+     */
     public MyRealm() {
         this.setCachingEnabled(true);
         this.setAuthenticationCachingEnabled(true);

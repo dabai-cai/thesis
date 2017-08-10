@@ -32,6 +32,14 @@ public class EnumHandler<E extends Enum<E> & Identifiable<K>, K> extends BaseTyp
         this.type = type;
     }
 
+    /**
+     * 非NULL情况，怎么设参数还得交给不同的子类完成
+     * @param ps
+     * @param i
+     * @param parameter
+     * @param jdbcType
+     * @throws SQLException
+     */
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
         if(jdbcType == null){
@@ -56,12 +64,26 @@ public class EnumHandler<E extends Enum<E> & Identifiable<K>, K> extends BaseTyp
         }
     }
 
+    /**
+     * 根据列名，获取可以为空的记录
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     @Override
     public E getNullableResult(ResultSet rs, String columnName) throws SQLException {
         String s = rs.getString(columnName);
         return toEnum(s);
     }
 
+    /**
+     * 根据列索引，获取可以为空的记录
+     * @param rs
+     * @param columnIndex
+     * @return
+     * @throws SQLException
+     */
     @Override
     public E getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         String s = rs.getString(columnIndex);
