@@ -3,6 +3,7 @@ package cn.zttek.thesis.modules.service;
 import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.modules.expand.ThesisCountExpand;
+import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.mapper.*;
 import cn.zttek.thesis.modules.model.Org;
 import cn.zttek.thesis.modules.model.Project;
@@ -42,6 +43,8 @@ public class ThesisService extends BaseService<Thesis>{
     private MidcheckMapper midcheckMapper;
     @Autowired
     private ScoreMapper scoreMapper;
+    @Autowired
+    private UserService userService;
 
     /**
      * 分页查询教师的论文题目
@@ -344,4 +347,24 @@ public class ThesisService extends BaseService<Thesis>{
             scoreMapper.deleteByThesis(thesisid);
         }
     }
+
+
+    /**
+     * 查询指导教师在当前论文工作下的上传论文列表
+     * @param projid
+     * @param teacherid
+     * @return
+     * @throws Exception
+     */
+    public List<ThesisExpand> listByTeacher(Long projid, Long teacherid) throws Exception{
+        log.info("===查询指导教师在当前论文工作下的自评成绩列表===");
+        List<ThesisExpand> list = thesisMapper.listByTeacher(projid, teacherid);
+        for (ThesisExpand te : list){
+            User viewer = userService.queryById(te.getViewerid());
+            if(viewer != null) te.setViewer(viewer.getUsername());
+            Thesis thesis=thesisMapper.selectByPrimaryKey(te.getId());
+        }
+        return list;
+    }
+
 }

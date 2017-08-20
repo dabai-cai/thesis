@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 /**
  * @描述: 学生论文工作事务管理相关控制器
  * @作者: Pengo.Wen
@@ -32,6 +34,10 @@ public class ThesisWorkController extends BaseController {
     private MidcheckService midcheckService;
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private UploadService uploadService;
+    @Autowired
+    private GoodDelayService goodDelayService;
 
     @RequestMapping(value = "/index", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String index(Model model) throws Exception{
@@ -51,7 +57,12 @@ public class ThesisWorkController extends BaseController {
             model.addAttribute("taskbook", taskbook);
             Midcheck midcheck = midcheckService.getByThesis(thesis.getId());
             model.addAttribute("midcheck", midcheck);
-
+            Project project=ThesisParam.getCurrentProj();
+            model.addAttribute("project",project);
+            Upload upload=uploadService.selectByStudent(thesis.getStudentid(),thesis.getId());
+            model.addAttribute("upload",upload);
+            GoodDelay goodDelay=goodDelayService.queryByThesisId(thesis.getId());
+            model.addAttribute("goodDelay",goodDelay);
             //TODO 加载答辩小组信息、评分情况等
         }
         return "console/thesis/work/index";

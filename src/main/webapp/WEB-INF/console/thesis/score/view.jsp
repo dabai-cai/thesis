@@ -23,7 +23,6 @@
         pre {
             white-space: pre-wrap;
             white-space: -moz-pre-wrap;
-            white-space: -pre-wrap;
             white-space: -o-pre-wrap;
             word-wrap: break-word;
             height: 100px;
@@ -43,6 +42,14 @@
 </table>
 <table width="700" align="center" border="1" cellspacing="0" bordercolor="#666666">
     <tr>
+        <td colspan="3" height="40" align="justify" width="40">学号</td>
+        <td colspan="2" height="40" align="left" width="80">${student.account}</td>
+        <td colspan="2" height="40" align="justify" width="60">姓名</td>
+        <td colspan="2" height="40" align="left" width="80">${student.username}</td>
+        <td colspan="3" height="40" align="justify" width="40">专业</td>
+        <td colspan="2" height="40" align="left" width="80">${student.info.grade}级${student.info.clazz}</td>
+    </tr>
+    <tr>
         <td colspan="3" height="40" align="justify" width="80">论文题目</td>
         <td colspan="11" height="40" align="left" width="340">${thesis.topic}</td>
     </tr>
@@ -51,66 +58,53 @@
         <td colspan="2" height="40" align="left" width="80">${teacher.username}</td>
         <td colspan="2" height="40" align="justify" width="60">职 称</td>
         <td colspan="2" height="40" align="left" width="80">${teacher.info.title}</td>
-        <td colspan="2" height="40" align="justify" width="100">起止时间</td>
+        <td colspan="2" height="40" align="justify" width="100">评分</td>
         <td colspan="3" height="40" align="justify" width="140">
-            <fmt:formatDate value="${currentProj.startdate}" pattern="yyyy.MM.dd"/> - <fmt:formatDate value="${currentProj.enddate}" pattern="yyyy.MM.dd"/>
+            ${score.mark1}
         </td>
     </tr>
     <tr>
-        <td colspan="3" height="40" align="justify" width="80">学生姓名</td>
-        <td colspan="2" height="40" align="left" width="80">${student.username}</td>
-        <td colspan="2" height="40" align="justify" width="60">学号</td>
-        <td colspan="2" height="40" align="left" width="120">${student.account}</td>
-        <td colspan="2" height="40" align="justify" width="100">专业班级</td>
-        <td colspan="5" height="40" align="left" width="190">${student.info.grade}级${student.info.clazz}</td>
+        <td colspan="3" height="40" align="justify" width="90">评阅老师</td>
+        <td colspan="2" height="40" align="left" width="80">${viewer.username}</td>
+        <td colspan="2" height="40" align="justify" width="60">职 称</td>
+        <td colspan="2" height="40" align="left" width="80">${viewer.info.title}</td>
+        <td colspan="2" height="40" align="justify" width="100">评分</td>
+        <td colspan="3" height="40" align="justify" width="140">
+            ${score.mark2}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" height="40" align="justify" width="90">答辩组长</td>
+        <td colspan="2" height="40" align="justify" width="60"></td>
+        <td colspan="2" height="40" align="justify" width="60">职 称</td>
+        <td colspan="2" height="40" align="left" width="80">${viewer.info.title}</td>
+        <td colspan="2" height="40" align="justify" width="100">评分</td>
+        <td colspan="3" height="40" align="justify" width="140">
+            ${score.mark3}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" height="40" align="justify" width="90">是否通过答辩</td>
+        <td colspan="11" height="40" align="justify" width="340">${agree}</td>
+    </tr>
+    <tr>
+        <td colspan="3" height="40" align="justify" width="120">论文总评分数</td>
+        <td colspan="4" height="40" align="left" width="80">${general}</td>
+        <td colspan="3" height="40" align="justify" width="120">论文成绩等级</td>
+        <td colspan="4" height="40" align="left" width="80">${level}</td>
+    </tr>
+
+    <tr>
+        <td colspan="16" width="640" align="left">
+            <span style="font-weight:bold;">指导教师评语</span><br/>
+            <pre>${score.comment1}</pre>
+        </td>
     </tr>
     <tr>
         <td colspan="16" width="640" align="left">
-            <span style="font-weight:bold;">目标与任务</span><br/>
-            <pre>${taskbook.task}</pre>
+            <span style="font-weight:bold;">评阅教师评语</span><br/>
+            <pre>${score.comment2}</pre>
         </td>
-    </tr>
-    <tr>
-        <td colspan="16" width="640" align="left">
-            <span style="font-weight:bold;">内容要求（含技术路线）</span><br/>
-            <pre>${taskbook.content}</pre>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="16" width="640" align="left">
-            <span style="font-weight:bold;">进度安排</span><br/>
-            <pre>${taskbook.schedule}</pre>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="16" width="640" align="left">
-            <span style="font-weight:bold;">参考文献</span><br/>
-            <pre>${taskbook.reference}</pre>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="8" align="left" height="50" width="140"> 毕业设计（论文）最终提交时间</td>
-        <td colspan="8" align="center" height="50" width="180">
-            <fmt:formatDate value="${thesis.uploadtime}" pattern="yyyy.MM.dd"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="8" align="left" height="40" width="140"> 毕业设计（论文）任务书下达时间</td>
-        <td colspan="8" align="center" height="40" width="180">
-            <fmt:formatDate value="${taskbook.cdate}" pattern="yyyy.MM.dd"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="8" align="left" height="40" width="140"> 毕业设计（论文）答辩时间</td>
-        <td colspan="8" align="center" height="40" width="180">
-            <fmt:formatDate value="${currentProj.defensedate}" pattern="yyyy.MM.dd"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4" align="justfity" height="40" width="160">指导老师签名</td>
-        <td colspan="4" align="justfity" height="40" width="160"></td>
-        <td colspan="4" align="justfity" height="40" width="140"> 学生签名</td>
-        <td colspan="4" align="justfity" height="40" width="180"></td>
     </tr>
 </table>
 </body>

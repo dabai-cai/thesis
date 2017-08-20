@@ -239,4 +239,23 @@
             and tt.topic like CONCAT('%',#{keywords},'%')
         </if>
     </select>
+
+
+
+    <select id="listByTeacher" resultMap="cn.zttek.thesis.modules.mapper.ThesisExpandMapper.ThesisExpand">
+        select ts.id, ts.topic, ts.teacherid, ts.studentid, ts.account as stuno, ts.username as stuname, s.id as scoreid,
+        s.mark3 as mark, ts.viewerid
+        from thesis_student ts LEFT JOIN score s on ts.id = s.thesisid
+        where ts.teacherid = #{teacherid} and ts.projid = #{projid}
+    </select>
+
+    <select id="listByStudent" resultMap="cn.zttek.thesis.modules.mapper.ThesisExpandMapper.ThesisExpand">
+        select ts.id, ts.topic, ts.teacherid, ts.studentid, ts.account as stuno, ts.username as stuname, s.id as scoreid,
+        s.mark1 as mark, ts.viewerid
+        from thesis_student ts LEFT JOIN score s on ts.id = s.thesisid
+        where  ts.projid = #{projid} and ts.studentid in
+        <foreach collection="studentids" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </select>
 </mapper>

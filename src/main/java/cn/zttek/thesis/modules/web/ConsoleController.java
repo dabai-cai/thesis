@@ -46,6 +46,7 @@ public class ConsoleController extends BaseController {
                 return "redirect:/console/main";
             }
         }else{
+
             //TODO 如果不是超级管理员，则直接设置为当前用户的组织机构，看需不需要选择论文工作
             Org org = orgService.queryById(user.getOrgid());
             model.addAttribute("orgs", Arrays.asList(org));
@@ -72,6 +73,13 @@ public class ConsoleController extends BaseController {
             session.setAttribute("currentProj", project);
         }
         return "redirect:/console/main";
+    }
+
+
+    @RequestMapping(value = "/switchproj", produces = "text/html;charset=utf-8")
+    public String switchPro(Model model,Long orgid) {
+        model.addAttribute("orgid",orgid);
+        return "/console/switchproj";
     }
 
     @RequestMapping(value = "/listProject.json", produces = "application/json;charset=utf-8")

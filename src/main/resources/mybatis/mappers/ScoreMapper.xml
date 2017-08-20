@@ -102,6 +102,7 @@
         order by ts.teacherid
     </select>
 
+
     <update id="saveAssign">
         UPDATE thesis t
         SET t.viewerid = #{viewerid}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--导入属性配置 -->
+
+    <classPathEntry location="D:\apache-tomcat-8.5.12\lib\mysql-connector-java-5.1.23-bin.jar"/>
+    <context id="testTables" targetRuntime="MyBatis3" >
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <!--<jdbcConnection driverClass="${jdbc.driver}"-->
+        <!--connectionURL="${jdbc.url}"-->
+        <!--userId="${jdbc.username}"-->
+        <!--password="${jdbc.password}">-->
+        <!--</jdbcConnection>-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/thesis?characterEncoding=UTF-8"
+                        userId="hjr"
+                        password="asd456++">
+        </jdbcConnection>
+
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+            NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+
+        <!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+    targetPackage     指定生成的model生成所在的包名
+    targetProject     指定在该项目下所在的路径
+-->
+        <javaModelGenerator targetPackage="cn.zttek.thesis.modules.model"
+                            targetProject="src/main/java">
+
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 设置一个根对象，
+            如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类；在Table的rootClass属性中可以覆盖该选项
+            注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括：
+                1，属性名相同，类型相同，有相同的getter/setter方法；
+             -->
+            <property name="rootClass" value="cn.zttek.thesis.common.base.BaseModel"/>
+        </javaModelGenerator>
+
+        <!-- targetProject:mapper映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="mybatis.mappers"
+                         targetProject="src\main\resources">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+            <property name="rootClass" value="cn.zttek.thesis.common.base.BaseMapper"/>
+        </sqlMapGenerator>
+        <!-- targetPackage：mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="cn.zttek.thesis.modules.mapper"
+                             targetProject="src\main\java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+        <!-- 指定数据库表 -->
+        <table tableName="applyextend"  enableCountByExample="false" domainObjectName="ApplyExtend"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>
+    </context>
+</generatorConfiguration>

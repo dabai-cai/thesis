@@ -3,6 +3,7 @@ package cn.zttek.thesis.modules.expand;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @描述: 论文题目扩展实体类
@@ -43,6 +44,28 @@ public class ThesisExpand implements Serializable {
     private String sconfirm;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String oconfirm;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long uploadid;
+
+    public Long getUploadid() {
+        return uploadid;
+    }
+
+    public void setUploadid(Long uploadid) {
+        this.uploadid = uploadid;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private  Timestamp lastuptime;
+
+    public Timestamp getLastuptime() {
+        return lastuptime;
+    }
+
+    public void setLastuptime(Timestamp lastuptime) {
+        this.lastuptime = lastuptime;
+    }
 
     public Long getId() {
         return id;

@@ -24,6 +24,10 @@
     <div class="ui-header-left">
         <h1><img src="${ctx}/resources/img/logo.png" height="40px" style="vertical-align: middle;"/>毕业论文选题系统</h1>
     </div>
+    <div align="center" >
+        <p><strong>${currentOrg.name}</strong><a href="#"  class="" >[切换]</a><strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')">[切换]</a></p>
+        </h2>
+    </div>
     <div class="ui-header-right">
         <p><strong>${currentUser.username}</strong>，欢迎您！
             <c:if test="${currentProj ne null}">
@@ -53,18 +57,23 @@
                     <li><a href="${ctx}/console/tmidcheck/list">论文中期检查</a></li>
                     <li><a href="${ctx}/console/tscore/list1">指导教师自评</a></li>
                     <li><a href="${ctx}/console/tscore/list2">评阅教师评分</a></li>
-                    <li><a href="${ctx}/console/tupload/list">论文上传</a></li>
+                    <li><a href="${ctx}/console/tupload/list/">论文上传</a></li>
+                    <li><a href="${ctx}/console/gooddelay/teacher">争优/延期确认</a></li>
+                    <li><a href="${ctx}/console/tscore/list3">录入答辩成绩</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() eq 1}">
                     <li><a href="${ctx}/console/project/list">论文工作管理</a></li>
                     <li><a href="${ctx}/console/project/users">参与用户管理</a></li>
+                    <li><a href="${ctx}/console/project/teachers">参与老师管理</a></li>
+                    <li><a href="${ctx}/console/project/students">参与学生管理</a></li>
+
                     <li><a href="${ctx}/console/tcount/list">教师出题情况</a></li>
                     <li><a href="${ctx}/console/tcheck/list">论文题目审核</a></li>
                     <li><a href="${ctx}/console/tadjust/list">学生选题调整</a></li>
                     <li><a href="${ctx}/console/tresult/list">论文选题结果</a></li>
+                    <li><a href="${ctx}/console/gooddelay/org">争优/延期确认</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() le 1}">
-
                     <li><a href="${ctx}/console/attr/list">基础数据管理</a></li>
                     <li><a href="${ctx}/console/arch/list-admin">管理员管理</a></li>
                     <li><a href="${ctx}/console/arch/list-teacher">教师管理</a></li>
@@ -97,6 +106,8 @@
     &copy; 2016 ZhouTian Tech. All Rights Reserved
 </div>
 <!-- end of footer -->
+<div id="dlg">
+</div>
 <script type="text/javascript">
     $(function(){
         $('.ui-side-tree a').bind("click",function(){
@@ -202,6 +213,31 @@
             window.top.reload_thesis_list.call();
         }
     }
+
+    //切换论文工作
+    function switchProj(orgid) {
+        d=$("#dlg").dialog({
+            title: '切换论文工作',
+            width: 300,
+            height: 500,
+            href:'${ctx}/console/switchproj?orgid='+orgid,
+            maximizable:true,
+            modal:true
+        });
+    }
+
+    //切换组织机构
+    function switchOrg(){
+        d=$("#dlg").dialog({
+            title: '切换组织机构',
+            width: 300,
+            height: 500,
+            href:'${ctx}/console/switchorg',
+            maximizable:true,
+            modal:true
+        });
+    }
+
 </script>
 </body>
 </html>

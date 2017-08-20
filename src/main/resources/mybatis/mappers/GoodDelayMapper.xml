@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zttek.thesis.modules.mapper.GoodDelayMapper" >
+  <resultMap id="BaseResultMap" type="cn.zttek.thesis.modules.model.GoodDelay" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="thesisid" property="thesisid" jdbcType="BIGINT" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="studentconf" property="studentconf" jdbcType="INTEGER" />
+    <result column="advice" property="advice" jdbcType="VARCHAR" />
+    <result column="teacherconf" property="teacherconf" jdbcType="INTEGER" />
+    <result column="review" property="review" jdbcType="VARCHAR" />
+    <result column="orgconf" property="orgconf" jdbcType="INTEGER" />
+    <result column="applytype" property="applytype" jdbcType="TINYINT" />
+    <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
+    <result column="mdate" property="mdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, thesisid, reason, studentconf, advice, teacherconf, review, orgconf, applytype,
+    cdate, mdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gooddelay
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from gooddelay
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.zttek.thesis.modules.model.GoodDelay" >
+    insert into gooddelay (thesisid, reason,
+      studentconf, advice, teacherconf, 
+      review, orgconf, applytype, 
+      cdate, mdate)
+    values ( #{thesisid,jdbcType=BIGINT}, #{reason,jdbcType=VARCHAR},
+      #{studentconf,jdbcType=INTEGER}, #{advice,jdbcType=VARCHAR}, #{teacherconf,jdbcType=INTEGER}, 
+      #{review,jdbcType=VARCHAR}, #{orgconf,jdbcType=INTEGER}, #{applytype,jdbcType=TINYINT}, 
+      #{cdate,jdbcType=TIMESTAMP}, #{mdate,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.GoodDelay" >
+    update gooddelay
+    set thesisid = #{thesisid,jdbcType=BIGINT},
+      reason = #{reason,jdbcType=VARCHAR},
+      studentconf = #{studentconf,jdbcType=INTEGER},
+      advice = #{advice,jdbcType=VARCHAR},
+      teacherconf = #{teacherconf,jdbcType=INTEGER},
+      review = #{review,jdbcType=VARCHAR},
+      orgconf = #{orgconf,jdbcType=INTEGER},
+      applytype = #{applytype,jdbcType=TINYINT},
+      cdate = #{cdate,jdbcType=TIMESTAMP},
+      mdate = #{mdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- =========================以下为手动添加===================================== -->
+  <!--  queryByThesisId -->
+  <select id="queryByThesisId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select *
+    from gooddelay
+    where thesisid = #{thesisid,jdbcType=BIGINT}
+  </select>
+
+  <select id="checkByThesisId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select *
+    from gooddelay
+    where thesisid = #{thesisid,jdbcType=BIGINT} and orgconf != -1
+  </select>
+
+  <resultMap id="ExtendResultMap" type="cn.zttek.thesis.modules.expand.ApplyExtend" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="thesisid" property="thesisid" jdbcType="BIGINT" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="studentconf" property="studentconf" jdbcType="TINYINT" />
+    <result column="advice" property="advice" jdbcType="VARCHAR" />
+    <result column="teacherconf" property="teacherconf" jdbcType="INTEGER" />
+    <result column="review" property="review" jdbcType="VARCHAR" />
+    <result column="orgconf" property="orgconf" jdbcType="INTEGER" />
+    <result column="applytype" property="applytype" jdbcType="INTEGER" />
+    <result column="topic" property="topic"  jdbcType="VARCHAR"/>
+    <result column="username" property="username"  jdbcType="VARCHAR"/>
+    <result column="cdate" property="cdate" jdbcType="TIMESTAMP"/>
+    <result column="studentid" property="studentid" jdbcType="BIGINT"/>
+  </resultMap>
+
+
+  <select id="listByTeacher" resultMap="ExtendResultMap" parameterType="java.lang.Long" >
+    select * from gooddelay left join thesis on gooddelay.thesisid=thesis.id
+    left join user on  thesis.studentid=user.id
+    where thesis.teacherid = #{teacherid,jdbcType=BIGINT}  and gooddelay.studentconf=1
+  </select>
+
+  <select id="listByOrg" resultMap="ExtendResultMap" parameterType="java.lang.Long" >
+   select * from gooddelay left join thesis on gooddelay.thesisid=thesis.id
+    left join user on  thesis.studentid=user.id
+    where thesis.orgid = #{orgid,jdbcType=BIGINT} and gooddelay.teacherconf=1
+  </select>
+
+  <select id="countUnConfByTeacher" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+     select count(*) from gooddelay left join thesis on gooddelay.thesisid=thesis.id
+    left join user on  thesis.studentid=user.id
+    where thesis.teacherid = #{teacherid,jdbcType=BIGINT}  and gooddelay.studentconf=1 and gooddelay.teacherconf=0
+  </select>
+</mapper>

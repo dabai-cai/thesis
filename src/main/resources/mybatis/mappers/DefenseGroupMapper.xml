@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zttek.thesis.modules.mapper.DefenseGroupMapper" >
+  <resultMap id="BaseResultMap" type="cn.zttek.thesis.modules.model.DefenseGroup" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="projectid" property="projectid" jdbcType="BIGINT" />
+    <result column="taskid" property="taskid" jdbcType="BIGINT" />
+    <result column="groupno" property="groupno" jdbcType="VARCHAR" />
+    <result column="grouptype" property="grouptype" jdbcType="VARCHAR" />
+    <result column="leader" property="leader" jdbcType="VARCHAR" />
+    <result column="secretary" property="secretary" jdbcType="VARCHAR" />
+    <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
+    <result column="defenseroom" property="defenseroom" jdbcType="VARCHAR" />
+    <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
+    <result column="teachers" property="teachers" jdbcType="LONGVARCHAR" />
+    <result column="students" property="students" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from defense_group
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.zttek.thesis.modules.model.DefenseGroup" >
+    insert into defense_group (id, projectid,taskid, groupno,
+      grouptype, leader, secretary, 
+      defensetime, defenseroom, cdate, 
+      teachers, students)
+    values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT},#{groupno,jdbcType=VARCHAR},
+      #{grouptype,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, #{secretary,jdbcType=VARCHAR}, 
+      #{defensetime,jdbcType=TIMESTAMP}, #{defenseroom,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP}, 
+      #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.DefenseGroup" >
+    update defense_group
+    set projectid = #{projectid,jdbcType=BIGINT},
+      taskid = #{taskid,jdbcType=BIGINT},
+      groupno = #{groupno,jdbcType=VARCHAR},
+      grouptype = #{grouptype,jdbcType=VARCHAR},
+      leader = #{leader,jdbcType=VARCHAR},
+      secretary = #{secretary,jdbcType=VARCHAR},
+      defensetime = #{defensetime,jdbcType=TIMESTAMP},
+      defenseroom = #{defenseroom,jdbcType=VARCHAR},
+      cdate = #{cdate,jdbcType=TIMESTAMP},
+      teachers = #{teachers,jdbcType=LONGVARCHAR},
+      students = #{students,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
+    cdate, teachers, students
+    from defense_group
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
+    cdate, teachers, students
+    from defense_group
+  </select>
+  <!-- ==================以下为手动添加======================== -->
+  <delete id="deleteByTask" parameterType="java.lang.Long" >
+    delete from defense_group
+    where  taskid = #{taskid,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByTask" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
+    cdate, teachers, students
+    from defense_group where taskid =#{taskid,jdbcType=BIGINT}
+  </select>
+
+  <select id="listBySecretary" resultMap="BaseResultMap">
+    select * from defense_group where projectid=#{projid} and secretary=#{secretary}
+  </select>
+
+</mapper>

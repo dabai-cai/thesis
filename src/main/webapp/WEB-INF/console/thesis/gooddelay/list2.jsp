@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: wenpeng23
-  Date: 2016-09-15
-  Time: 00:55
+  User: 大白菜
+  Date: 2017/8/14 0014
+  Time: 下午 10:54
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -12,17 +12,17 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>指导老师论文上传</title>
+    <title>指导老师确认申请</title>
     <%@include file="/inc/header.jsp" %>
 </head>
 <body class="easyui-layout">
 <div data-options="region:'north',split:true, border:false" height="60px">
     <div id="p" class="easyui-panel" title="管理提示" style="padding:5px;" iconCls="myicon-information">
         <span class="myicon-tick" style="width: 16px; height: 16px;display: inline-block;margin-right: 4px;">&nbsp;&nbsp;</span>
-        ${currentProj.title}，你一共有<strong>&nbsp;${expands.size()}&nbsp;</strong>道论文题目需要上传论文
+        ${currentProj.title}，你一共有<strong>&nbsp;${applys.size()}&nbsp;</strong>个申请需要确认
     </div>
 </div>
-<div data-options="region:'center',split:true, border:false,title:'论文成绩列表', iconCls:'myicon-table-go'">
+<div data-options="region:'center',split:true, border:false,title:'申请列表', iconCls:'myicon-table-go'">
     <table id="dg" class="easyui-datagrid"
            data-options="
                         idField: 'id',
@@ -34,33 +34,24 @@
                         singleSelect:false">
         <thead>
         <tr>
-            <th data-options="field:'id', checkbox:true">论文ID</th>
             <th data-options="field:'topic'" width="200">论文题目</th>
             <th data-options="field:'stuname'" width="80">选题学生</th>
-            <th data-options="field:'stuno'" width="60" hidden="true">学生学号</th>
-            <th data-options="field:'viewerid'" width="60" hidden="true">评阅教师ID</th>
-            <th data-options="field:'viewer'" width="100">评阅教师</th>
-            <th data-options="field:'scoreid'" width="60" hidden="true">成绩ID</th>
-            <th data-options="field:'mark'" width="80">最近上传时间</th>
+            <th data-options="field:'mark'" width="80">申请时间</th>
             <th data-options="field:'action'"  align="left" width="200">操作</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${expands}" var="thesisEx">
-            <tr>
-                <td>${thesisEx.id}</td>
-                <td><a href="#" onclick="viewTopic(${thesisEx.id}, event);">${thesisEx.topic}</a></td>
-                <td><a href="#" onclick="viewStudent(${thesisEx.studentid});">${thesisEx.stuname}</a></td>
-                <td>${thesisEx.stuno}</td>
-                <td>${thesisEx.viewerid}</td>
-                <td>${thesisEx.viewer}</td>
-                <td>${thesisEx.scoreid}</td>
-                <td><fmt:formatDate value="${thesisEx.lastuptime}"/></td>
+        <tr>
+            <c:forEach items="${applys}" var="apply">
+                <td><a href="#" onclick="viewTopic(${apply.thesisid});">${apply.topic}</a></td>
+                <td><a href="#" onclick="viewStudent(${apply.studentid});">${apply.username}</a></td>
+                <td><fmt:formatDate value="${apply.cdate}"/></td>
                 <td>
-                        <a name="edit" href="#" onclick="edit('${thesisEx.uploadid}')">上传论文</a>
+                    <a name="edit" href="#"onclick="edit('${apply.id}')" class="easyui-linkbutton">编辑申请</a>
                 </td>
-            </tr>
-        </c:forEach>
+            </c:forEach>
+
+        </tr>
         </tbody>
     </table>
 </div>
@@ -69,7 +60,7 @@
 <script>
     function onLoadSuccess(data){
 
-        $("a[name='edit']").linkbutton({text:'上传论文',plain:true, iconCls:'icon-add', width:100});
+        $("a[name='edit']").linkbutton({text:'编辑申请',plain:true, iconCls:'icon-add', width:100});
 
         $("#dg").datagrid("resize");
     }
@@ -91,27 +82,16 @@
         return false;
     }
 
-    function edit(uploadid){
+    function edit(applyid){
         d=$("#dlg").dialog({
-            title: '上传论文',
+            title: '争优/延期申请',
             width: 860,
             height: 500,
-            href:'${ctx}/console/tupload/upload?id='+uploadid,
+            href:'${ctx}/console/gooddelay/edit-orgconf?id='+applyid,
             maximizable:true,
             modal:true
         });
     }
-    var dlg_dlg =$('#dlg-dlg').dialog({
-        modal : true,
-        title : '选择评阅教师',
-        width :780,
-        height:600,
-        closed:true,
-        cache: false,
-        onOpen:openDlg,
-        onClose:closeDlg
-    });
-    var dg2 = null;
 
 
 </script>

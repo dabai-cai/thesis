@@ -1,6 +1,7 @@
 package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.common.base.BaseMapper;
+import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.model.Score;
 import org.apache.ibatis.annotations.Param;
@@ -32,11 +33,14 @@ public interface ScoreMapper extends BaseMapper<Score> {
      */
     List<ThesisExpand> listByViewer(@Param("projid") Long projid, @Param("viewerid") Long viewerid) throws Exception;
 
-    /**
-     * 批量为论文题目指定评阅老师
-     * @param viewerid
-     * @param idsArry
-     */
+
+
+
+        /**
+         * 批量为论文题目指定评阅老师
+         * @param viewerid
+         * @param idsArry
+         */
     void saveAssign(@Param("viewerid") Long viewerid, @Param("list") List<Long> idsArry) throws Exception;
 
     /**

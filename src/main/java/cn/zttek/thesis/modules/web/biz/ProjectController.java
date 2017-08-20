@@ -139,6 +139,17 @@ public class ProjectController extends BaseController {
         return "console/project/users";
     }
 
+
+    @RequestMapping(value = "/students", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String listStudents() throws Exception {
+        return "console/project/students";
+    }
+
+    @RequestMapping(value = "/teachers", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String listTeachers() throws Exception {
+        return "console/project/teachers";
+    }
+
     @RequestMapping(value = "/users-{userType}.json", produces = "application/json;charset=utf-8")
     @ResponseBody
     public EUDataGridResult list(Integer page, Integer rows, String keywords, @PathVariable String userType,

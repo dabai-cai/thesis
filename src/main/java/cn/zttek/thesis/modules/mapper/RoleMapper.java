@@ -32,10 +32,10 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     /**
      * 根据角色编码查询记录
-     * @param roleCode
+     * @param code
      * @return
      */
-    Role getByCode(@Param("roleCode") String roleCode) throws Exception;
+    Role getByCode(@Param("code") String code) throws Exception;
 
     /**
      * 根据角色获得其对应的权限列表
