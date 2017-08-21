@@ -55,7 +55,6 @@ public class Md5Utils {
      * getkeyBeanofStr是类keyBean最主要的公共方法，入口参数是你想要进行keyBean变换的字符串
      * 返回的是变换完的结果，这个结果是从公共成员digestHexStr取得的．
      */
-
     public String getkeyBeanofStr(String inbuf) {
         keyBeanInit();
         keyBeanUpdate(inbuf.getBytes(), inbuf.length());

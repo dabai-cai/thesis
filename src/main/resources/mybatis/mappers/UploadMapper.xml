@@ -12,7 +12,7 @@
     <result column="mdate" jdbcType="TIMESTAMP" property="mdate" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, path,studentid, teacherid, projectid,thesisid,cdate,mdate
+    id,path,studentid, teacherid, projectid,thesisid,cdate,mdate
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -25,7 +25,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="cn.zttek.thesis.modules.model.Upload" >
-    insert into upload ( path,
+    insert into upload (path,
       studentid, teacherid, projectid,cdate,mdate,thesisid
       )
     values ( #{path,jdbcType=VARCHAR},
@@ -55,5 +55,10 @@
   <select id="selectByStudent" resultType="cn.zttek.thesis.modules.model.Upload">
     select *
     from  upload  where  studentid= #{studentid} and thesisid = #{thesisid}
+  </select>
+
+  <select id="selectByThesis" resultType="cn.zttek.thesis.modules.model.Upload">
+    select *
+    from  upload  where  thesisid = #{thesisid}
   </select>
 </mapper>

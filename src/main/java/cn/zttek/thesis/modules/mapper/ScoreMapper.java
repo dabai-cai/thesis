@@ -49,4 +49,22 @@ public interface ScoreMapper extends BaseMapper<Score> {
      * @throws Exception
      */
     void deleteByThesis(@Param("thesisid") Long thesisid)throws Exception;
+
+
+    /**
+     * 查询论文题目关联的成绩单
+     * @param thesisid
+     * @throws Exception
+     */
+    void queryByThesis(@Param("thesisid") Long thesisid)throws Exception;
+
+
+    /**
+     * 查询答辩秘书在当前论文工作下需要录入成绩的学生列表
+     * @param  projid
+     * @param  studentids
+     * *@return
+     * @throws Exception
+     */
+    List<ThesisExpand> listByStudent(@Param("projid") Long projid, @Param("studentids") Long[] studentids) throws Exception;
 }

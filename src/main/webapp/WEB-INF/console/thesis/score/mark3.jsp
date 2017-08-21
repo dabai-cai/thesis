@@ -47,7 +47,7 @@
             <tbody>
             <tr>
                 <td rowspan="8" width="20" >答辩委员会意见与成绩评定</td>
-                <td  rowspan="2" >评分项目</td>
+                <td  rowspan="2">评分项目</td>
                 <td  rowspan="2" >具体要求(A级标准)</td>
                 <td  rowspan="2" align="center" width="40">最高分</td>
                 <td  colspan="5"  align="center">评分</td>

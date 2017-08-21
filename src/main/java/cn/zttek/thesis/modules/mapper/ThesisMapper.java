@@ -111,12 +111,5 @@ public interface ThesisMapper extends BaseMapper<Thesis> {
      */
     List<ThesisExpand> listByTeacher(@Param("projid") Long projid, @Param("teacherid") Long teacherid) throws Exception;
 
-    /**
-     * 查询答辩秘书在当前论文工作下需要录入成绩的学生列表
-     * @param  projid
-     * @param  studentids
-     * *@return
-     * @throws Exception
-     */
-    List<ThesisExpand> listByStudent(@Param("projid") Long projid, @Param("studentids") Long[] studentids) throws Exception;
+
 }

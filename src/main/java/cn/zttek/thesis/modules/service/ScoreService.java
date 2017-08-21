@@ -89,11 +89,7 @@ public class ScoreService extends BaseService<Score>{
             for(int i=0;i<students.size();i++){
                 studentids[i]=students.get(i).getStudentid();
             }
-            list=thesisMapper.listByStudent(projid,studentids);
-            for (ThesisExpand te : list){
-                User teacher = userService.queryById(te.getTeacherid());
-                if(teacher != null) te.setTeacher(teacher.getUsername());
-            }
+            list=scoreMapper.listByStudent(projid,studentids);
         }
         return list;
     }

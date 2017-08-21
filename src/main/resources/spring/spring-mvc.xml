@@ -12,12 +12,13 @@
             http://www.springframework.org/schema/aop
             http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
             http://www.springframework.org/schema/mvc
-            http://www.springframework.org/schema/mvc/spring-mvc.xsd" default-lazy-init="true">
-    <context:annotation-config />
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/aop " default-lazy-init="true">
+    <context:annotation-config/>
     <mvc:annotation-driven/>
     <!-- 指明要扫描的controller所在位置 -->
     <context:component-scan base-package="cn.zttek">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <!-- 排除css、js文件 -->
@@ -99,39 +100,39 @@
     </bean>
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/console/**" />
+            <mvc:mapping path="/console/**"/>
             <mvc:exclude-mapping path="/**/*.html"/>
-            <mvc:exclude-mapping path="/ueditor/**" />
-            <mvc:exclude-mapping path="/upload/**" />
-            <bean class="cn.zttek.thesis.modules.interceptor.ParamIntercepter" />
+            <mvc:exclude-mapping path="/ueditor/**"/>
+            <mvc:exclude-mapping path="/upload/**"/>
+            <bean class="cn.zttek.thesis.modules.interceptor.ParamIntercepter"/>
         </mvc:interceptor>
         <mvc:interceptor>
-            <mvc:mapping path="/console/**" />
+            <mvc:mapping path="/console/**"/>
             <mvc:exclude-mapping path="/**/*.html"/>
-            <mvc:exclude-mapping path="/ueditor/**" />
-            <mvc:exclude-mapping path="/upload/**" />
-            <bean class="cn.zttek.thesis.modules.interceptor.LoginIntercepter" />
+            <mvc:exclude-mapping path="/ueditor/**"/>
+            <mvc:exclude-mapping path="/upload/**"/>
+            <bean class="cn.zttek.thesis.modules.interceptor.LoginIntercepter"/>
         </mvc:interceptor>
         <mvc:interceptor>
-            <mvc:mapping path="/console/attr/list" />
-            <mvc:mapping path="/console/arch/list-admin" />
-            <mvc:mapping path="/console/arch/list-teacher" />
-            <mvc:mapping path="/console/arch/list-student" />
-            <mvc:mapping path="/console/project/list" />
-            <mvc:mapping path="/console/thesis/listAll" />
-            <bean class="cn.zttek.thesis.modules.interceptor.OrgIntercepter" />
+            <mvc:mapping path="/console/attr/list"/>
+            <mvc:mapping path="/console/arch/list-admin"/>
+            <mvc:mapping path="/console/arch/list-teacher"/>
+            <mvc:mapping path="/console/arch/list-student"/>
+            <mvc:mapping path="/console/project/list"/>
+            <mvc:mapping path="/console/thesis/listAll"/>
+            <bean class="cn.zttek.thesis.modules.interceptor.OrgIntercepter"/>
         </mvc:interceptor>
         <mvc:interceptor>
-            <mvc:mapping path="/console/thesis/list" />
-            <mvc:mapping path="/console/treply/list" />
-            <mvc:mapping path="/console/tapply/list" />
-            <mvc:mapping path="/console/tapply/result" />
-            <mvc:mapping path="/console/ttask/list" />
-            <mvc:mapping path="/console/tmidcheck/list" />
-            <mvc:mapping path="/console/tcheck/list" />
-            <mvc:mapping path="/console/tcount/list" />
-            <mvc:mapping path="/console/project/users" />
-            <bean class="cn.zttek.thesis.modules.interceptor.ProjectIntercepter" />
+            <mvc:mapping path="/console/thesis/list"/>
+            <mvc:mapping path="/console/treply/list"/>
+            <mvc:mapping path="/console/tapply/list"/>
+            <mvc:mapping path="/console/tapply/result"/>
+            <mvc:mapping path="/console/ttask/list"/>
+            <mvc:mapping path="/console/tmidcheck/list"/>
+            <mvc:mapping path="/console/tcheck/list"/>
+            <mvc:mapping path="/console/tcount/list"/>
+            <mvc:mapping path="/console/project/users"/>
+            <bean class="cn.zttek.thesis.modules.interceptor.ProjectIntercepter"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

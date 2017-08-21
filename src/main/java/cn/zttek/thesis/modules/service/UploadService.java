@@ -49,4 +49,19 @@ public class UploadService extends BaseService<Upload> {
     }
 
 
+
+
+    /**
+     * 查询论文上传记录
+     * @param thesisid
+     * @return
+     * @throws Exception
+     */
+    public Upload  selectByThesis(@Param("thesisid") Long thesisid) throws Exception{
+        log.info("===查询学生在当前论文工作下的论文上传状态===");
+        Upload upload=uploadMapper.selectByThesis(thesisid);
+        return upload;
+    }
+
+
 }

@@ -8,7 +8,13 @@ import cn.zttek.thesis.modules.holder.TitleHolder;
 import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.modules.service.*;
 import cn.zttek.thesis.utils.ThesisParam;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +42,7 @@ public class ThesisUploadController extends BaseController {
     private UserService userService;
 
 
+
     @ModelAttribute
     public Upload get(@RequestParam(required = false)Long id) throws Exception{
         if(id != null && id > 0){
@@ -44,6 +51,9 @@ public class ThesisUploadController extends BaseController {
             return new Upload();
         }
     }
+
+
+
 
     @RequestMapping(value = "/list", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String list(Model model) throws Exception {
@@ -54,6 +64,10 @@ public class ThesisUploadController extends BaseController {
         return "console/thesis/upload/list";
     }
 
+
+
+
+
     //获取上传表单
     @RequestMapping(value = {"/upload"}, produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String edit(@ModelAttribute Upload upload, Model model) throws Exception {
@@ -63,27 +77,23 @@ public class ThesisUploadController extends BaseController {
 
 
 
+
+
     //上传论文
     @RequestMapping(value = "/upload", produces = "application/json;charset=utf-8",method = RequestMethod.POST)
     @ResponseBody
     public EUResult form(@ModelAttribute Upload upload, MultipartFile uploadFile, HttpServletRequest request) {
         EUResult result = new EUResult();
         Org currentOrg=ThesisParam.getCurrentOrg();
-        User currentUser=ThesisParam.getCurrentUser();
         Project currentProject=ThesisParam.getCurrentProj();
+        User currentUser=ThesisParam.getCurrentUser();
         //  计算机/2017//建军节论文工作/张大斌教师/
         try {
 
-            //构建上传路径
-            String rootpath=this.getDocRoot(request)+"/";
-            String path = currentOrg.getDocroot() + "/" + currentProject.getYear() + "/"
-                    +currentProject.getTitle()+"/"+currentUser.getUsername()+"/";
+            //验证表单
             String filename = uploadFile.getOriginalFilename();
             int limitsize=currentOrg.getUploadlimit();//论文上传限制大小
             Long filesize=uploadFile.getSize();
-
-
-            //验证表单
             if(filesize==0){throw  new Exception("请先选择文件!");}
             else{
                 boolean flag=limit(filesize,limitsize);
@@ -94,28 +104,37 @@ public class ThesisUploadController extends BaseController {
             String filetype=filename.substring(filename.lastIndexOf('.')+1);
             String types=currentProject.getDoctype();
             if(types.indexOf(filetype)==-1){throw new Exception("文件格式不符合,请选择正确格式文件!");}
-            System.out.println("文件格式:"+filetype);
+
+
+
 
 
             //保存文件到服务器
-            File file = new File(rootpath+path, TimeUtils.currentTime()+filename);
+            //构建上传路径
+            Long thesisid=Long.parseLong(request.getParameter("thesisid"));
+            Thesis thesis=thesisService.queryById(thesisid);
+            String rootpath=this.getDocRoot(request)+"/"+currentOrg.getDocroot() + "/" + currentProject.getYear() + "/"
+                    +currentProject.getTitle()+"/";
+            String path = thesis.getTopic()+"/";
+            String savename= TimeUtils.currentTime()+filename;
+            File file = new File(rootpath+path,savename);
             if(!file.exists()) {
                 file.mkdirs();
             }
             uploadFile.transferTo(file);
 
 
+
             //更新上传表
+            upload.setPath(rootpath+path+savename);
             if(upload.getId() != null && upload.getId() > 0){
                 //学生先上传，老师这边才会显示，所以不存在插入问题，只是更新论文
                 uploadService.update(upload);
             }else{
                 //学生先上传，教师才可见，所以插入数据的是学生
-                upload.setPath(rootpath+path);
-                upload.setProjectid(ThesisParam.getCurrentProj().getId());
-                upload.setStudentid(ThesisParam.getCurrentUser().getId());
-                Long thesisid=Long.parseLong(request.getParameter("thesisid"));
-                upload.setTeacherid(thesisService.queryById(thesisid).getTeacherid());
+                upload.setTeacherid(thesis.getTeacherid());
+                upload.setProjectid(currentProject.getId());
+                upload.setStudentid(currentUser.getId());
                 upload.setThesisid(thesisid);
                 uploadService.insert(upload);
             }
@@ -127,6 +146,29 @@ public class ThesisUploadController extends BaseController {
         }
         return result;
     }
+
+
+
+
+
+
+     //论文下载
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> download(Long thesisid) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+            String path=uploadService.selectByThesis(thesisid).getPath();
+            File file=new File(path);
+            headers.setContentDispositionFormData("attachment",file.getName());
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                    headers, HttpStatus.CREATED);
+
+    }
+
+
+
+
+
 
     //加载上传论文表单信息
     private void loadData(Upload upload, Model model) throws Exception {
@@ -144,6 +186,11 @@ public class ThesisUploadController extends BaseController {
         Project project = ThesisParam.getCurrentProj();
         model.addAttribute("project", project);
     }
+
+
+
+
+
     //判断文件是否超出限制
     private boolean limit(Long size,int limit) {
         size = size / 1024;//换成KB

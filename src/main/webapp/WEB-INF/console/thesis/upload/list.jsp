@@ -57,6 +57,7 @@
                 <td>${thesisEx.scoreid}</td>
                 <td><fmt:formatDate value="${thesisEx.lastuptime}"/></td>
                 <td>
+                        <a name="download" href="/console/tupload/download?thesisid=${thesisEx.id}" >下载论文</a>
                         <a name="edit" href="#" onclick="edit('${thesisEx.uploadid}')">上传论文</a>
                 </td>
             </tr>
@@ -70,7 +71,7 @@
     function onLoadSuccess(data){
 
         $("a[name='edit']").linkbutton({text:'上传论文',plain:true, iconCls:'icon-add', width:100});
-
+        $("a[name='download']").linkbutton({text:'下载论文',plain:true, iconCls:'icon-download', width:100});
         $("#dg").datagrid("resize");
     }
     var d;

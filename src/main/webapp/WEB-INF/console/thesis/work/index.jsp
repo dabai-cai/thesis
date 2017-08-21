@@ -158,6 +158,8 @@
                             <td colspan="5">
                                 <label>${project.doctype } </label>
                             </td>
+                            <td>最近上传日期</td>
+                            <td>操作</td>
                         </tr>
                         <tr>
                             <td>
@@ -167,6 +169,12 @@
                                 <input  class="easyui-filebox" name="uploadFile"  />
                             </td>
                             <td>
+                                <fmt:formatDate value="${upload.mdate}" pattern="yyyy.MM.dd"/>
+                            </td>
+                            <td>
+                                <c:if test="${upload ne null}">
+                                    <a href="/console/tupload/download?thesisid=${thesis.id}" class="easyui-linkbutton" iconCls="icon-download">论文下载</a>
+                                </c:if>
                                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="doUpload()" iconCls="icon-ok">上传论文</a>
                             </td>
                         </tr>
@@ -318,11 +326,10 @@
                 success: function (data) {
                     if(data.status==200){
                         $.messager.alert("提示", data.msg, "info", function(){
-                            $("#dlg").dialog("close");
                             location.reload();
                         });
                     }else{
-                        $.messager.alert("提示", data.msg, "error");
+                        $.messager.alert("提示错误", data.msg, "error");
                     }
                 },
                 error: function (data) {

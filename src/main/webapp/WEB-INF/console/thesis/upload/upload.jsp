@@ -14,6 +14,9 @@
 
     <form id="uploadForm" enctype="multipart/form-data" action="${ctx}/console/tupload/upload?id=${upload.id}"  method="post">
         <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc; padding-bottom: 5px;">指导教师上传论文</div>
+        <input type="hidden" id="studentid" name="studentid" value="${student.id}">
+        <input type="hidden" id="projectid" name="projectid" value="${project.id}">
+        <input type="hidden" id="thesisid" name="thesisid" value="${thesis.id}">
         <table width="100%" cellpadding="5" class="form-table">
             <tbody>
             <tr>

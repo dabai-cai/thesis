@@ -63,7 +63,6 @@
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() eq 1}">
                     <li><a href="${ctx}/console/project/list">论文工作管理</a></li>
-                    <li><a href="${ctx}/console/project/users">参与用户管理</a></li>
                     <li><a href="${ctx}/console/project/teachers">参与老师管理</a></li>
                     <li><a href="${ctx}/console/project/students">参与学生管理</a></li>
 

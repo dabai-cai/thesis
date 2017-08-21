@@ -17,6 +17,8 @@ public class Upload extends BaseModel {
 
     private String path;
 
+
+
     private Long studentid;
 
     private Long teacherid;

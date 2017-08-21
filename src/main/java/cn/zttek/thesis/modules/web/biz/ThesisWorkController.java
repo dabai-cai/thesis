@@ -59,7 +59,7 @@ public class ThesisWorkController extends BaseController {
             model.addAttribute("midcheck", midcheck);
             Project project=ThesisParam.getCurrentProj();
             model.addAttribute("project",project);
-            Upload upload=uploadService.selectByStudent(thesis.getStudentid(),thesis.getId());
+            Upload upload=uploadService.selectByThesis(thesis.getId());
             model.addAttribute("upload",upload);
             GoodDelay goodDelay=goodDelayService.queryByThesisId(thesis.getId());
             model.addAttribute("goodDelay",goodDelay);

@@ -42,6 +42,8 @@
             <th data-options="field:'viewerid'" width="60" hidden="true">指导教师ID</th>
             <th data-options="field:'viewer'" width="100">指导教师</th>
             <th data-options="field:'scoreid'" width="60" hidden="true">成绩ID</th>
+            <th data-options="field:'mark'" width="80">答辩成绩</th>
+            <th data-options="field:'agree'" width="100" >答辩通过</th>
             <th data-options="field:'action'"  align="left" width="200">操作</th>
         </tr>
         </thead>
@@ -55,6 +57,12 @@
                 <td>${thesisEx.teacherid}</td>
                 <td>${thesisEx.teacher}</td>
                 <td>${thesisEx.scoreid}</td>
+                <td>${thesisEx.mark}</td>
+                <td>
+                    <c:if test="${thesisEx.mark ne null}">
+                        ${thesisEx.mark lt 60 ? "不通过":"通过" }
+                    </c:if>
+                </td>
                 <td>
                     <c:if test="${currentProj.mark3allowed}">
                         <a name="edit" href="#" onclick="edit('${thesisEx.id}', '${thesisEx.scoreid}')">编辑答辩成绩</a>

@@ -30,4 +30,16 @@ public interface UploadMapper extends BaseMapper<Upload>{
     Upload selectByStudent(@Param("studentid") Long studentid, @Param("thesisid") Long thesisid) throws Exception;
 
 
+
+
+    /**
+     * 查询论文的上传记录
+     * @param thesisid
+     * @return
+     * @throws Exception
+     */
+    Upload  selectByThesis(@Param("thesisid") Long thesisid) throws Exception;
+
+
+
 }

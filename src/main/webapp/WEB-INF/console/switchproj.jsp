@@ -13,15 +13,9 @@
 <form id="myform" action="${ctx}/console/index" method="post">
     <input type="hidden" id="orgid" name="orgid" />
     <input type="hidden" id="projid" name="projid" />
-    <div class="easyui-layout" data-options="fit:true">
-        <div data-options="region:'west'"  style="width: 500px;">
-            <table id="dg2"></table>
-        </div>
-        <div data-options="region:'south',border:false" style="text-align:center;padding:5px 0 0;">
-            <a class="easyui-linkbutton" href="#" onclick="submitForm();" data-options="iconCls:'icon-ok'" style="width:250px">确定</a>
-        </div>
+    <div>
+        <table id="dg2"></table><a class="easyui-linkbutton" href="#" onclick="submitForm();" data-options="iconCls:'icon-ok'" style="width:250px">确定</a>
     </div>
-
 </form>
 <script type="text/javascript">
     var isSuper = '${currentUser.type.ordinal() eq 0}';
@@ -31,7 +25,6 @@
         dg2=$('#dg2').datagrid({
             method: "get",
             url:'${ctx}/console/listProject.json?orgid='+${orgid},
-            fit  : true,
            fitColumns : true,
            border : false,
             idField : 'id',
