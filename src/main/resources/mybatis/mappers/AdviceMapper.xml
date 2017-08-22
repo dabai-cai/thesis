@@ -50,7 +50,45 @@
         cdate = #{cdate,jdbcType=TIMESTAMP},
         valid = #{valid,jdbcType=BIT},
         top = #{top,jdbcType=BIT},
-        mdate = #{mdate,jdbcType=TIMESTAMP}
+        mdate = #{mdate,jdbcType=TIMESTAMP},
+        content = #{content,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+
+    <!-- ==================以下为手动添加======================== -->
+
+    <select id="listByOrgAndKeywords" resultMap="BaseResultMap">
+        select a.id,a.orgid,a.topic,a.content,a.target,a.creator,a.valid,a.top,a.mdate,a.cdate
+        from advice a
+        <where>
+            <if test="orgid!=0">
+            AND a.orgid=#{orgid}
+            </if>
+            <if test="keywords!=null and keywords != ''">
+            AND a.topic LIKE CONCAT('%',#{keywords},'%')
+            </if>
+        </where>
+            order by a.mdate desc
+    </select>
+    <select id="listByUserType" resultMap="BaseResultMap">
+        select a.id,a.orgid,a.topic,a.content,a.target,a.creator,a.valid,a.top,a.mdate,a.cdate
+        from advice a
+        <where>
+                a.valid = 1
+                <if test="keywords!=null and keywords != ''">
+                    AND a.topic LIKE CONCAT('%',#{keywords},'%')
+                </if>
+                <if test='type.name() =="ADMIN"'>
+                    and ( (a.target = 3  AND a.orgid=#{orgid}) or a.target=0)
+                </if>
+                <if test='type.name() =="STUDENT"'>
+                    and ((a.target = 2 AND a.orgid=#{orgid}) or a.target=0)
+                </if>
+                <if test='type.name() =="TEACHER"'>
+                    and ((a.target = 1 AND a.orgid=#{orgid}) or a.target=0)
+                </if>
+        </where>
+        order by a.top desc,a.cdate desc
+    </select>
 </mapper>

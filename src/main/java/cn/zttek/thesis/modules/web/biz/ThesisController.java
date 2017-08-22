@@ -112,7 +112,7 @@ public class ThesisController extends BaseController {
         if(thesis.getId() == null || thesis.getId() <= 0){
             Project currentProj = ThesisParam.getCurrentProj();
             thesis.setUploadtime(new Timestamp(currentProj.getSubmitdate().getTime()));
-        }
+    }
         model.addAttribute("thesis", thesis);
         return "console/thesis/edit";
     }

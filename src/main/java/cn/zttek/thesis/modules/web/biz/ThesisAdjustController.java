@@ -65,7 +65,6 @@ public class ThesisAdjustController extends BaseController{
                 result = EUResult.build(EUResult.FAIL, "请输入学生学号！");
             }
         }
-
         return result;
     }
 

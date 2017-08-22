@@ -3,16 +3,20 @@ package cn.zttek.thesis.modules.web;
 import cn.zttek.thesis.common.base.BaseController;
 import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.modules.enums.UserType;
+import cn.zttek.thesis.modules.model.Advice;
 import cn.zttek.thesis.modules.model.Org;
 import cn.zttek.thesis.modules.model.Project;
 import cn.zttek.thesis.modules.model.User;
+import cn.zttek.thesis.modules.service.AdviceService;
 import cn.zttek.thesis.modules.service.OrgService;
 import cn.zttek.thesis.modules.service.ProjectService;
 import cn.zttek.thesis.utils.ThesisParam;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +38,8 @@ public class ConsoleController extends BaseController {
     private OrgService orgService;
     @Autowired
     private ProjectService projectService;
-
+    @Autowired
+    private AdviceService adviceService;
     @RequiresAuthentication
     @RequestMapping(value = "/index", produces = "text/html;charset=utf-8")
     public String index(Model model, HttpSession session) throws Exception{

@@ -487,7 +487,13 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.mankind</groupId>
+            <artifactId>mybatisplugins</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
+    <!--install mybatis-generator:generate -DconfigurationFile=generatorConfig.xml-->
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -540,10 +546,15 @@
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mankind</groupId>
+                        <artifactId>mybatisplugins</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>

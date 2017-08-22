@@ -13,6 +13,7 @@ public enum AdviceTarget implements Identifiable<Integer> {
     STUDENT(2, "学生"),
     MANAGER(3,"管理员");
 
+
     private Integer val;
     private String label;
 

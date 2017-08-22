@@ -71,7 +71,7 @@ public class UserController extends BaseController{
     @RequestMapping(value = {"/add", "/edit"}, produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String edit(@ModelAttribute User user, Model model) throws Exception {
         model.addAttribute("types", UserType.values());
-        model.addAttribute("user", user);
+            model.addAttribute("user", user);
         return "console/user/edit";
     }
 

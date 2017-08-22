@@ -10,12 +10,18 @@
     <!--指定特定数据库的jdbc驱动jar包的位置-->
     <classPathEntry location="${jdbc.driverLocation}"/>
 
-    <context id="default" targetRuntime="MyBatis3">
+    <context id="default" targetRuntime="MyBatis3Simple" defaultModelType="flat">
 
+        <plugin type="com.mankind.mybatis.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="com.mankind.mybatis.plugins.InterFaceExtendsPlugin">
+                <property name="mappers" value="BaseMapper"/>
+        </plugin>
         <!-- optional，旨在创建class时，对注释进行控制 -->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
-            <property name="suppressAllComments" value="true"/>
+            <property name="suppressAllComments" value="true" />
         </commentGenerator>
 
         <!--jdbc的数据库连接 -->
@@ -39,7 +45,10 @@
         -->
         <javaModelGenerator targetPackage="cn.zttek.thesis.modules.model"
                             targetProject="src/main/java">
-
+            <property name="constructorBased" value="false"/>
+            <property name="useActualColumnNames" value="false" />
+            <property name="immutable" value="false"/>
+            <property name="trimStrings" value="true"/>
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <property name="enableSubPackages" value="false"/>
             <!-- 设置一个根对象，
@@ -63,13 +72,16 @@
         -->
         <javaClientGenerator targetPackage="cn.zttek.thesis.modules.mapper"
                              targetProject="src/main/java" type="XMLMAPPER">
-            <property name="enableSubPackages" value="true"/>
+            <property name="enableSubPackages" value=""/>
+            <property name="methodNameCalculator" value=""/>
         </javaClientGenerator>
 
-        <table tableName="advice" domainObjectName="Advice"
+        <table tableName="defense_%"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false" >
+            <property name="rootClass" value="cn.zttek.thesis.common.base.BaseModel"/>
+            <columnOverride column="cdate" jdbcType="TIMESTAMP"/>
         </table>
 
     </context>

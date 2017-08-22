@@ -63,46 +63,103 @@
                 </ul>
                 <div id="step-1">
                     <h2 class="StepTitle">Step 1 输入答辩小组的基本参数</h2>
-                    <%--<table style="margin-top: 20px; margin-left: auto;margin-right:auto;" cellpadding="5" cellspacing="10">--%>
-                        <%--<tr>--%>
-                            <%--<td align="right"><label>请选择答辩类型：</label></td>--%>
-                            <%--<td>--%>
-                                <%--<input type="text" id="grouptype" class="easyui-textbox" style="width:250px;"/>--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                        <%--<tr>--%>
-                            <%--<td align="right"><label>请选择答辩组长：</label></td>--%>
-                            <%--<td>--%>
-                                <%--<input type="text" id="leader" class="easyui-textbox" style="width:250px;" readonly="readonly"/>--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                        <%--<tr>--%>
-                            <%--<td align="right"><label>请选择答辩秘书：</label></td>--%>
-                            <%--<td>--%>
-                                <%--<input type="text" id="secretary" class="easyui-textbox" style="width:250px;" readonly="readonly">--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                        <%--<tr>--%>
-                            <%--<td align="right"><label>请输入答辩地点：</label></td>--%>
-                            <%--<td>--%>
-                                <%--<input type="text" id="defenseroom" class="easyui-textbox" style="width:250px;">--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                        <%--<tr>--%>
-                            <%--<td align="right"><label>请选择答辩时间：</label></td>--%>
-                            <%--<td>--%>
-                                <%--<input id="defensetime" class="easyui-datebox" style="width:250px;" data-options="editable:false">--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                    <%--</table>--%>
                     <div class="easyui-layout" style="height: 375px">
                         <div data-options="region:'west',split:true, border:true,title:'答辩任务基本信息'" width="30%" height="100px">
-                            <p>!!@#!@#!@@#$#@%</p>
+                            <table style="margin-top: 20px; margin-left: auto;margin-right:auto;" cellpadding="5" cellspacing="10">
+                                <form id="form-left">
+                                    <tr>
+                                        <td align="right"><label>答辩类型：</label></td>
+                                        <td>
+                                            <select id="grouptype" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
+                                                <option value="普通">普通</option>
+                                                <option value="争优">争优</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><label>答辩地点：</label></td>
+                                        <td>
+                                            <input type="text" id="defenseroom" class="easyui-textbox" style="width:150px;">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><label>答辩时间：</label></td>
+                                        <td>
+                                            <input id="defensetime" class="easyui-datebox" style="width:150px;" data-options="editable:false">
+                                        </td>
+                                    </tr>
+                                </form>
+
+                            </table>
                         </div>
-                        <div data-options="region:'center',split:true, border:true,title:'参加学生'" width="35%" height="100%">
+                        <div data-options="region:'center',split:true, border:true,title:'请选择答辩组长'" width="35%" height="100%">
+                            <%--<div id="ui-toolbar-leader">--%>
+                                <%--<div class="ui-toolbar-search">--%>
+                                    <%--<label>选择职称：</label>--%>
+                                    <%--<select id="leader-title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">--%>
+                                        <%--<option value="">请选择职称</option>--%>
+                                        <%--<c:forEach items="${titles}" var="title">--%>
+                                            <%--<option value="${title.ordinal()}">${title.label}</option>--%>
+                                        <%--</c:forEach>--%>
+                                    <%--</select>--%>
+                                    <%--<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doTeacherSearch()">开始检索</a>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                            <table id="dg-leader" class="easyui-datagrid"
+                                   data-options="url: '${ctx}/console/thesis/defense/group/teacher-list.json?taskid=${defenseTask.id}',
+                            method: 'get',
+                            idField: 'teacherid',
+                            toolbar: '#ui-toolbar-leader',
+                            <%--fit:true,--%>
+                            fitColumns:true,
+                            height: '375',
+                            width: '100%',
+                            <%--pagination:true,--%>
+                            rownumbers:true,
+                            <%--pageNumber:1,--%>
+                            <%--pageSize : 10,--%>
+                            <%--pageList : [ 10, 20, 30, 40, 50 ],--%>
+                            singleSelect:true">
+                                <thead>
+                                <tr>
+                                        <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
+                                        <th data-options="field:'account'" width="100">工号</th>
+                                        <th data-options="field:'userName'" width="100">姓名</th>
+                                        <th data-options="field:'titleName'" width="100">职称</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
-                        <div  data-options="region:'east',split:true, border:true,title:'参加教师'" width="35%" height="100%">
-                            22333333333333333333333
+                        <div  data-options="region:'east',split:true, border:true,title:'请选择答辩秘书'" width="35%" height="100%">
+                            <%--<label>选择职称：</label>--%>
+                            <%--<select id="secretary-title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">--%>
+                                <%--<option value="">请选择职称</option>--%>
+                                <%--<c:forEach items="${titles}" var="title">--%>
+                                    <%--<option value="${type.ordinal()}">${type.label}</option>--%>
+                                <%--</c:forEach>--%>
+                            <%--</select>--%>
+                            <%--<a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doTeacherSearch()">开始检索</a>--%>
+                            <table id="dg-secretary" class="easyui-datagrid"
+                                   data-options="url: '${ctx}/console/thesis/defense/group/teacher-list.json?taskid=${defenseTask.id}',
+                            method: 'get',
+                            idField: 'teacherid',
+                            <%--fit:true,--%>
+                            fitColumns:true,
+                            height: '375',
+                            width: '100%',
+                            <%--pagination:true,--%>
+                            rownumbers:true,
+                            singleSelect:true">
+                                <thead>
+                                <tr>
+                                    <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
+                                    <th data-options="field:'account'" width="100">工号</th>
+                                    <th data-options="field:'userName'" width="100">姓名</th>
+                                    <th data-options="field:'titleName'" width="100">职称</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -114,21 +171,7 @@
                             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doStudentSearch()">开始检索</a>
                         </div>
                     </div>
-                    <table id="dg1" class="easyui-datagrid"
-                           data-options="url: '${ctx}/console/thesis/defense/group/student-list.json',
-                            method: 'get',
-                            idField: 'studentid',
-                            toolbar: '#ui-toolbar1',
-                            <%--fit:true,--%>
-                            fitColumns:true,
-                            height: '350',
-                            width: '965',
-                            pagination:true,
-                            rownumbers:true,
-                            pageNumber:1,
-                            pageSize : 10,
-                            pageList : [ 10, 20, 30, 40, 50 ],
-                            singleSelect:false">
+                    <table id="dg1" class="easyui-datagrid">
                         <thead>
                         <tr>
                             <th data-options="field:'studentid', checkbox:true" , width="100">ID</th>
@@ -149,7 +192,7 @@
                             <select id="title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
                                 <option value="">请选择职称</option>
                                 <c:forEach items="${titles}" var="title">
-                                    <option value="${title.name}">${title.name}</option>
+                                    <option value="${title.ordinal()}">${title.label}</option>
                                 </c:forEach>
                             </select>
                             <label>工号：</label><input class="wu-text easyui-textbox" id="teacherid" style="width:80px">
@@ -157,10 +200,10 @@
                         </div>
                     </div>
                     <table id="dg2" class="easyui-datagrid"
-                           data-options="url: '${ctx}/console/thesis/defense/group/teacher-list.json',
+                           data-options="
                             method: 'get',
                             idField: 'teacherid',
-                            toolbar: '#ui-toolbar',
+                            toolbar: '#ui-toolbar2',
                             <%--fit:true,--%>
                             fitColumns:false,
                             height: '350',
@@ -185,7 +228,7 @@
                     <h2 class="StepTitle">Step 4 确认答辩任务的信息</h2>
                     <div style="padding:10px 10px 10px 10px">
                         <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc; padding-bottom: 5px;">
-                            答辩任务信息
+                            答辩小组信息
                         </div>
                         <input type="hidden" id="form-taskid" name="taskid" value="${defenseTask.id}"/>
                         <input type="hidden" id="form-grouptype" name="grouptype"/>
@@ -195,16 +238,12 @@
                         <input type="hidden" id="form-defenseroom" name="defenseroom"/>
                         <input type="hidden" id="form-students" name="students"/>
                         <input type="hidden" id="form-teachers" name="teachers"/>
-                        <table width="100%" cellpadding="5" class="form-table">
+                        <table width="100%" cellpadding="5" class="form-table" >
                             <tbody>
                             <tr id="newTopic">
-                                <td width="120"><label>所属答辩任务名称</label></td>
-                                <td colspan="3">
-                                    <span class="defensename"></span>
-                                </td>
-                                <td><label>答辩主席</label></td>
-                                <td>
-                                    <span class="president"></span>
+                                <td colspan="2"  style="text-align: center"><label>所属答辩任务名称</label></td>
+                                <td colspan="4"  style="text-align: center">
+                                    <span class="defensename">${defenseTask.name}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -216,18 +255,22 @@
                                 <td>
                                     <span class="secretary"></span>
                                 </td>
+                                <td> <label>答辩主席</label></td>
+                                <td>
+                                    <span class="president">${defenseTask.president}</span>
+                                </td>
                             </tr>
                             <tr>
-                                <td><label>答辩类型</label></td>
-                                <td>
+                                <td width="120"><label>答辩类型</label></td>
+                                <td width="170">
                                     <span class="grouptype"></span>
                                 </td>
-                                <td><label>答辩时间</label></td>
-                                <td>
+                                <td width="120"><label>答辩时间</label></td>
+                                <td width="170">
                                     <span class="defensetime"></span>
                                 </td>
-                                <td><label>答辩地点</label></td>
-                                <td>
+                                <td width="120"><label>答辩地点</label></td>
+                                <td width="170">
                                     <span class="defenseroom"></span>
                                 </td>
                             </tr>
@@ -238,7 +281,15 @@
                                 </td>
                                 <td><label>学生详情</label></td>
                                 <td colspan="3">
-                                    <span class="studentclass"></span>
+                                    <span class="studentclass">
+                                    201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                    201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -263,6 +314,39 @@
 </table>
 <div id="dlg"></div>
 <script type="text/javascript">
+    var leader;
+    var secretary;
+    // 分页数据的操作
+    function pagerFilter(data) {
+        if (typeof data.length == 'number' && typeof data.splice == 'function') {   // is array
+            data = {
+                total: data.length,
+                rows: data
+            }
+        }
+        var dg = $(this);
+        var opts = dg.datagrid('options');
+        var pager = dg.datagrid('getPager');
+        pager.pagination({
+            onSelectPage: function (pageNum, pageSize) {
+                opts.pageNumber = pageNum;
+                opts.pageSize = pageSize;
+                pager.pagination('refresh', {
+                    pageNumber: pageNum,
+                    pageSize: pageSize
+                });
+                dg.datagrid('loadData', data);
+            }
+        });
+        if (!data.originalRows) {
+            data.originalRows = (data.rows);
+        }
+        var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+        var end = start + parseInt(opts.pageSize);
+        data.rows = (data.originalRows.slice(start, end));
+        return data;
+    }
+
     $(document).ready(function () {
         //绑定事件
         $("#leader").next("span").click(function(){
@@ -287,9 +371,28 @@
         function showStepCallback(obj, context) {
             if (context.toStep == 2) {
                 $("#dg1").datagrid("resize");
+                $('#dg1').datagrid({ loadFilter: pagerFilter }).datagrid({
+                    url:'${ctx}/console/thesis/defense/group/student-list.json?taskid=${defenseTask.id}'+"&grouptype="+$("#grouptype").combobox("getValue"),
+                    method: 'get',
+                    idField: 'studentid',
+                    toolbar: '#ui-toolbar1',
+                    <%--fit:true,--%>
+                    fitColumns:true,
+                    height: '350',
+                    width: '965',
+                    pagination:true,
+                    rownumbers:true,
+                    pageNumber:1,
+                    pageSize : 10,
+                    pageList : [ 10, 20, 30, 40, 50 ],
+                    singleSelect:false
+                });
             }
             else if(context.toStep==3){
                 $("#dg2").datagrid("resize");
+                $('#dg2').datagrid({ loadFilter: pagerFilter }).datagrid({
+                    url:'${ctx}/console/thesis/defense/group/teacher-list.json?taskid=${defenseTask.id}'+"&leaderJSON="+JSON.stringify(leader)+"&secretaryJSON="+JSON.stringify(secretary)
+                });
             }
         }
 
@@ -302,44 +405,32 @@
             // validate step 1
             if (stepnumber == 1) {
                 var grouptype = $("#grouptype").textbox("getValue");
-                var leaderid=$("#leaderid").textbox("getValue");
-                var secretaryid=$("#secretaryid").textbox("getValue");
                 var defensetime=$("#defensetime").datebox("getValue");
                 var defenseroom=$("#defenseroom").textbox('getValue');
-                if (grouptype == ""||leaderid==""||secretaryid==""||defensetime==""||defenseroom=="") {
+                leader=$("#dg-leader").datagrid("getSelected");
+                secretary=$("#dg-secretary").datagrid("getSelected");
+                if (grouptype == ""||leader==""||secretary==""||defensetime==""||defenseroom=="") {
                     // set isStepValid = false if has errors
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '存在未填写的字段,请填写完毕后再继续！');
-                } else {
+                }
+                else if(JSON.stringify(leader) == JSON.stringify(secretary)){
+                    isStepValid = false;
+                    $('#wizard').smartWizard('showError', stepnumber);
+                    $('#wizard').smartWizard('showMessage', '答辩组长与答辩秘书不得相同！');
+                }else{
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
-                    $.ajaxSetup({
-                        async : false
-                    });
-                    $.post("${ctx}/console/thesis/defense/group/wizard", {"grouptype":grouptype,"step_number":stepnumber}, function(data){
-                        if(data.status == 200){
-                            $("#form-grouptype").val(grouptype);
-                            $("#form-leaderid").val(leaderid);
-                            $("#form-secretaryid").val(secretaryid);
-                            $("#form-defensetime").val(defensetime);
-                            $("#form-defenseroom").val(defenseroom);
-                            //TODO缺少组长和秘书的名字赋值
-                            $(".grouptype").text(grouptype);
-                            $(".defensetime").text(defensetime);
-                            $(".defenseroom").text(defenseroom);
-                        }else{
-                            isStepValid = false;
-                            $('#wizard').smartWizard('showError',1);
-                            $('#wizard').smartWizard('showMessage', data.msg);
-                            //$('#wizard').smartWizard('goToStep',1);
-                        }
-                    })
-
+                    $("#form-grouptype").val(grouptype);
+                    $("#form-leaderid").val(leader.id);
+                    $("#form-secretaryid").val(secretary.id);
+                    $("#form-defensetime").val(defensetime);
+                    $("#form-defenseroom").val(defenseroom);
                 }
             } else if (stepnumber == 2) {
                 var rows = $("#dg1").datagrid("getSelections");
-                if (rows == null) {
+                if (rows == null||rows=="") {
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '请为答辩小组添加参与学生！');
@@ -365,7 +456,7 @@
                 }
             }else if(stepnumber == 3){
                 var rows = $("#dg2").datagrid("getSelections");
-                if (rows == null) {
+                if (rows == null||rows=="") {
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '请为答辩任务添加参与教师！');

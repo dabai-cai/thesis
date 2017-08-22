@@ -39,6 +39,9 @@
     <div class="easyui-accordion" data-options="border:false,fit:true">
         <div title="快捷菜单" data-options="iconCls:'icon-application-cascade'" style="padding:5px;">
             <ul class="easyui-tree ui-side-tree">
+                <c:if test="${currentUser.type.ordinal() ne 0}">
+                    <li id="home"><a href="${ctx}/console/home">首页链接</a></li>
+                </c:if>
                 <li><a href="${ctx}/console/info/edit">编辑个人资料</a></li>
                 <c:if test="${currentUser.type.ordinal() eq 3}">
                     <li><a href="${ctx}/console/tapply/list">论文题目申请</a></li>
@@ -62,6 +65,8 @@
                     <li><a href="${ctx}/console/tcheck/list">论文题目审核</a></li>
                     <li><a href="${ctx}/console/tadjust/list">学生选题调整</a></li>
                     <li><a href="${ctx}/console/tresult/list">论文选题结果</a></li>
+                    <li><a href="${ctx}/console/thesis/defense/task/list">答辩任务管理</a></li>
+                    <li><a href="${ctx}/console/advice/admin-list">公告管理</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() le 1}">
 
@@ -71,6 +76,7 @@
                     <li><a href="${ctx}/console/arch/list-student">学生管理</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() eq 0}">
+                    <li><a href="${ctx}/console/advice/super-list">公告管理</a></li>
                     <li><a href="${ctx}/console/title/list">职称管理</a></li>
                     <li><a href="${ctx}/console/org/list">机构管理</a></li>
                     <li><a href="${ctx}/console/user/list">用户管理</a></li>
@@ -106,6 +112,11 @@
             addTab(title,url,iconCls, true);
             return false;
         });
+        //转到首页
+        <c:if test="${currentUser.type.ordinal() ne 0}">
+            $("#home").click();
+        </c:if>
+
     })
 
     /**
@@ -192,7 +203,15 @@
             tabPanel.tabs('close', index);
         }
     }
-
+    function FlashTab(title){
+        var tabPanel = $('#ui-tabs');
+        var tabs=tabPanel.tabs('tabs');
+        for(var i=0;i<tabs.length;i++){
+            if(tabPanel.tabs('getTab',i).panel("options").title==title){
+                RefreshTab(tabPanel.tabs('getTab',i))
+            }
+        }
+    }
 
 
     function reloadTabGrid(title) {

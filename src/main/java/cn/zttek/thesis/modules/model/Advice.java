@@ -4,7 +4,6 @@ import cn.zttek.thesis.common.base.BaseModel;
 import cn.zttek.thesis.modules.enums.AdviceTarget;
 
 import java.util.Date;
-
 public class Advice extends BaseModel {
     private Long orgid;
     private Long creator;
