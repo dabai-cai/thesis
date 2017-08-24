@@ -119,6 +119,7 @@
                             idField: 'studentid',
                             toolbar: '#ui-toolbar1',
                             <%--fit:true,--%>
+                            loadFilter: pagerFilter ,
                             fitColumns:true,
                             height: '350',
                             width: '965',
@@ -130,11 +131,11 @@
                             singleSelect:false">
                         <thead>
                         <tr>
-                            <th data-options="field:'studentid', checkbox:true" , width="100">ID</th>
-                            <th data-options="field:'stuno'," width="200">学生学号</th>
-                            <th data-options="field:'stuname'" width="200">学生姓名</th>
-                            <th data-options="field:'clazz'" width="198">年级班级</th>
-                            <th data-options="field:'defenseStatus'" width="200">论文答辩类型</th>
+                            <th data-options="field:'studentid', checkbox:true" , width="50">ID</th>
+                            <th data-options="field:'stuno'," width="230">学生学号</th>
+                            <th data-options="field:'stuname'" width="230">学生姓名</th>
+                            <th data-options="field:'clazz'" width="230">年级班级</th>
+                            <th data-options="field:'defenseStatus'" >论文答辩类型</th>
                             <%--<th data-options="field:'direction'" width="80">研究方向</th>--%>
                         </tr>
                         </thead>
@@ -146,37 +147,23 @@
                         <div class="ui-toolbar-search">
                             <label>选择职称：</label>
                             <select id="title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
-                                <option value="">请选择职称</option>
+                                <option value="-1">请选择级别</option>
                                 <c:forEach items="${titles}" var="title">
-                                    <option value="${title.name}">${title.name}</option>
+                                    <option value="${title.ordinal()}">${title.label}</option>
                                 </c:forEach>
                             </select>
                             <label>工号：</label><input class="wu-text easyui-textbox" id="teacherid" style="width:80px">
                             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doTeacherSearch()">开始检索</a>
                         </div>
                     </div>
-                    <table id="dg2" class="easyui-datagrid"
-                           data-options="url: '${ctx}/console/thesis/defense/task/teacher-list.json',
-                            method: 'get',
-                            idField: 'teacherid',
-                            toolbar: '#ui-toolbar',
-                            <%--fit:true,--%>
-                            fitColumns:false,
-                            height: '350',
-                            width: '948',
-                            pagination:true,
-                            rownumbers:true,
-                            pageNumber:1,
-                            pageSize : 10,
-                            pageList : [ 10, 20, 30, 40, 50 ],
-                            singleSelect:false">
+                    <table id="dg2" class="easyui-datagrid">
                         <thead>
                         <tr>
                             <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                            <th data-options="field:'account'" width="300">工号</th>
-                            <th data-options="field:'userName'" width="300">姓名</th>
-                            <th data-options="field:'title.name'" width="248">职称</th>
-                            <th data-options="field:'title.level'" hidden="true">职称</th>
+                            <th data-options="field:'account'" width="230">工号</th>
+                            <th data-options="field:'userName'" width="230">姓名</th>
+                            <th data-options="field:'titleName'"  width="230">职称</th>
+                            <th data-options="field:'titleLevel'" width="220">等级</th>
                         </tr>
                         </thead>
                     </table>
@@ -252,6 +239,36 @@
     </tr>
 </table>
 <script type="text/javascript">
+    // 分页数据的操作
+    function pagerFilter(data) {
+        if (typeof data.length == 'number' && typeof data.splice == 'function') {   // is array
+            data = {
+                total: data.length,
+                rows: data
+            }
+        }
+        var dg = $(this);
+        var opts = dg.datagrid('options');
+        var pager = dg.datagrid('getPager');
+        pager.pagination({
+            onSelectPage: function (pageNum, pageSize) {
+                opts.pageNumber = pageNum;
+                opts.pageSize = pageSize;
+                pager.pagination('refresh', {
+                    pageNumber: pageNum,
+                    pageSize: pageSize
+                });
+                dg.datagrid('loadData', data);
+            }
+        });
+        if (!data.originalRows) {
+            data.originalRows = (data.rows);
+        }
+        var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+        var end = start + parseInt(opts.pageSize);
+        data.rows = (data.originalRows.slice(start, end));
+        return data;
+    }
     $(document).ready(function () {
         // Smart Wizard
         var sw = $('#wizard').smartWizard({
@@ -324,7 +341,7 @@
                 }
             } else if (stepnumber == 2) {
                 var rows = $("#dg1").datagrid("getSelections");
-                if (rows == null) {
+                if (rows == null||rows=="") {
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '请为答辩任务添加参与学生！');
@@ -345,12 +362,30 @@
                     }
                     $(".studentclass").text(studentclass);
                     $(".studentnum").text(rows.length+"名");
+                    alert(JSON.stringify(rows));
                     $("#form-students").val(JSON.stringify(rows));
                     //检验是否为json
+                    $("#dg2").datagrid({
+                        url: '${ctx}/console/thesis/defense/task/teacher-list.json?defensetime='+$("#form-defensetime").val(),
+                        method: 'get',
+                        idField: 'teacherid',
+                        toolbar: '#ui-toolbar',
+                        <%--fit:true,--%>
+                        loadFilter: pagerFilter ,
+                        fitColumns:false,
+                        height: '350',
+                        width: '948',
+                        pagination:true,
+                        rownumbers:true,
+                        pageNumber:1,
+                        pageSize : 10,
+                        pageList : [ 10, 20, 30, 40, 50 ],
+                        singleSelect:false
+                    })
                 }
             }else if(stepnumber == 3){
                 var rows = $("#dg2").datagrid("getSelections");
-                if (rows == null) {
+                if (rows == null||rows=="") {
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '请为答辩任务添加参与教师！');
@@ -371,6 +406,7 @@
                     }
                     $(".teacherclass").text(teacherclass);
                     $(".teachernum").text(rows.length+"名");
+                    alert(JSON.stringify(rows));
                     $("#form-teachers").val(JSON.stringify(rows));
                 }
             }
@@ -416,6 +452,7 @@
                     $('#wizard').smartWizard('showMessage', data.msg);
                     $.messager.alert("提示", data.msg, undefined, function () {
                         location.reload();
+                        window.top.FlashTab("答辩任务管理");
                     });
                 } else {
                     $('#wizard').smartWizard('showError', 4);
@@ -460,7 +497,7 @@
         var params = {};
         params.teacher=$("#teacherid").val();
         if($('#title').combobox("getValue") != ""){
-            params.title = $('#title').combobox("getValue");
+            params.titleLevel = $('#title').combobox("getValue");
         }
         $("#dg2").datagrid("load", params);
         return false;

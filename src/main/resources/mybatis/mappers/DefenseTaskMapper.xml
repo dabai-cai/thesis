@@ -67,8 +67,8 @@
     <result column="id" jdbcType="BIGINT" property="teacherid" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="username" jdbcType="VARCHAR" property="userName" />
-    <result column="name" jdbcType="VARCHAR" property="title.name" />
-    <result column="level" property="title.level" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+    <result column="name" jdbcType="VARCHAR" property="titleName" />
+    <result column="level" property="titleLevel" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
   </resultMap>
   <select id="listByProj" resultMap="BaseResultMap" >
     select id , projectid, name, president, contact, remark, nums, defensetime, cdate,
@@ -84,9 +84,7 @@
     select a.id,a.account,a.username ,b.clazz,t.defensestatus
     from user a,user_info b,project_student ps,thesis t
     WHERE a.id=ps.studentid and a.id=b.uid and a.id=t.studentid and ps.projectid = #{projid,jdbcType=BIGINT}
-    <if test="t.defensestatus!=null">
-     AND t.defensestatus != 4
-    </if>
+    and (t.defensestatus = 0 or t.defensestatus = 2)
     <if test="major!=null">
       AND b.major=#{major}
     </if>
@@ -104,11 +102,11 @@
     select a.id,a.account,a.username ,t.name,t.level
     from user a,user_info ui,title t,project_teacher pt
     WHERE a.id=pt.teacherid and a.id=ui.uid and ui.tid=t.id and pt.projectid = #{projid,jdbcType=BIGINT}
-    <if test="title!=null and title!=''">
-      AND t.name=#{title}
-    </if>
     <if test="account!=null and account != ''">
       AND a.account LIKE CONCAT('%',#{account},'%')
+    </if>
+    <if test="titleLevel!=null">
+      AND t.level = #{titleLevel, typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler}
     </if>
   </select>
 

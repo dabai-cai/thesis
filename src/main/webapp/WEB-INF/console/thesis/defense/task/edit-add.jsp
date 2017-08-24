@@ -30,9 +30,9 @@
             <c:if test="${type eq 'teacher'}">
                 <label>选择职称：</label>
                 <select id="title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
-                    <option value="">请选择职称</option>
+                    <option value="-1">请选择级别</option>
                     <c:forEach items="${titles}" var="title">
-                        <option value="${title.name}">${title.name}</option>
+                        <option value="${title.ordinal()}">${title.label}</option>
                     </c:forEach>
                 </select>
                 <label>工号：</label><input class="wu-text easyui-textbox" id="teacherid" style="width:80px">
@@ -53,7 +53,7 @@
                             <%--fit:true,--%>
                             fitColumns:true,
                             height: '350',
-                            width: '965',
+                            width: '935',
                             pagination:true,
                             rownumbers:true,
                             pageNumber:1,
@@ -63,19 +63,19 @@
         <thead>
         <tr>
             <c:if test="${type eq 'student'}">
-                <th data-options="field:'studentid', checkbox:true" , width="100">ID</th>
-                <th data-options="field:'stuno'," width="300">学生学号</th>
-                <th data-options="field:'stuname'" width="300">学生姓名</th>
-                <th data-options="field:'clazz'" width="248">年级班级</th>
+                <th data-options="field:'studentid', checkbox:true" , width="50">ID</th>
+                <th data-options="field:'stuno'," width="130">学生学号</th>
+                <th data-options="field:'stuname'" width="130">学生姓名</th>
+                <th data-options="field:'clazz'" width="130">年级班级</th>
+                <th data-options="field:'defenseStatus'" width="130">论文答辩类型</th>
             </c:if>
             <c:if test="${type eq 'teacher'}">
                 <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                <th data-options="field:'account'" width="300">工号</th>
-                <th data-options="field:'userName'" width="300">姓名</th>
-                <th data-options="field:'titleName'" width="248">职称</th>
+                <th data-options="field:'account'" width="230">工号</th>
+                <th data-options="field:'userName'" width="230">姓名</th>
+                <th data-options="field:'titleName'"  width="230">职称</th>
+                <th data-options="field:'titleLevel'" width="220">等级</th>
             </c:if>
-
-
         </tr>
         </thead>
     </table>
@@ -133,7 +133,7 @@
         var params = {};
         params.teacher = $("#teacherid").val();
         if ($('#title').combobox("getValue") != "") {
-            params.title = $('#title').combobox("getValue");
+            params.titleLevel = $('#title').combobox("getValue");
         }
         $("#dg1").datagrid("load", params);
         return false;

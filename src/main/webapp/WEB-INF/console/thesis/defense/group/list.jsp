@@ -24,14 +24,41 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="autogroup()">自动分组</a>
     </div>
 </div>
-<table id="dg" class="easyui-datagrid"></table>
+<table id="dg" class="easyui-datagrid"
+       data-options="   url: '${ctx}/console/thesis/defense/group/list.json?taskid=${taskid}',
+                        method: 'get',
+                        idField: 'id',
+                        toolbar: '#ui-toolbar',
+                        fit:true,
+                        fitColumns:true,
+                        pagination:true,
+                        rownumbers:true,
+                        pageNumber:1,
+                        pageSize : 10,
+                        pageList : [ 10, 20, 30, 40, 50 ],
+                        singleSelect:true
+                    ">
+    <thead>
+    <tr>
+        <th data-options="field:'id'" width="60" >ID</th>
+        <th data-options="field:'groupno'"  width="100">分组编号</th>
+        <th data-options="field:'grouptype'" width="100">分组类型</th>
+        <th data-options="field:'leaderName'" width="80">答辩组长</th>
+        <th data-options="field:'secretaryName'" width="80">答辩秘书</th>
+        <th data-options="field:'students',formatter:formatnum" width="80">小组学生人数</th>
+        <th data-options="field:'teachers',formatter:formatnum" width="80">小组教师人数</th>
+        <th data-options="field:'defensetime',formatter:formatShortDate" width="220">答辩时间</th>
+        <th data-options="field:'defenseroom'" width="220">答辩地点</th>
+    </tr>
+    </thead>
+</table>
 <div id="dlg"></div>
 <script>
     function formatView(val, row){
         return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+val+'</div></a>';
     }
-    function formatNum(val, row){
-        return val+"名";
+    function formatnum(val, row){
+        return JSON.parse(val).length+"名";
     }
     function formatGroup(val, row){
         return val+"组";
@@ -46,35 +73,6 @@
     }
 
     $(function(){
-        $("#dg").datagrid({
-            title:"答辩小组列表",
-            fitColumns:true,
-            columns:[[
-                {field:'id',width:'80',title:"ID",checkbox:true},
-                {field:"groupno",width:"100",title:"分组编号"},
-                {field:"grouptype",width:"100",title:"分组类型"},
-                {field:"leaderName",width:"120",title:"答辩组长"},
-                {field:"secretaryName",width:"120",title:"答辩秘书"},
-                {field:"students",width:"120",title:"小组学生人数",
-                    formatter: function(value,row,index){
-                        return JSON.parse(value).length +"名";
-                    }},
-                {field:"teachers",width:"120",title:"小组教师人数",
-                    formatter: function(value,row,index){
-                        return JSON.parse(value).length +"名";
-                    }},
-                {field:"defensetime",width:"160",title:"答辩时间"},
-                {field:"defenseroom",width:"160",title:"答辩地点"}
-            ]]
-    });
-        $.ajax({
-            url: '${ctx}/console/thesis/defense/group/list?taskid=${taskid}',
-            type:'get',
-            dataType:'json',
-            success:function (data) {
-                $("#dg").datagrid('loadData',data);
-            }
-        })
     });
 
     var d;
@@ -91,7 +89,7 @@
             $.messager.alert('提示','必须选择一个答辩任务才能编辑!');
             return ;
         }
-        window.top.addTab("编辑答辩任务", '${ctx}/console/thesis/defense/task/edit?id='+id, null, true);
+        window.top.addTab("编辑答辩任务", '${ctx}/console/thesis/defense/group/edit?id='+id, null, true);
         event.stopPropagation();
         return false;
     }
@@ -105,7 +103,7 @@
         $.messager.confirm('确认','确定删除ID为 '+ids+' 的答辩任务及其所属的答辩小组吗？',function(r){
             if (r){
                 var params = {"ids":ids};
-                $.post("${ctx}/console/thesis/defense/task/delete", params, function(data){
+                $.post("${ctx}/console/thesis/defense/group/delete", params, function(data){
                     if(data.status == 200){
                         $.messager.alert('提示', data.msg, undefined, function(){
                             $("#dg").datagrid("reload");

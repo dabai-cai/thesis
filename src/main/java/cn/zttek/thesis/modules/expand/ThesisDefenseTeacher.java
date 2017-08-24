@@ -1,5 +1,6 @@
 package cn.zttek.thesis.modules.expand;
 
+import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.model.Title;
 
 import java.util.*;
@@ -14,8 +15,8 @@ public class ThesisDefenseTeacher implements Comparable<ThesisDefenseTeacher>{
     private Long teacherid;
     private String account;
     private String userName;
-    private Title title;
-
+    private String titleName;
+    private TitleLevel titleLevel;
     public Long getTeacherid() {
         return teacherid;
     }
@@ -40,12 +41,20 @@ public class ThesisDefenseTeacher implements Comparable<ThesisDefenseTeacher>{
         this.userName = userName;
     }
 
-    public Title getTitle() {
-        return title;
+    public String getTitleName() {
+        return titleName;
     }
 
-    public void setTitle(Title title) {
-        this.title = title;
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
+
+    public TitleLevel getTitleLevel() {
+        return titleLevel;
+    }
+
+    public void setTitleLevel(TitleLevel titleLevel) {
+        this.titleLevel = titleLevel;
     }
 
     @Override
@@ -62,7 +71,8 @@ public class ThesisDefenseTeacher implements Comparable<ThesisDefenseTeacher>{
         ThesisDefenseTeacher other = (ThesisDefenseTeacher) that;
         return (this.getTeacherid() == null ? other.getTeacherid() == null : this.getTeacherid().equals(other.getTeacherid()))
                 && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
-                && (this.getTitle()== null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
+                && (this.getTitleLevel() == null ? other.getTitleLevel() == null : this.getTitleLevel().equals(other.getTitleLevel()))
+                && (this.getTitleName()==null ? other.getTitleName() == null : this.getTitleName().equals(other.getTitleName()))
                 && (this.getUserName() == null ? other.getUserName() == null : this.getUserName().equals(other.getUserName()));
     }
 
@@ -70,15 +80,27 @@ public class ThesisDefenseTeacher implements Comparable<ThesisDefenseTeacher>{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
+        result = prime * result + ((getTitleName() == null) ? 0 : getTitleName().hashCode());
         result = prime * result + ((getUserName() == null) ? 0 : getUserName().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getTeacherid() == null) ? 0 : getTeacherid().hashCode());
+        result = prime * result + ((getTitleLevel() == null) ? 0 : getTitleLevel().hashCode());
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ThesisDefenseTeacher{" +
+                "teacherid=" + teacherid +
+                ", account='" + account + '\'' +
+                ", userName='" + userName + '\'' +
+                ", titleName='" + titleName + '\'' +
+                ", titleLevel=" + titleLevel +
+                '}';
+    }
+
     @Override
     public int compareTo(ThesisDefenseTeacher o) {
         return this.account.compareTo(o.getAccount());
     }
-
 }

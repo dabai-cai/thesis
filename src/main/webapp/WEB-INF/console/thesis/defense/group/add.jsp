@@ -71,8 +71,8 @@
                                         <td align="right"><label>答辩类型：</label></td>
                                         <td>
                                             <select id="grouptype" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
-                                                <option value="普通">普通</option>
-                                                <option value="争优">争优</option>
+                                                <option value="0">正常答辩</option>
+                                                <option value="2">争优答辩</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -115,18 +115,15 @@
                             fitColumns:true,
                             height: '375',
                             width: '100%',
-                            <%--pagination:true,--%>
                             rownumbers:true,
-                            <%--pageNumber:1,--%>
-                            <%--pageSize : 10,--%>
-                            <%--pageList : [ 10, 20, 30, 40, 50 ],--%>
                             singleSelect:true">
                                 <thead>
                                 <tr>
-                                        <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                                        <th data-options="field:'account'" width="100">工号</th>
-                                        <th data-options="field:'userName'" width="100">姓名</th>
-                                        <th data-options="field:'titleName'" width="100">职称</th>
+                                    <th data-options="field:'teacherid', checkbox:true" , width="40">ID</th>
+                                    <th data-options="field:'account'" width="70">工号</th>
+                                    <th data-options="field:'userName'" width="50">姓名</th>
+                                    <th data-options="field:'titleName'" width="70">职称</th>
+                                    <th data-options="field:'titleLevel'" width="70">等级</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -148,15 +145,15 @@
                             fitColumns:true,
                             height: '375',
                             width: '100%',
-                            <%--pagination:true,--%>
                             rownumbers:true,
                             singleSelect:true">
                                 <thead>
                                 <tr>
-                                    <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                                    <th data-options="field:'account'" width="100">工号</th>
-                                    <th data-options="field:'userName'" width="100">姓名</th>
-                                    <th data-options="field:'titleName'" width="100">职称</th>
+                                    <th data-options="field:'teacherid', checkbox:true" , width="40">ID</th>
+                                    <th data-options="field:'account'" width="70">工号</th>
+                                    <th data-options="field:'userName'" width="50">姓名</th>
+                                    <th data-options="field:'titleName'" width="70">职称</th>
+                                    <th data-options="field:'titleLevel'" width="70">等级</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -164,7 +161,7 @@
                     </div>
                 </div>
                 <div id="step-2">
-                    <h2 class="StepTitle">Step 2 添加参与当前答辩任务的学生</h2>
+                    <h2 class="StepTitle">Step 2 添加参与当前答辩小组的学生</h2>
                     <div id="ui-toolbar1">
                         <div class="ui-toolbar-search">
                             <label>学号：</label><input class="wu-text easyui-textbox" id="studentid" style="width:90px">
@@ -174,18 +171,17 @@
                     <table id="dg1" class="easyui-datagrid">
                         <thead>
                         <tr>
-                            <th data-options="field:'studentid', checkbox:true" , width="100">ID</th>
-                            <th data-options="field:'stuno'," width="300">学生学号</th>
-                            <th data-options="field:'stuname'" width="300">学生姓名</th>
-                            <th data-options="field:'clazz'" width="248">年级班级</th>
-                            <%--<th data-options="field:'topic',formatter:formatTopic" width="250">论文题目</th>--%>
-                            <%--<th data-options="field:'direction'" width="80">研究方向</th>--%>
+                            <th data-options="field:'studentid', checkbox:true" , width="50">ID</th>
+                            <th data-options="field:'stuno'," width="230">学生学号</th>
+                            <th data-options="field:'stuname'" width="230">学生姓名</th>
+                            <th data-options="field:'clazz'" width="230">年级班级</th>
+                            <th data-options="field:'defenseStatus'" >论文答辩类型</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
                 <div id="step-3">
-                    <h2 class="StepTitle">Step 3 添加参与当前答辩任务的教师</h2>
+                    <h2 class="StepTitle">Step 3 添加参与当前答辩小组的教师</h2>
                     <div id="ui-toolbar2">
                         <div class="ui-toolbar-search">
                             <label>选择职称：</label>
@@ -195,37 +191,23 @@
                                     <option value="${title.ordinal()}">${title.label}</option>
                                 </c:forEach>
                             </select>
-                            <label>工号：</label><input class="wu-text easyui-textbox" id="teacherid" style="width:80px">
                             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doTeacherSearch()">开始检索</a>
                         </div>
                     </div>
-                    <table id="dg2" class="easyui-datagrid"
-                           data-options="
-                            method: 'get',
-                            idField: 'teacherid',
-                            toolbar: '#ui-toolbar2',
-                            <%--fit:true,--%>
-                            fitColumns:false,
-                            height: '350',
-                            width: '948',
-                            pagination:true,
-                            rownumbers:true,
-                            pageNumber:1,
-                            pageSize : 10,
-                            pageList : [ 10, 20, 30, 40, 50 ],
-                            singleSelect:false">
+                    <table id="dg2" class="easyui-datagrid">
                         <thead>
                         <tr>
                             <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                            <th data-options="field:'account'" width="300">工号</th>
-                            <th data-options="field:'userName'" width="300">姓名</th>
-                            <th data-options="field:'titleName'" width="248">职称</th>
+                            <th data-options="field:'account'" width="230">工号</th>
+                            <th data-options="field:'userName'" width="230">姓名</th>
+                            <th data-options="field:'titleName'"  width="230">职称</th>
+                            <th data-options="field:'titleLevel'" width="220">等级</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
                 <div id="step-4">
-                    <h2 class="StepTitle">Step 4 确认答辩任务的信息</h2>
+                    <h2 class="StepTitle">Step 4 确认答辩小组的信息</h2>
                     <div style="padding:10px 10px 10px 10px">
                         <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc; padding-bottom: 5px;">
                             答辩小组信息
@@ -282,22 +264,15 @@
                                 <td><label>学生详情</label></td>
                                 <td colspan="3">
                                     <span class="studentclass">
-                                    201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                    201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
-                                        201527010408 何铭凯,201527010408 何铭凯,201527010408 何铭凯 <br/>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label>总共选择老师人数</label></td>
+                                <td><label>参加教师人数</label></td>
                                 <td>
                                     <span class="teachernum"></span>
                                 </td>
-                                <td><label>职称情况统计</label></td>
+                                <td><label>教师详情</label></td>
                                 <td colspan="3">
                                     <span class="teacherclass"></span>
                                 </td>
@@ -372,7 +347,7 @@
             if (context.toStep == 2) {
                 $("#dg1").datagrid("resize");
                 $('#dg1').datagrid({ loadFilter: pagerFilter }).datagrid({
-                    url:'${ctx}/console/thesis/defense/group/student-list.json?taskid=${defenseTask.id}'+"&grouptype="+$("#grouptype").combobox("getValue"),
+                    url:'${ctx}/console/thesis/defense/group/student-list.json?taskid=${defenseTask.id}'+"&defenseStatus="+$("#grouptype").combobox("getValue"),
                     method: 'get',
                     idField: 'studentid',
                     toolbar: '#ui-toolbar1',
@@ -391,7 +366,20 @@
             else if(context.toStep==3){
                 $("#dg2").datagrid("resize");
                 $('#dg2').datagrid({ loadFilter: pagerFilter }).datagrid({
-                    url:'${ctx}/console/thesis/defense/group/teacher-list.json?taskid=${defenseTask.id}'+"&leaderJSON="+JSON.stringify(leader)+"&secretaryJSON="+JSON.stringify(secretary)
+                    url:'${ctx}/console/thesis/defense/group/teacher-list.json?taskid=${defenseTask.id}'+"&leaderJSON="+JSON.stringify(leader)+"&secretaryJSON="+JSON.stringify(secretary),
+                    method: 'get',
+                    idField: 'teacherid',
+                    toolbar: '#ui-toolbar2',
+                    <%--fit:true,--%>
+                    fitColumns:false,
+                    height: '350',
+                    width: '948',
+                    pagination:true,
+                    rownumbers:true,
+                    pageNumber:1,
+                    pageSize : 10,
+                    pageList : [ 10, 20, 30, 40, 50 ],
+                    singleSelect:false
                 });
             }
         }
@@ -422,11 +410,16 @@
                 }else{
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
-                    $("#form-grouptype").val(grouptype);
-                    $("#form-leaderid").val(leader.id);
-                    $("#form-secretaryid").val(secretary.id);
+                    $("#form-grouptype").val(grouptype==0?"正常答辩":"争优答辩");
+                    $("#form-leaderid").val(leader.teacherid);
+                    $("#form-secretaryid").val(secretary.teacherid);
                     $("#form-defensetime").val(defensetime);
                     $("#form-defenseroom").val(defenseroom);
+                    $(".grouptype").text(grouptype==0?"正常答辩":"争优答辩");
+                    $(".leader").text(leader.userName);
+                    $(".secretary").text(secretary.userName);
+                    $(".defensetime").text(defensetime);
+                    $(".defenseroom").text(defenseroom);
                 }
             } else if (stepnumber == 2) {
                 var rows = $("#dg1").datagrid("getSelections");
@@ -437,19 +430,16 @@
                 } else {
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
-//                    var total={}
-//                    for(var i=0;i<rows.length;i++){
-//                        if(total[rows[i].clazz]==null){
-//                            total[rows[i].clazz]=1;
-//                        }else{
-//                            total[rows[i].clazz]++;
-//                        }
-//                    }
-//                    var studentclass=""
-//                    for(var key in total){
-//                        studentclass+=key+":"+total[key]+"名 ";
-//                    }
-//                    $(".studentclass").text(studentclass);
+                    var studentclass="";
+                    var j=0;
+                    for(var i=0;i<rows.length;i++){
+                        studentclass+=rows[i].stuno+""+rows[i].stuname+"   ";
+                        j+=1;
+                        if(j%3==0){
+                            studentclass+="</br>";
+                        }
+                    }
+                    $(".studentclass").html(studentclass);
                     $(".studentnum").text(rows.length+"名");
                     $("#form-students").val(JSON.stringify(rows));
                     //检验是否为json
@@ -463,19 +453,17 @@
                 } else {
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
-//                    var total={}
-//                    for(var i=0;i<rows.length;i++){
-//                        if(total[rows[i].titleName]==null){
-//                            total[rows[i].titleName]=1;
-//                        }else{
-//                            total[rows[i].titleName]++;
-//                        }
-//                    }
-//                    var teacherclass=""
-//                    for(var key in total){
-//                        teacherclass+=key+":"+total[key]+"名 ";
-//                    }
-//                    $(".teacherclass").text(teacherclass);
+                    var teacherclass=""
+                    var j=0;
+                    for(var i=0;i<rows.length;i++){
+                        teacherclass+=rows[i].userName+ " "+rows[i].titleLevel;
+                        if(i!=rows.length-1){teacherclass+=","}
+                        j+=1;
+                        if(j%3==0){
+                            studentclass+="</br>";
+                        }
+                    }
+                    $(".teacherclass").html(teacherclass);
                     $(".teachernum").text(rows.length+"名");
                     $("#form-teachers").val(JSON.stringify(rows));
                 }
@@ -492,6 +480,9 @@
             var defenseroom=$("#form-defenseroom").val();
             var students=$("#form-students").val();
             var teachers=$("#form-teachers").val();
+            alert("taskid="+taskid+";grouptype="+grouptype+"leaderid="+leaderid+
+                "secretaryid="+secretaryid+"defensetime"+defensetime+"defenseroom"+
+            "students"+students+"teachers"+teachers)
             if (grouptype == null || grouptype == ""
                 ||leaderid==null || leaderid==""
                 ||secretaryid==null || secretaryid==""
@@ -522,6 +513,7 @@
                     $('#wizard').smartWizard('showMessage', data.msg);
                     $.messager.alert("提示", data.msg, undefined, function () {
                         location.reload();
+                        window.top.FlashTab("答辩小组管理");
                     });
                 } else {
                     $('#wizard').smartWizard('showError', 4);
@@ -579,7 +571,7 @@
         var params = {};
         params.teacher = $("#teacherid").val();
         if ($('#title').combobox("getValue") != "") {
-            params.title = $('#title').combobox("getValue");
+            params.titleLevel = $('#title').combobox("getValue");
         }
         $("#dg2").datagrid("load", params);
         return false;

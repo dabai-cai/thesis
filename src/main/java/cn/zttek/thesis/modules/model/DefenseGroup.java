@@ -11,7 +11,7 @@ public class DefenseGroup extends BaseModel {
 
     private Long taskid;
 
-    private String groupno;
+    private Integer groupno;
 
     private String grouptype;
 
@@ -68,12 +68,12 @@ public class DefenseGroup extends BaseModel {
         this.taskid = taskid;
     }
 
-    public String getGroupno() {
+    public Integer getGroupno() {
         return groupno;
     }
 
-    public void setGroupno(String groupno) {
-        this.groupno = groupno == null ? null : groupno.trim();
+    public void setGroupno(Integer groupno) {
+        this.groupno = groupno;
     }
 
     public String getGrouptype() {

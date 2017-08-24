@@ -1,11 +1,14 @@
 package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.common.base.BaseMapper;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
+import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.model.DefenseTask;
 import cn.zttek.thesis.modules.model.Thesis;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +17,7 @@ import java.util.TreeSet;
 /**
  * 由MyBatis Generator工具自动生成
  */
+@Repository
 public interface DefenseTaskMapper extends BaseMapper<DefenseTask> {
 
     /**
@@ -45,7 +49,8 @@ public interface DefenseTaskMapper extends BaseMapper<DefenseTask> {
                                                  @Param("major") String major,
                                                  @Param("grade") Integer grade,
                                                  @Param("clazz") String clazz,
-                                                 @Param("studentno") String stuno) throws Exception;
+                                                 @Param("studentno") String stuno
+                                                ) throws Exception;
 
     /**
      * 通过论文工作id和条件查询论文工作下符合条件的教师列表
@@ -56,7 +61,7 @@ public interface DefenseTaskMapper extends BaseMapper<DefenseTask> {
      * @throws Exception
      */
     List<ThesisDefenseTeacher> teacherlistByProj(@Param("projid") Long projid,
-                                                 @Param("title")String titlename,
+                                                 @Param("titleLevel")TitleLevel titleLevel,
                                                  @Param("account")String account) throws Exception;
 
 

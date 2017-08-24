@@ -5,6 +5,8 @@ import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
+import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.json.Json;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +76,7 @@ public class ThesisDefenseTaskController extends BaseController {
     }
     @RequestMapping(value = "/add", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String add(Model model) throws Exception{
-        model.addAttribute("titles",titleService.listAll());
+        model.addAttribute("titles", TitleLevel.values());
         return "console/thesis/defense/task/add";
     }
     @RequestMapping(value = "/view", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
@@ -106,20 +109,16 @@ public class ThesisDefenseTaskController extends BaseController {
 
     @RequestMapping(value = "/{type}-list.json", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUDataGridResult addlist(Integer page, Integer rows, @PathVariable String type, ThesisResult thesisResult) throws Exception{
+    public EUDataGridResult addlist(Integer page, Integer rows, @PathVariable String type, ThesisResult thesisResult, TitleLevel titleLevel, Timestamp defensetime) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
         if("student".equals(type)){
             PageInfo<ThesisDefenseStudent> pageInfo = defenseTaskService.listStudent(page,rows,ThesisParam.getCurrentProj().getId(),thesisResult);
             result.setTotal(pageInfo.getTotal());
-            int from =(page-1)*rows;
-            int to=(int)(pageInfo.getTotal()-(page-1)*rows<rows?pageInfo.getTotal():page*rows);
-            result.setRows(pageInfo.getList().subList(from,to));
+            result.setRows(pageInfo.getList());
         }else if("teacher".equals(type)){
-            PageInfo<ThesisDefenseTeacher> pageInfo = defenseTaskService.listTeacher(page,rows,ThesisParam.getCurrentProj().getId(),thesisResult);
+            PageInfo<ThesisDefenseTeacher> pageInfo = defenseTaskService.listTeacher(page,rows,ThesisParam.getCurrentProj().getId(),titleLevel,thesisResult.getTeacher(),defensetime);
             result.setTotal(pageInfo.getTotal());
-            int from =(page-1)*rows;
-            int to=(int)(pageInfo.getTotal()-(page-1)*rows<rows?pageInfo.getTotal():page*rows);
-            result.setRows(pageInfo.getList().subList(from,to));
+            result.setRows(pageInfo.getList());
         }
         return result;
     }
@@ -168,27 +167,22 @@ public class ThesisDefenseTaskController extends BaseController {
     @ResponseBody
     public EUDataGridResult showlist(Integer page, Integer rows,@PathVariable String type,@ModelAttribute DefenseTask defenseTask) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
-        int from =(page-1)*rows;
         if("student".equals(type)){
             if(defenseTask.getStudents()!=null){
                 List<ThesisDefenseStudent> students=JsonUtils.jsonToList(defenseTask.getStudents(),ThesisDefenseStudent.class);
                 Collections.sort(students);
                 PageInfo<ThesisDefenseStudent> pageInfo=new PageInfo<ThesisDefenseStudent>(students);
                 result.setTotal(pageInfo.getTotal());
-                int to=(int)(pageInfo.getTotal()-(page-1)*rows<rows?pageInfo.getTotal():page*rows);
-                result.setRows(pageInfo.getList().subList(from,to));
+                result.setRows(pageInfo.getList());
             }
-
         }else if("teacher".equals(type)){
             if(defenseTask.getTeachers()!=null){
                 List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(defenseTask.getTeachers(),ThesisDefenseTeacher.class);
                 Collections.sort(teachers);
                 PageInfo<ThesisDefenseTeacher> pageInfo=new PageInfo<ThesisDefenseTeacher>(teachers);
                 result.setTotal(pageInfo.getTotal());
-                int to=(int)(pageInfo.getTotal()-(page-1)*rows<rows?pageInfo.getTotal():page*rows);
-                result.setRows(pageInfo.getList().subList(from,to));
+                result.setRows(pageInfo.getList());
             }
-
         }
         return result;
     }
@@ -220,7 +214,7 @@ public class ThesisDefenseTaskController extends BaseController {
     @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.GET, produces = "text/html;charset=utf-8")
     public String addStudentOrTeacher(Model model,@PathVariable String type) throws Exception{
         if("teacher".equals(type)){
-            model.addAttribute("titles",titleService.listAll());
+            model.addAttribute("titles",TitleLevel.values());
         }
         return "console/thesis/defense/task/edit-add";
     }

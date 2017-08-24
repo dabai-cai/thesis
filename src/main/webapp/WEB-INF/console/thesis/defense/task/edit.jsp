@@ -81,7 +81,7 @@
         </table>
     </div>
 </div>
-<div data-options="region:'center',split:true, border:false,title:'参加学生'" width="35%">
+<div data-options="region:'center',split:true, border:false,title:'参加学生'" width="37%">
     <div id="ui-toolbar-student">
         <div class="ui-toolbar-button">
             <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="add('student')">添加学生</a>
@@ -95,6 +95,7 @@
                         toolbar: '#ui-toolbar-student',
                         <%--fit:true,--%>
                         height:'100%',
+                        loadFilter: pagerFilter ,
                         fitColumns:true,
                         rownumbers:true,
                         pagination:true,
@@ -106,14 +107,15 @@
         <thead>
         <tr>
             <th data-options="field:'studentid', checkbox:true" , width="40">ID</th>
-            <th data-options="field:'stuno'," width="100">学生学号</th>
+            <th data-options="field:'stuno'," width="120">学生学号</th>
             <th data-options="field:'stuname'" width="100">学生姓名</th>
             <th data-options="field:'clazz'" width="100">年级班级</th>
+            <th data-options="field:'defenseStatus'" >论文答辩类型</th>
         </tr>
         </thead>
     </table>
 </div>
-<div data-options="region:'east',split:true, border:false,title:'参加教师'" width="35%">
+<div data-options="region:'east',split:true, border:false,title:'参加教师'" width="33%">
     <div id="ui-toolbar-teacher">
         <div class="ui-toolbar-button">
             <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="add('teacher')">添加教师</a>
@@ -129,10 +131,6 @@
                         height:'100%',
                         fitColumns:true,
                         rownumbers:true,
-                        pagination:true,
-                        pageNumber:1,
-                        pageSize : 10,
-                        pageList : [ 10, 20, 30, 40, 50 ],
                         singleSelect:false
                     ">
         <thead>
@@ -141,6 +139,7 @@
                 <th data-options="field:'account'" width="100">工号</th>
                 <th data-options="field:'userName'" width="100">姓名</th>
                 <th data-options="field:'titleName'" width="100">职称</th>
+                <th data-options="field:'titleLevel'" width="100">等级</th>
             </tr>
         </thead>
     </table>
@@ -149,6 +148,36 @@
 
 </div>
 <script>
+    // 分页数据的操作
+    function pagerFilter(data) {
+        if (typeof data.length == 'number' && typeof data.splice == 'function') {   // is array
+            data = {
+                total: data.length,
+                rows: data
+            }
+        }
+        var dg = $(this);
+        var opts = dg.datagrid('options');
+        var pager = dg.datagrid('getPager');
+        pager.pagination({
+            onSelectPage: function (pageNum, pageSize) {
+                opts.pageNumber = pageNum;
+                opts.pageSize = pageSize;
+                pager.pagination('refresh', {
+                    pageNumber: pageNum,
+                    pageSize: pageSize
+                });
+                dg.datagrid('loadData', data);
+            }
+        });
+        if (!data.originalRows) {
+            data.originalRows = (data.rows);
+        }
+        var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+        var end = start + parseInt(opts.pageSize);
+        data.rows = (data.originalRows.slice(start, end));
+        return data;
+    }
     function save(){
         alert($("#form1").serialize());
         $.post("${ctx}/console/thesis/defense/task/edit",$("#form1").serialize(),function(data){

@@ -7,9 +7,11 @@ import cn.zttek.thesis.common.base.BaseMapper;
 import cn.zttek.thesis.modules.enums.UserType;
 import cn.zttek.thesis.modules.model.Advice;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface AdviceMapper extends BaseMapper<Advice> {
     /**
      * 查询管理员或者超级管理员的公告管理列表

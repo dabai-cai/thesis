@@ -40,7 +40,7 @@
                 <select id="title" class="easyui-combobox" pageHeight="auto" editable="false" style="width: 150px;">
                     <option value="">请选择职称</option>
                     <c:forEach items="${titles}" var="title">
-                        <option value="${type.ordinal()}">${type.label}</option>
+                        <option value="${title.ordinal()}">${title.label}</option>
                     </c:forEach>
                 </select>
                 <label>工号：</label><input class="wu-text easyui-textbox" id="teacherid" style="width:80px">
@@ -48,39 +48,22 @@
             </c:if>
         </div>
     </div>
-    <table id="dg1" class="easyui-datagrid"
-           data-options="url: '${ctx}/console/thesis/defense/group/${type}-list.json?taskid=${taskid}',
-                            method: 'get',
-                            <c:if test="${type eq 'student'}">
-                            idField: 'studentid',
-                            </c:if>
-                            <c:if test="${type ne 'student'}">
-                            idField: 'teacherid',
-                            </c:if>
-                            toolbar: '#ui-toolbar1',
-                            <%--fit:true,--%>
-                            fitColumns:true,
-                            height: '350',
-                            width: '965',
-                            pagination:true,
-                            rownumbers:true,
-                            pageNumber:1,
-                            pageSize : 10,
-                            pageList : [ 10, 20, 30, 40, 50 ],
-                            singleSelect:false">
+    <table id="dg-add" class="easyui-datagrid">
         <thead>
         <tr>
             <c:if test="${type eq 'student'}">
-                <th data-options="field:'studentid', checkbox:true" , width="100">ID</th>
-                <th data-options="field:'stuno'," width="300">学生学号</th>
-                <th data-options="field:'stuname'" width="300">学生姓名</th>
-                <th data-options="field:'clazz'" width="248">年级班级</th>
+                <th data-options="field:'studentid', checkbox:true" , width="40">ID</th>
+                <th data-options="field:'stuno'," width="120">学生学号</th>
+                <th data-options="field:'stuname'" width="100">学生姓名</th>
+                <th data-options="field:'clazz'" width="100">年级班级</th>
+                <th data-options="field:'defenseStatus'" >论文答辩类型</th>
             </c:if>
             <c:if test="${type ne 'student'}">
                 <th data-options="field:'teacherid', checkbox:true" , width="100">ID</th>
-                <th data-options="field:'account'" width="300">工号</th>
-                <th data-options="field:'userName'" width="300">姓名</th>
-                <th data-options="field:'titleName'" width="248">职称</th>
+                <th data-options="field:'account'" width="230">工号</th>
+                <th data-options="field:'userName'" width="230">姓名</th>
+                <th data-options="field:'titleName'"  width="230">职称</th>
+                <th data-options="field:'titleLevel'" width="220">等级</th>
             </c:if>
         </tr>
         </thead>
@@ -93,13 +76,13 @@
 <script type="text/javascript">
     var Form = {
         submitForm: function(){
-            var rows = $("#dg1").datagrid("getSelections");
+            var rows = $("#dg-add").datagrid("getSelections");
             if(rows==null||rows==""){
                 $.messager.alert("提示", "请至少选中一位"+'${role}'+"！");
                 return ;
             }
             progressLoad();
-            $.post("${ctx}/console/thesis/defense/task/edit-add-${type}?id=${defenseTask.id}",{"jsondata":JSON.stringify(rows)} , function(data){
+            $.post("${ctx}/console/thesis/defense/group/edit-add-${type}?id=${defenseGroup.id}",{"jsondata":JSON.stringify(rows)} , function(data){
                 progressClose();
                 if(data.status == 200){
                     $.messager.alert("提示", data.msg, "info", function(){
@@ -119,7 +102,7 @@
     function doStudentSearch(){
         var params = {};
         params.stuno =$("#studentid").val();
-        $("#dg1").datagrid("load", params);
+        $("#dg-add").datagrid("load", params);
         return false;
     }
     function doTeacherSearch() {
@@ -128,9 +111,33 @@
         if ($('#title').combobox("getValue") != "") {
             params.title = $('#title').combobox("getValue");
         }
-        $("#dg1").datagrid("load", params);
+        $("#dg-add").datagrid("load", params);
         return false;
     }
+    $(function(){
+        $("#dg-add").datagrid({
+            method: 'get',
+            <c:if test="${type eq 'student'}">
+            url: '${ctx}/console/thesis/defense/group/${type}-list.json?id=${defenseGroup.id}',
+            idField: 'studentid',
+            </c:if>
+            <c:if test="${type ne 'student'}">
+            url: '${ctx}/console/thesis/defense/group/${type}-list.json?id=${defenseGroup.id}'+"&secretaryJSON="+$("#secretaryJSON").val()+"&leaderJSON="+$("#leaderJSON").val(),
+            idField: 'teacherid',
+            </c:if>
+            toolbar: '#ui-toolbar1',
+            <%--fit:true,--%>
+            fitColumns:true,
+            height: '350',
+            width: '965',
+            pagination:true,
+            rownumbers:true,
+            pageNumber:1,
+            pageSize : 10,
+            pageList : [ 10, 20, 30, 40, 50 ],
+            singleSelect:false
+        })
+    })
 </script>
 </body>
 </html>

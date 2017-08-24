@@ -2,20 +2,22 @@ package cn.zttek.thesis.modules.service;
 
 import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
+import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.mapper.DefenseGroupMapper;
 import cn.zttek.thesis.modules.mapper.DefenseTaskMapper;
-import cn.zttek.thesis.modules.model.Advice;
-import cn.zttek.thesis.modules.model.DefenseGroup;
-import cn.zttek.thesis.modules.model.DefenseTask;
-import cn.zttek.thesis.modules.model.Thesis;
+import cn.zttek.thesis.modules.mapper.ProjectMapper;
+import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -29,6 +31,9 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
 
     @Autowired
     private DefenseGroupMapper defenseGroupMapper;
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     public PageInfo<DefenseTask> listAll(Integer page, Integer rows, Long projid) throws Exception{
         log.info("===查询所有答辩任务列表===");
@@ -107,9 +112,9 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
             defenseTask.setTeachers(JsonUtils.objectToJson(teacherlist));
             defenseTaskMapper.updateByPrimaryKey(defenseTask);
     }
-    public PageInfo<ThesisDefenseStudent> listStudent(Integer page, Integer rows,Long projid,ThesisResult thesisResult) throws Exception {
+    public PageInfo<ThesisDefenseStudent> listStudent(Integer page, Integer rows, Long projid, ThesisResult thesisResult) throws Exception {
         log.info("===查询论文工作下所有未分配的学生===");
-        List<ThesisDefenseStudent> studentlist=defenseTaskMapper.studentlistByProj(projid,thesisResult.getMajor(),thesisResult.getGrade(),thesisResult.getClazz(),thesisResult.getStuno());
+        List<ThesisDefenseStudent> studentlist=defenseTaskMapper.studentlistByProj(projid,null,null,null,thesisResult.getStuno());
         //List<ThesisDefenseStudent> studentsList=defenseTaskMapper.selectNotAllotedStudent(orgid,thesisResult.getMajor(),thesisResult.getGrade(),thesisResult.getClazz(),thesisResult.getStuno());
         //获取已经分配的所有学生
         List<DefenseTask> tasks=defenseTaskMapper.listByProj(projid);
@@ -124,19 +129,34 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
 
         return pageInfo;
     }
-
-    public PageInfo<ThesisDefenseTeacher> listTeacher(Integer page, Integer rows,Long projid,ThesisResult thesisResult) throws Exception {
+    public PageInfo<ThesisDefenseTeacher> listTeacher(Integer page, Integer rows, Long projid, TitleLevel titleLevel, String account, Timestamp defensetime) throws Exception {
         log.info("===查询所有未分配的老师===");
-        List<ThesisDefenseTeacher> teachersList=defenseTaskMapper.teacherlistByProj(projid,thesisResult.getTitle(),thesisResult.getTeacher());
-        List<DefenseTask> tasks=defenseTaskMapper.listByProj(projid);
-        for(DefenseTask task:tasks){
-            List<ThesisDefenseTeacher> groupTeacherList=JsonUtils.jsonToList(task.getTeachers(),ThesisDefenseTeacher.class);
-            if(groupTeacherList!=null){
-                teachersList.removeAll(groupTeacherList);
+        Project project=ThesisParam.getCurrentProj();
+        List<Project> projects=projectMapper.listByOrgAndYear(project.getOrgid(),project.getYear());
+        //遍历所有活跃论文工作
+        List<ThesisDefenseTeacher> teacherList=new ArrayList<ThesisDefenseTeacher>();
+        for(Project p:projects){
+            //取出每一个论文工作的参与教师，去重后添加列表中
+            List<ThesisDefenseTeacher> teachers=defenseTaskMapper.teacherlistByProj(p.getId(),titleLevel,account);
+            teacherList.removeAll(teachers);
+            teacherList.addAll(teachers);
+        }
+        //List<ThesisDefenseTeacher> teachersList=defenseTaskMapper.teacherlistByProj(projid,titleLevel,account);
+        for(Project p:projects){
+            //取出每一个论文工作下的所有答辩任务,去除已经参加的教师
+            List<DefenseTask> tasks=defenseTaskMapper.listByProj(p.getId());
+            for(DefenseTask task:tasks){
+                //不同论文工作，只去除答辩时间相同的老师
+                if(defensetime.equals(task.getDefensetime())){
+                    List<ThesisDefenseTeacher> groupTeacherList=JsonUtils.jsonToList(task.getTeachers(),ThesisDefenseTeacher.class);
+                    if(groupTeacherList!=null){
+                        teacherList.removeAll(groupTeacherList);
+                    }
+                }
             }
         }
-        Collections.sort(teachersList);
-        PageInfo<ThesisDefenseTeacher> pageInfo=new PageInfo<ThesisDefenseTeacher>(teachersList);
+        Collections.sort(teacherList);
+        PageInfo<ThesisDefenseTeacher> pageInfo=new PageInfo<ThesisDefenseTeacher>(teacherList);
         return pageInfo;
     }
 

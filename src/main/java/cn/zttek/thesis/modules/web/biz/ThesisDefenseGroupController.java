@@ -12,6 +12,7 @@ import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.model.DefenseGroup;
 import cn.zttek.thesis.modules.model.DefenseTask;
+import cn.zttek.thesis.modules.model.Title;
 import cn.zttek.thesis.modules.service.DefenseGroupService;
 import cn.zttek.thesis.modules.service.DefenseTaskService;
 import cn.zttek.thesis.modules.service.TitleService;
@@ -70,7 +71,14 @@ public class ThesisDefenseGroupController extends BaseController{
     }
     @RequestMapping(value = "/edit", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String edit(@ModelAttribute DefenseGroup defenseGroup, Model model) throws Exception {
+        model.addAttribute("leaderJSON",defenseGroupService.getTeacherJSON(defenseGroup.getLeaderid()));
+        model.addAttribute("secretaryJSON",defenseGroupService.getTeacherJSON(defenseGroup.getSecretaryid()));
         return "console/thesis/defense/group/edit";
+    }
+    @RequestMapping(value = "/edit-{type}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String editType(@PathVariable String type, Model model) throws Exception {
+        model.addAttribute("titles",TitleLevel.values());
+        return "console/thesis/defense/group/edit-edit";
     }
     @RequestMapping(value = "/add", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String add(Model model,Long taskid) throws Exception{
@@ -109,18 +117,18 @@ public class ThesisDefenseGroupController extends BaseController{
 
     @RequestMapping(value = "/student-list.json", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUDataGridResult studentlist(Integer page, Integer rows,Long taskid,String stuno,String grouptype) throws Exception{
+    public EUDataGridResult studentlist(Integer page,Integer rows,Long taskid,String stuno,DefenseStatus defenseStatus,@ModelAttribute DefenseGroup defenseGroup) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
-        PageInfo<ThesisDefenseStudent> pageInfo = defenseGroupService.listStudent(page,rows,taskid,stuno,grouptype);
+        PageInfo<ThesisDefenseStudent> pageInfo = defenseGroupService.listStudent(taskid,stuno,defenseStatus,defenseGroup);
         result.setTotal(pageInfo.getTotal());
         result.setRows(pageInfo.getList());
         return result;
     }
     @RequestMapping(value = "/teacher-list.json", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUDataGridResult teacherlist(Integer page, Integer rows,Long taskid,String account,String leaderJSON,String secretaryJSON) throws Exception{
+    public EUDataGridResult teacherlist(@ModelAttribute DefenseGroup defenseGroup, Integer page,Integer rows,Long taskid,String leaderJSON,String secretaryJSON,TitleLevel titleLevel,Long leaderid,Long secretaryid) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
-        PageInfo<ThesisDefenseTeacher> pageInfo = defenseGroupService.listTeacher(page,rows,taskid,account,leaderJSON,secretaryJSON);
+        PageInfo<ThesisDefenseTeacher> pageInfo = defenseGroupService.listTeacher(taskid,leaderJSON,secretaryJSON,titleLevel,defenseGroup);
         result.setTotal(pageInfo.getTotal());
         result.setRows(pageInfo.getList());
         return result;
@@ -151,6 +159,9 @@ public class ThesisDefenseGroupController extends BaseController{
             } else {
                 //如果是添加
                 defenseGroup.setProjectid(ThesisParam.getCurrentProj().getId());
+                //获取当前可用的最小编号
+                log.info("当前可用的最小编号为:"+defenseGroupService.getGroupno(defenseGroup.getTaskid()));
+                defenseGroup.setGroupno(defenseGroupService.getGroupno(defenseGroup.getTaskid()));
                 defenseGroupService.insert(defenseGroup);
             }
             result.setStatus(EUResult.OK);
@@ -185,62 +196,62 @@ public class ThesisDefenseGroupController extends BaseController{
         }
         return result;
     }
-//
-//    @RequestMapping(value = "/delete-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-//    @ResponseBody
-//    public EUResult deleteStudentOrTeacher(String jsondata,@PathVariable String type,@ModelAttribute DefenseTask defenseTask){
-//        EUResult result = new EUResult();
-//        if (StringUtils.isNotEmpty(jsondata)) {
-//            try {
-//                result.setStatus(EUResult.OK);
-//                if("student".equals(type)){
-//                    defenseTaskService.deleteStudentByJSON(jsondata,defenseTask);
-//                }else if("teacher".equals(type)){
-//                    defenseTaskService.deleteTeacherByJSON(jsondata,defenseTask);
-//                }
-//                String msg = "删除答辩任务参加"+("student".equals(type)?"学生":"教师")+"成功";
-//                result.setMsg(msg);
-//            } catch (Exception e) {
-//                result.setStatus(EUResult.FAIL);
-//                result.setMsg("删除答辩任务参加"+("student".equals(type)?"学生":"教师")+"时发生异常！" + e.getMessage());
-//            }
-//        } else {
-//            result.setStatus(EUResult.FAIL);
-//            result.setMsg("请选择要删除的"+("student".equals(type)?"学生":"教师")+"！");
-//        }
-//        return result;
-//    }
+
+    @RequestMapping(value = "/delete-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public EUResult deleteStudentOrTeacher(String jsondata,@PathVariable String type,@ModelAttribute DefenseGroup defenseGroup){
+        EUResult result = new EUResult();
+        if (StringUtils.isNotEmpty(jsondata)) {
+            try {
+                result.setStatus(EUResult.OK);
+                if("student".equals(type)){
+                    defenseGroupService.deleteStudentByJSON(jsondata,defenseGroup);
+                }else if("teacher".equals(type)){
+                    defenseGroupService.deleteTeacherByJSON(jsondata,defenseGroup);
+                }
+                String msg = "删除答辩任务参加"+("student".equals(type)?"学生":"教师")+"成功";
+                result.setMsg(msg);
+            } catch (Exception e) {
+                result.setStatus(EUResult.FAIL);
+                result.setMsg("删除答辩任务参加"+("student".equals(type)?"学生":"教师")+"时发生异常！" + e.getMessage());
+            }
+        } else {
+            result.setStatus(EUResult.FAIL);
+            result.setMsg("请选择要删除的"+("student".equals(type)?"学生":"教师")+"！");
+        }
+        return result;
+    }
     @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.GET, produces = "text/html;charset=utf-8")
-    public String addStudentOrTeacher(Model model,@PathVariable String type,@ModelAttribute("taskid")  Long taskid) throws Exception{
+    public String addStudentOrTeacher(Model model,@PathVariable String type,@ModelAttribute DefenseGroup defenseGroup) throws Exception{
         if(!"student".equals(type)){
-            model.addAttribute("titles",titleService.listAll());
+            model.addAttribute("titles", TitleLevel.values());
         }
         return "console/thesis/defense/group/edit-add";
     }
-//    @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-//    @ResponseBody
-//    public EUResult add(String jsondata,@PathVariable String type,@ModelAttribute DefenseTask defenseTask){
-//        EUResult result = new EUResult();
-//        if (StringUtils.isNotEmpty(jsondata)){
-//            try{
-//                result.setStatus(EUResult.OK);
-//                if("student".equals(type)){
-//                    defenseTaskService.addStudentByJSON(jsondata,defenseTask);
-//                }else if("teacher".equals(type)){
-//                    defenseTaskService.addTeacherByJSON(jsondata,defenseTask);
-//                }
-//                String msg = "添加答辩任务参加"+("student".equals(type)?"学生":"教师")+"成功";
-//                result.setMsg(msg);
-//            }catch(Exception e){
-//                result.setStatus(EUResult.FAIL);
-//                result.setMsg("添加答辩任务参加"+("student".equals(type)?"学生":"教师")+"时发生异常！" + e.getMessage());
-//            }
-//        }else{
-//            result.setStatus(EUResult.FAIL);
-//            result.setMsg("请选择要添加的"+("student".equals(type)?"学生":"教师")+"！");
-//
-//        }
-//        return result;
-//    }
+    @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public EUResult add(String jsondata,@PathVariable String type,@ModelAttribute DefenseGroup defenseGroup){
+        EUResult result = new EUResult();
+        if (StringUtils.isNotEmpty(jsondata)){
+            try{
+                result.setStatus(EUResult.OK);
+                if("student".equals(type)){
+                    defenseGroupService.addStudentByJSON(jsondata,defenseGroup);
+                }else if("teacher".equals(type)){
+                    defenseGroupService.addTeacherByJSON(jsondata,defenseGroup);
+                }
+                String msg = "添加答辩任务参加"+("student".equals(type)?"学生":"教师")+"成功";
+                result.setMsg(msg);
+            }catch(Exception e){
+                result.setStatus(EUResult.FAIL);
+                result.setMsg("添加答辩任务参加"+("student".equals(type)?"学生":"教师")+"时发生异常！" + e.getMessage());
+            }
+        }else{
+            result.setStatus(EUResult.FAIL);
+            result.setMsg("请选择要添加的"+("student".equals(type)?"学生":"教师")+"！");
+
+        }
+        return result;
+    }
 
 }
