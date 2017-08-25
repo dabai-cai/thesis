@@ -38,6 +38,8 @@ public class ThesisWorkController extends BaseController {
     private UploadService uploadService;
     @Autowired
     private GoodDelayService goodDelayService;
+    @Autowired
+    private DefenseGroupService defenseGroupService;
 
     @RequestMapping(value = "/index", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String index(Model model) throws Exception{
@@ -63,6 +65,8 @@ public class ThesisWorkController extends BaseController {
             model.addAttribute("upload",upload);
             GoodDelay goodDelay=goodDelayService.queryByThesisId(thesis.getId());
             model.addAttribute("goodDelay",goodDelay);
+            DefenseGroup defenseGroup=defenseGroupService.getByStudent(project.getId(),currentUser.getId());
+            model.addAttribute("defenseGroup",defenseGroup);
             //TODO 加载答辩小组信息、评分情况等
         }
         return "console/thesis/work/index";

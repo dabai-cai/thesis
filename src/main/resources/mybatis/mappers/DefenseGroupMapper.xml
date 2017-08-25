@@ -5,10 +5,10 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="projectid" property="projectid" jdbcType="BIGINT" />
     <result column="taskid" property="taskid" jdbcType="BIGINT" />
-    <result column="groupno" property="groupno" jdbcType="VARCHAR" />
+    <result column="groupno" property="groupno" jdbcType="INTEGER" />
     <result column="grouptype" property="grouptype" jdbcType="VARCHAR" />
-    <result column="leader" property="leader" jdbcType="VARCHAR" />
-    <result column="secretary" property="secretary" jdbcType="VARCHAR" />
+    <result column="leaderid" property="leaderid" jdbcType="BIGINT" />
+    <result column="secretaryid" property="secretaryid" jdbcType="BIGINT" />
     <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
     <result column="defenseroom" property="defenseroom" jdbcType="VARCHAR" />
     <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
@@ -21,11 +21,11 @@
   </delete>
   <insert id="insert" parameterType="cn.zttek.thesis.modules.model.DefenseGroup" >
     insert into defense_group (id, projectid,taskid, groupno,
-      grouptype, leader, secretary, 
+      grouptype, leaderid, secretaryid,
       defensetime, defenseroom, cdate, 
       teachers, students)
-    values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT},#{groupno,jdbcType=VARCHAR},
-      #{grouptype,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, #{secretary,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT},#{groupno,jdbcType=INTEGER},
+      #{grouptype,jdbcType=VARCHAR}, #{leaderid,jdbcType=BIGINT}, #{secretaryid,jdbcType=BIGINT},
       #{defensetime,jdbcType=TIMESTAMP}, #{defenseroom,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP}, 
       #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
   </insert>
@@ -33,10 +33,10 @@
     update defense_group
     set projectid = #{projectid,jdbcType=BIGINT},
       taskid = #{taskid,jdbcType=BIGINT},
-      groupno = #{groupno,jdbcType=VARCHAR},
+      groupno = #{groupno,jdbcType=INTEGER},
       grouptype = #{grouptype,jdbcType=VARCHAR},
-      leader = #{leader,jdbcType=VARCHAR},
-      secretary = #{secretary,jdbcType=VARCHAR},
+      leaderid = #{leaderid,jdbcType=BIGINT},
+      secretaryid = #{secretaryid,jdbcType=BIGINT},
       defensetime = #{defensetime,jdbcType=TIMESTAMP},
       defenseroom = #{defenseroom,jdbcType=VARCHAR},
       cdate = #{cdate,jdbcType=TIMESTAMP},
@@ -44,30 +44,75 @@
       students = #{students,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
-    cdate, teachers, students
-    from defense_group
-    where id = #{id,jdbcType=BIGINT}
+  <select id="selectByPrimaryKey" resultMap="Result" parameterType="java.lang.Long" >
+    select dg.id, dg.projectid,dg.taskid,dg.groupno, dg.grouptype, dg.leaderid, dg.secretaryid, dg.defensetime, dg.defenseroom,
+    dg.cdate, dg.teachers, dg.students,ua.username as leaderName,ub.username as secretaryName
+    from defense_group dg
+    left join user ua on dg.leaderid = ua.id
+    left join user ub on dg.secretaryid = ub.id
+    where dg.id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
+    select id, projectid,taskid,groupno, grouptype, leaderid, secretaryid, defensetime, defenseroom,
     cdate, teachers, students
     from defense_group
   </select>
   <!-- ==================以下为手动添加======================== -->
+  <resultMap id="Result" type="cn.zttek.thesis.modules.model.DefenseGroup">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="projectid" property="projectid" jdbcType="BIGINT" />
+    <result column="taskid" property="taskid" jdbcType="BIGINT" />
+    <result column="groupno" property="groupno" jdbcType="INTEGER" />
+    <result column="grouptype" property="grouptype" jdbcType="VARCHAR" />
+    <result column="leaderid" property="leaderid" jdbcType="BIGINT" />
+    <result column="secretaryid" property="secretaryid" jdbcType="BIGINT" />
+    <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
+    <result column="defenseroom" property="defenseroom" jdbcType="VARCHAR" />
+    <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
+    <result column="teachers" property="teachers" jdbcType="LONGVARCHAR" />
+    <result column="students" property="students" jdbcType="LONGVARCHAR" />
+    <result column="leaderName" property="leaderName" jdbcType="VARCHAR" />
+    <result column="secretaryName" property="secretaryName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DefenseStudentResult" type="cn.zttek.thesis.modules.expand.ThesisDefenseStudent">
+    <result column="id" jdbcType="BIGINT" property="studentid" />
+    <result column="account" jdbcType="VARCHAR" property="stuno" />
+    <result column="username" jdbcType="VARCHAR" property="stuname" />
+    <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+    <result column="defensestatus" property="defenseStatus" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+  </resultMap>
+  <resultMap id="DefenseTeacherResult" type="cn.zttek.thesis.modules.expand.ThesisDefenseTeacher">
+    <result column="id" jdbcType="BIGINT" property="teacherid" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="username" jdbcType="VARCHAR" property="userName" />
+    <result column="name" jdbcType="VARCHAR" property="titleName" />
+    <result column="level" property="titleLevel" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+  </resultMap>
   <delete id="deleteByTask" parameterType="java.lang.Long" >
     delete from defense_group
     where  taskid = #{taskid,jdbcType=BIGINT}
   </delete>
-  <select id="selectByTask" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,
-    cdate, teachers, students
-    from defense_group where taskid =#{taskid,jdbcType=BIGINT}
+  <!--<select id="selectByTask" resultMap="BaseResultMap" parameterType="java.lang.Long" >-->
+    <!--select id, projectid,taskid,groupno, grouptype, leader, secretary, defensetime, defenseroom,-->
+    <!--cdate, teachers, students-->
+    <!--from defense_group where taskid =#{taskid,jdbcType=BIGINT}-->
+  <!--</select>-->
+  <select id="selectByTask" resultMap="Result" parameterType="java.lang.Long" >
+    select dg.id, dg.projectid,dg.taskid,dg.groupno, dg.grouptype, dg.leaderid, dg.secretaryid, dg.defensetime, dg.defenseroom,
+    dg.cdate, dg.teachers, dg.students,ua.username as leaderName,ub.username as secretaryName
+    from defense_group dg
+    left join user ua on dg.leaderid = ua.id
+    left join user ub on dg.secretaryid = ub.id
+    where taskid =#{taskid,jdbcType=BIGINT}
+  </select>
+  <select id="selectTeacherByUserId" resultMap="DefenseTeacherResult">
+    select a.id,a.account,a.username ,t.name,t.level
+    from user a,user_info ui,title t
+    WHERE  a.id=ui.uid and ui.tid=t.id and a.id=#{userid}
   </select>
 
   <select id="listBySecretary" resultMap="BaseResultMap">
-    select * from defense_group where projectid=#{projid} and secretary=#{secretary}
+    select * from defense_group where projectid=#{projid} and secretaryid=#{secretaryid}
   </select>
 
 </mapper>

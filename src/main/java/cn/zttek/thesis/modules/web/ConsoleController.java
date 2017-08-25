@@ -6,6 +6,7 @@ import cn.zttek.thesis.modules.enums.UserType;
 import cn.zttek.thesis.modules.model.Org;
 import cn.zttek.thesis.modules.model.Project;
 import cn.zttek.thesis.modules.model.User;
+import cn.zttek.thesis.modules.service.AdviceService;
 import cn.zttek.thesis.modules.service.OrgService;
 import cn.zttek.thesis.modules.service.ProjectService;
 import cn.zttek.thesis.utils.ThesisParam;
@@ -34,6 +35,8 @@ public class ConsoleController extends BaseController {
     private OrgService orgService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private AdviceService adviceService;
 
     @RequiresAuthentication
     @RequestMapping(value = "/index", produces = "text/html;charset=utf-8")
@@ -99,9 +102,12 @@ public class ConsoleController extends BaseController {
     }
 
     //@RequiresAuthentication
-    @RequestMapping(value = "/main", produces = "text/html;charset=utf-8")
-    public String main() throws Exception {
+    @RequestMapping(value = "/main", produces = "text/html;charset=utf-8",method = RequestMethod.GET)
+    public String main(Model model) throws Exception {
         //TODO 取出菜单
+        User currentUser=ThesisParam.getCurrentUser();
+        Org currentOrg=ThesisParam.getCurrentOrg();
+        model.addAttribute("advices",adviceService.listByUserType(1,10,currentOrg.getId(),null,currentUser.getType()).getList());
         return "console/main";
     }
 

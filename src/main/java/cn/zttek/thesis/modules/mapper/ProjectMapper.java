@@ -46,4 +46,18 @@ public interface ProjectMapper extends BaseMapper<Project> {
      * @throws Exception
      */
     List<Project> listByUser(@Param("orgid") Long orgid, @Param("uid") Long uid, @Param("type") String type) throws Exception;
+
+
+
+    /**
+     * 根据组织机构id和年份获得相应的活跃论文工作
+     * @param orgid
+     * @param year
+     * @return
+     * @throws Exception
+     */
+    List<Project> listByOrgAndYear(@Param("orgid") Long orgid,@Param("year")Integer year) throws Exception;
+
+
+
 }

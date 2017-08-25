@@ -3,6 +3,7 @@ package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.common.base.BaseMapper;
 import cn.zttek.thesis.modules.enums.UserType;
+import cn.zttek.thesis.modules.expand.GuideStudent;
 import cn.zttek.thesis.modules.model.Role;
 import cn.zttek.thesis.modules.model.User;
 import org.apache.ibatis.annotations.Param;
@@ -106,4 +107,17 @@ public interface UserMapper extends BaseMapper<User> {
      * @param stuno
      */
     User getByProjectAndAccount(@Param("projid") Long projid, @Param("stuno") String stuno) throws Exception;
+
+
+
+
+    /**
+     * 查询指导老师指导学生的列表
+     * @param projid
+     * @param teacherid
+     * @return
+     * @throws Exception
+     */
+    List<GuideStudent> listStudentByGuide(@Param("projid")Long projid, @Param("teacherid") Long teacherid) throws Exception;
+
 }

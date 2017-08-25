@@ -241,4 +241,22 @@
         AND ps.projectid = #{projid}
         AND u.account = #{stuno}
     </select>
+
+
+    <resultMap id="GuideStudMap" type="cn.zttek.thesis.modules.expand.GuideStudent">
+        <id column="uid" jdbcType="BIGINT" property="id" />
+        <id column="tid" jdbcType="BIGINT" property="thesisid" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+        <result column="account" jdbcType="VARCHAR" property="account" />
+        <result column="username" jdbcType="VARCHAR" property="stuname" />
+    </resultMap>
+    <select id="listStudentByGuide" resultMap="GuideStudMap">
+        select u.id uid,tt.topic,u.account,u.username as stuname,tt.id tid
+        from  thesis_teacher tt left JOIN user u on tt.studentid=u.id
+        where tt.projid = #{projid}
+        and tt.studentid >0 and tt.checked = true
+        and tt.teacherid = #{teacherid}
+    </select>
+
+
 </mapper>

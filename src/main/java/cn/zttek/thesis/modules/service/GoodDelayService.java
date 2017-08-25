@@ -1,5 +1,4 @@
 package cn.zttek.thesis.modules.service;
-
 import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.modules.expand.ApplyExtend;
 import cn.zttek.thesis.modules.mapper.GoodDelayMapper;
@@ -13,7 +12,7 @@ import java.util.List;
 public class GoodDelayService extends BaseService<GoodDelay> {
 
    @Autowired
-   private GoodDelayMapper goodDelayMapper;
+    private GoodDelayMapper goodDelayMapper;
 
 
     /**

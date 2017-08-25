@@ -154,4 +154,11 @@
         from project p, (select projectid from project_${type} pt where pt.${type}id = #{uid}) as temp
         where p.valid = 1 and p.orgid = #{orgid} and p.id = temp.projectid and p.close = 0
     </select>
+
+
+    <select id="listByOrgAndYear" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project p where p.valid = 1 and p.close = 0 and p.orgid = #{orgid} and p.year = #{year}
+    </select>
 </mapper>

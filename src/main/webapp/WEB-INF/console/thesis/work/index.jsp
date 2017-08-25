@@ -72,7 +72,39 @@
                 </tbody>
             </table>
         </c:if>
+        <div class="easyui-accordion" style="width: 95%; margin: 20px auto;">
+
+                <div title="答辩分组信息" data-options="iconCls:'myicon-group',collapsed:false,collapsible:false" style="padding:10px; height: 150px;">
+                    <table class="mini-table" style="width: 98%">
+                        <thead>
+                        <tr>
+                            <th>答辩组长</th>
+                            <th>答辩秘书</th>
+                            <th>答辩时间</th>
+                            <th>答辩地点</th>
+                            <th>其他操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td></td>
+                            <td></td>
+                            <td>
+                                <fmt:formatDate value="${}" pattern="yyyy.MM.dd"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <a href="" class="easyui-linkbutton" iconCls="icon-download">下载分组表</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
     </div>
+    </div>
+
+
+
     <div data-options="region:'center',split:true, iconCls:'myicon-arrow-right', border:false, title:'论文事务处理'" width="50%">
         <c:if test="${thesis ne null}">
 

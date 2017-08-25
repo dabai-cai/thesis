@@ -112,4 +112,8 @@ public interface ThesisMapper extends BaseMapper<Thesis> {
     List<ThesisExpand> listByTeacher(@Param("projid") Long projid, @Param("teacherid") Long teacherid) throws Exception;
 
 
+
+
+
+
 }

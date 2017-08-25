@@ -90,7 +90,7 @@
     <select id="listByTeacher" resultMap="cn.zttek.thesis.modules.mapper.ThesisExpandMapper.ThesisExpand">
         select ts.id, ts.topic, ts.teacherid, ts.studentid, ts.account as stuno, ts.username as stuname, s.id as scoreid,
         s.mark1 as mark, ts.viewerid
-        from thesis_student ts LEFT JOIN score s on ts.id = s.thesisid
+        from thesis_student ts LEFT JOIN score s on ts.id = s.thesisid right join upload u on ts.id=u.thesisid
         where ts.teacherid = #{teacherid} and ts.projid = #{projid}
     </select>
 
@@ -98,7 +98,7 @@
         select ts.id, ts.topic, ts.teacherid, ts.studentid, ts.account as stuno, ts.username as stuname, s.id as scoreid,
         s.mark2 as mark, ts.viewerid
         from thesis_student ts LEFT JOIN score s on ts.id = s.thesisid
-        where ts.viewerid = #{viewerid} and ts.projid = #{projid}
+        where ts.viewerid = #{viewerid} and ts.projid = #{projid} and s.mark1>=0
         order by ts.teacherid
     </select>
 

@@ -1,12 +1,13 @@
 package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.common.base.BaseMapper;
-import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
+import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.model.DefenseGroup;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 /**
  * 由MyBatis Generator工具自动生成
  */
@@ -26,15 +27,22 @@ public interface DefenseGroupMapper extends BaseMapper<DefenseGroup> {
      */
     List<DefenseGroup> selectByTask(@Param("taskid") Long id) throws Exception;
 
-
     /**
-     * 查询评阅教师在当前论文工作下的评阅成绩列表
-     * @param projid
-     * @param secretary
+     * 用于查找答辩秘书和答辩组长
+     * @param id
      * @return
      * @throws Exception
      */
-    DefenseGroup listBySecretary(@Param("projid") Long projid, @Param(("secretary")) Long secretary) throws Exception;
+    ThesisDefenseTeacher selectTeacherByUserId(@Param("userid") Long id)throws  Exception;
 
+
+    /**
+     * 查询答辩教师在当前论文工作下的答辩成绩列表
+     * @param projid
+     * @param secretaryid
+     * @return
+     * @throws Exception
+     */
+    DefenseGroup listBySecretary(@Param("projid") Long projid, @Param(("secretaryid")) Long secretaryid) throws Exception;
 
 }

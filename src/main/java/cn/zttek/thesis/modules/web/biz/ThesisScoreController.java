@@ -3,6 +3,7 @@ package cn.zttek.thesis.modules.web.biz;
 import cn.zttek.thesis.common.base.BaseController;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.holder.TitleHolder;
 import cn.zttek.thesis.modules.model.*;
@@ -113,6 +114,11 @@ public class ThesisScoreController extends BaseController {
         try {
 
             if(score.getId() != null && score.getId() > 0){
+                if(score.getMark2()!=null&&score.getMark3()==null){//指导老师，评阅老师登记成绩之后，更新论文答辩类型(正常答辩)
+                    Thesis thesis=thesisService.queryById(score.getThesisid());
+                    thesis.setDefensestatus(DefenseStatus.NORMAL);
+                    thesisService.update(thesis);
+                }
                 scoreService.update(score);
             }else{
                 scoreService.insert(score);

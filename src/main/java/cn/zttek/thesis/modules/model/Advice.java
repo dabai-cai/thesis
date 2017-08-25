@@ -2,8 +2,7 @@ package cn.zttek.thesis.modules.model;
 
 import cn.zttek.thesis.common.base.BaseModel;
 import cn.zttek.thesis.modules.enums.AdviceTarget;
-
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class Advice extends BaseModel {
     private Long orgid;
@@ -12,6 +11,22 @@ public class Advice extends BaseModel {
     private String content;
     private AdviceTarget target;
     private Boolean top;
+
+
+
+    /**
+     * 添加此字段作为前端显示编辑人所用
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String creatorname;
+
+    public String getCreatorname() {
+        return creatorname;
+    }
+
+    public void setCreatorname(String creatorname) {
+        this.creatorname = creatorname;
+    }
 
     public Long getOrgid() {
         return orgid;

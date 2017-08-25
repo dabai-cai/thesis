@@ -86,6 +86,7 @@ public class ScoreService extends BaseService<Score>{
         if(null!=defenseGroup){
             List<ThesisDefenseStudent> students= JsonUtils.jsonToList(defenseGroup.getStudents(),ThesisDefenseStudent.class);//转换为pojo
             Long[] studentids=new Long[students.size()];
+            System.out.println("学生人数"+students.size());
             for(int i=0;i<students.size();i++){
                 studentids[i]=students.get(i).getStudentid();
             }

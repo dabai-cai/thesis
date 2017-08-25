@@ -3,7 +3,6 @@ package cn.zttek.thesis.modules.model;
 import cn.zttek.thesis.common.base.BaseModel;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public class DefenseGroup extends BaseModel {
@@ -11,22 +10,46 @@ public class DefenseGroup extends BaseModel {
 
     private Long taskid;
 
-    private String groupno;
+    private Integer groupno;
 
     private String grouptype;
 
-    private String leader;
+    private Long leaderid;
 
-    private String secretary;
+    private Long secretaryid;
 
     private Timestamp defensetime;
 
     private String defenseroom;
 
-
     private String teachers;
 
     private String students;
+
+    /**
+     * 前端显示答辩组长名字用
+     */
+    private String leaderName;
+    /**
+     * 前端显示答辩秘书名字用
+     */
+    private String secretaryName;
+
+    public String getLeaderName() {
+        return leaderName;
+    }
+
+    public void setLeaderName(String leaderName) {
+        this.leaderName = leaderName;
+    }
+
+    public String getSecretaryName() {
+        return secretaryName;
+    }
+
+    public void setSecretaryName(String secretaryName) {
+        this.secretaryName = secretaryName;
+    }
 
     public Long getProjectid() {
         return projectid;
@@ -44,12 +67,12 @@ public class DefenseGroup extends BaseModel {
         this.taskid = taskid;
     }
 
-    public String getGroupno() {
+    public Integer getGroupno() {
         return groupno;
     }
 
-    public void setGroupno(String groupno) {
-        this.groupno = groupno == null ? null : groupno.trim();
+    public void setGroupno(Integer groupno) {
+        this.groupno = groupno;
     }
 
     public String getGrouptype() {
@@ -60,20 +83,20 @@ public class DefenseGroup extends BaseModel {
         this.grouptype = grouptype == null ? null : grouptype.trim();
     }
 
-    public String getLeader() {
-        return leader;
+    public Long getLeaderid() {
+        return leaderid;
     }
 
-    public void setLeader(String leader) {
-        this.leader = leader == null ? null : leader.trim();
+    public void setLeaderid(Long leaderid) {
+        this.leaderid = leaderid;
     }
 
-    public String getSecretary() {
-        return secretary;
+    public Long getSecretaryid() {
+        return secretaryid;
     }
 
-    public void setSecretary(String secretary) {
-        this.secretary = secretary == null ? null : secretary.trim();
+    public void setSecretaryid(Long secretaryid) {
+        this.secretaryid = secretaryid;
     }
 
     public Timestamp getDefensetime() {
@@ -118,8 +141,8 @@ public class DefenseGroup extends BaseModel {
         sb.append(", taskid=").append(taskid);
         sb.append(", groupno=").append(groupno);
         sb.append(", grouptype=").append(grouptype);
-        sb.append(", leader=").append(leader);
-        sb.append(", secretary=").append(secretary);
+        sb.append(", leader=").append(leaderid);
+        sb.append(", secretary=").append(secretaryid);
         sb.append(", defensetime=").append(defensetime);
         sb.append(", defenseroom=").append(defenseroom);
         sb.append(", teachers=").append(teachers);
@@ -145,8 +168,8 @@ public class DefenseGroup extends BaseModel {
                 && (this.getTaskid() == null ? other.getTaskid() == null : this.getTaskid().equals(other.getTaskid()))
             && (this.getGroupno() == null ? other.getGroupno() == null : this.getGroupno().equals(other.getGroupno()))
             && (this.getGrouptype() == null ? other.getGrouptype() == null : this.getGrouptype().equals(other.getGrouptype()))
-            && (this.getLeader() == null ? other.getLeader() == null : this.getLeader().equals(other.getLeader()))
-            && (this.getSecretary() == null ? other.getSecretary() == null : this.getSecretary().equals(other.getSecretary()))
+            && (this.getLeaderid() == null ? other.getLeaderid() == null : this.getLeaderid().equals(other.getLeaderid()))
+            && (this.getSecretaryid() == null ? other.getSecretaryid() == null : this.getSecretaryid().equals(other.getSecretaryid()))
             && (this.getDefensetime() == null ? other.getDefensetime() == null : this.getDefensetime().equals(other.getDefensetime()))
             && (this.getDefenseroom() == null ? other.getDefenseroom() == null : this.getDefenseroom().equals(other.getDefenseroom()))
             && (this.getCdate() == null ? other.getCdate() == null : this.getCdate().equals(other.getCdate()))
@@ -163,8 +186,8 @@ public class DefenseGroup extends BaseModel {
         result = prime * result + ((getTaskid() == null) ? 0 : getTaskid().hashCode());
         result = prime * result + ((getGroupno() == null) ? 0 : getGroupno().hashCode());
         result = prime * result + ((getGrouptype() == null) ? 0 : getGrouptype().hashCode());
-        result = prime * result + ((getLeader() == null) ? 0 : getLeader().hashCode());
-        result = prime * result + ((getSecretary() == null) ? 0 : getSecretary().hashCode());
+        result = prime * result + ((getLeaderid() == null) ? 0 : getLeaderid().hashCode());
+        result = prime * result + ((getSecretaryid() == null) ? 0 : getSecretaryid().hashCode());
         result = prime * result + ((getDefensetime() == null) ? 0 : getDefensetime().hashCode());
         result = prime * result + ((getDefenseroom() == null) ? 0 : getDefenseroom().hashCode());
         result = prime * result + ((getCdate() == null) ? 0 : getCdate().hashCode());

@@ -1,7 +1,6 @@
 package cn.zttek.thesis.modules.enums;
 
 import cn.zttek.thesis.common.mybatis.Identifiable;
-import cn.zttek.thesis.modules.model.Advice;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -13,16 +12,17 @@ public enum AdviceTarget implements Identifiable<Integer> {
     STUDENT(2, "学生"),
     MANAGER(3,"管理员");
 
+
     private Integer val;
     private String label;
 
-    AdviceTarget(Integer val,String label){
+    AdviceTarget(Integer val, String label){
         this.val=val;
         this.label=label;
     }
 
     public static AdviceTarget getById(int id){
-        AdviceTarget[] adviceTargets=AdviceTarget.values();
+        AdviceTarget[] adviceTargets= AdviceTarget.values();
         for(AdviceTarget target: adviceTargets){
             if(target.val==id){
                 return target;

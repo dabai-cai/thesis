@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zttek.thesis.modules.mapper.DefenseTaskMapper" >
+  <resultMap id="BaseResultMap" type="cn.zttek.thesis.modules.model.DefenseTask" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="projectid" property="projectid" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="president" property="president" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="nums" property="nums" jdbcType="INTEGER" />
+    <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
+    <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
+    <result column="teachers" property="teachers" jdbcType="LONGVARCHAR" />
+    <result column="students" property="students" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from defense_task
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.zttek.thesis.modules.model.DefenseTask" >
+    insert into defense_task (id, projectid, name, 
+      president, contact, remark, 
+      nums, defensetime, cdate, 
+      teachers, students)
+    values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{president,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{nums,jdbcType=INTEGER}, #{defensetime,jdbcType=TIMESTAMP}, #{cdate,jdbcType=TIMESTAMP}, 
+      #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.DefenseTask" >
+    update defense_task
+    set projectid = #{projectid,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      president = #{president,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      nums = #{nums,jdbcType=INTEGER},
+      defensetime = #{defensetime,jdbcType=TIMESTAMP},
+      cdate = #{cdate,jdbcType=TIMESTAMP},
+      teachers = #{teachers,jdbcType=LONGVARCHAR},
+      students = #{students,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, projectid, name, president, contact, remark, nums, defensetime, cdate, 
+    teachers, students
+    from defense_task
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, projectid, name, president, contact, remark, nums, defensetime, cdate, 
+    teachers, students
+    from defense_task
+  </select>
+
+  <!-- ==================以下为手动添加======================== -->
+
+  <resultMap id="DefenseStudentResult" type="cn.zttek.thesis.modules.expand.ThesisDefenseStudent">
+    <result column="id" jdbcType="BIGINT" property="studentid" />
+    <result column="account" jdbcType="VARCHAR" property="stuno" />
+    <result column="username" jdbcType="VARCHAR" property="stuname" />
+    <result column="clazz" jdbcType="VARCHAR" property="clazz" />
+    <result column="defensestatus" property="defenseStatus" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+  </resultMap>
+  <resultMap id="DefenseTeacherResult" type="cn.zttek.thesis.modules.expand.ThesisDefenseTeacher">
+    <result column="id" jdbcType="BIGINT" property="teacherid" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="username" jdbcType="VARCHAR" property="userName" />
+    <result column="name" jdbcType="VARCHAR" property="titleName" />
+    <result column="level" property="titleLevel" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
+  </resultMap>
+  <select id="listByProj" resultMap="BaseResultMap" >
+    select id , projectid, name, president, contact, remark, nums, defensetime, cdate,
+    teachers, students
+    from defense_task WHERE projectid = #{projid,jdbcType=BIGINT}
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap" >
+    select id , projectid, name, president, contact, remark, nums, defensetime, cdate,
+    teachers, students
+    from defense_task WHERE name = #{name}
+  </select>
+  <select id="studentlistByProj" resultMap="DefenseStudentResult">
+    select a.id,a.account,a.username ,b.clazz,t.defensestatus
+    from user a,user_info b,project_student ps,thesis t
+    WHERE a.id=ps.studentid and a.id=b.uid and a.id=t.studentid and ps.projectid = #{projid,jdbcType=BIGINT}
+    and (t.defensestatus = 0 or t.defensestatus = 2)
+    <if test="major!=null">
+      AND b.major=#{major}
+    </if>
+    <if test="grade!=null">
+      AND b.grade=#{grade}
+    </if>
+    <if test="clazz!=null">
+      AND b.clazz=#{clazz}
+    </if>
+    <if test="studentno!=null and studentno != ''">
+      AND a.account LIKE CONCAT('%',#{studentno},'%')
+    </if>
+</select>
+  <select id="teacherlistByProj" resultMap="DefenseTeacherResult">
+    select a.id,a.account,a.username ,t.name,t.level
+    from user a,user_info ui,title t,project_teacher pt
+    WHERE a.id=pt.teacherid and a.id=ui.uid and ui.tid=t.id and pt.projectid = #{projid,jdbcType=BIGINT}
+    <if test="account!=null and account != ''">
+      AND a.account LIKE CONCAT('%',#{account},'%')
+    </if>
+    <if test="titleLevel!=null">
+      AND t.level = #{titleLevel, typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler}
+    </if>
+  </select>
+
+</mapper>

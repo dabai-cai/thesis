@@ -13,9 +13,16 @@
 <form id="myform" action="${ctx}/console/index" method="post">
     <input type="hidden" id="orgid" name="orgid" />
     <input type="hidden" id="projid" name="projid" />
-    <div>
-        <table id="dg2"></table><a class="easyui-linkbutton" href="#" onclick="submitForm();" data-options="iconCls:'icon-ok'" style="width:250px">确定</a>
+    <div class="easyui-layout" data-options="fit:true" style="height: 375px">
+        <div data-options="region:'center'">
+            <table id="dg2"></table>
+        </div>
+        <div data-options="region:'south'">
+            <a class="easyui-linkbutton" href="#" onclick="submitForm();" data-options="iconCls:'icon-ok'" style="width:120px">确定</a>
+            <a class="easyui-linkbutton" href="#" onclick="clearForm();" data-options="iconCls:'icon-cancel'" style="width:120px">取消</a>
+        </div>
     </div>
+
 </form>
 <script type="text/javascript">
     var isSuper = '${currentUser.type.ordinal() eq 0}';
@@ -25,6 +32,7 @@
         dg2=$('#dg2').datagrid({
             method: "get",
             url:'${ctx}/console/listProject.json?orgid='+${orgid},
+            fit   : true,
            fitColumns : true,
            border : false,
             idField : 'id',
@@ -63,5 +71,9 @@
             $("#myform").submit();
         }
         return false;
+    }
+
+    function clearForm() {
+        $("#dlg").dialog("close");
     }
 </script>

@@ -1,19 +1,19 @@
 package cn.zttek.thesis.modules.expand;
 
-import cn.zttek.thesis.modules.model.Thesis;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
 
 /**
  * Created by Mankind on 2017/8/15.
  */
-public class ThesisDefenseStudent {
+public class ThesisDefenseStudent implements Comparable<ThesisDefenseStudent>{
     /**
-     * ID、学号、姓名、班级
+     * ID、学号、姓名、班级、答辩类型
      */
     private Long studentid;
     private String stuno;
     private String stuname;
     private String clazz;
-
+    private DefenseStatus defenseStatus;
     public Long getStudentid() {
         return studentid;
     }
@@ -46,6 +46,14 @@ public class ThesisDefenseStudent {
         this.clazz = clazz;
     }
 
+    public DefenseStatus getDefenseStatus() {
+        return defenseStatus;
+    }
+
+    public void setDefenseStatus(DefenseStatus defenseStatus) {
+        this.defenseStatus = defenseStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -60,6 +68,7 @@ public class ThesisDefenseStudent {
         ThesisDefenseStudent other = (ThesisDefenseStudent) that;
         return (this.getStudentid() == null ? other.getStudentid() == null : this.getStudentid().equals(other.getStudentid()))
                 && (this.getClazz() == null ? other.getClazz() == null : this.getClazz().equals(other.getClazz()))
+                && (this.getDefenseStatus() == null ? other.getDefenseStatus() == null : this.getDefenseStatus().equals(other.getDefenseStatus()))
                 && (this.getStuname()== null ? other.getStuname() == null : this.getStuname().equals(other.getStuname()))
                 && (this.getStuno() == null ? other.getStuno() == null : this.getStuno().equals(other.getStuno()));
     }
@@ -72,6 +81,23 @@ public class ThesisDefenseStudent {
         result = prime * result + ((getClazz() == null) ? 0 : getClazz().hashCode());
         result = prime * result + ((getStuname() == null) ? 0 : getStuname().hashCode());
         result = prime * result + ((getStuno() == null) ? 0 : getStuno().hashCode());
+        result = prime * result + ((getDefenseStatus() == null) ? 0 : getDefenseStatus().hashCode());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ThesisDefenseStudent{" +
+                "studentid=" + studentid +
+                ", stuno='" + stuno + '\'' +
+                ", stuname='" + stuname + '\'' +
+                ", clazz='" + clazz + '\'' +
+                ", defenseStatus=" + defenseStatus +
+                '}';
+    }
+
+    @Override
+    public int compareTo(ThesisDefenseStudent o) {
+        return this.stuno.compareTo(o.getStuno());
     }
 }

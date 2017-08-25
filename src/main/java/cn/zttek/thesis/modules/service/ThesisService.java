@@ -357,7 +357,7 @@ public class ThesisService extends BaseService<Thesis>{
      * @throws Exception
      */
     public List<ThesisExpand> listByTeacher(Long projid, Long teacherid) throws Exception{
-        log.info("===查询指导教师在当前论文工作下的自评成绩列表===");
+        log.info("===查询指导教师在当前论文工作下的上传列表===");
         List<ThesisExpand> list = thesisMapper.listByTeacher(projid, teacherid);
         for (ThesisExpand te : list){
             User viewer = userService.queryById(te.getViewerid());

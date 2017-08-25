@@ -1,11 +1,11 @@
 package cn.zttek.thesis.modules.expand;
 
-import java.util.*;
+import cn.zttek.thesis.modules.enums.TitleLevel;
 
 /**
  * Created by Mankind on 2017/8/15.
  */
-public class ThesisDefenseTeacher {
+public class ThesisDefenseTeacher implements Comparable<ThesisDefenseTeacher>{
     /**
      * ID、工号、姓名、职称名字、职称等级
      */
@@ -13,8 +13,7 @@ public class ThesisDefenseTeacher {
     private String account;
     private String userName;
     private String titleName;
-    private String titleLevel;
-
+    private TitleLevel titleLevel;
     public Long getTeacherid() {
         return teacherid;
     }
@@ -47,11 +46,11 @@ public class ThesisDefenseTeacher {
         this.titleName = titleName;
     }
 
-    public String getTitleLevel() {
+    public TitleLevel getTitleLevel() {
         return titleLevel;
     }
 
-    public void setTitleLevel(String titleLevel) {
+    public void setTitleLevel(TitleLevel titleLevel) {
         this.titleLevel = titleLevel;
     }
 
@@ -69,9 +68,9 @@ public class ThesisDefenseTeacher {
         ThesisDefenseTeacher other = (ThesisDefenseTeacher) that;
         return (this.getTeacherid() == null ? other.getTeacherid() == null : this.getTeacherid().equals(other.getTeacherid()))
                 && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
-                && (this.getTitleLevel()== null ? other.getTitleLevel() == null : this.getTitleLevel().equals(other.getTitleLevel()))
-                && (this.getTitleName() == null ? other.getTitleName() == null : this.getTitleName().equals(other.getTitleName())
-                && (this.getUserName() == null ? other.getUserName() == null : this.getUserName().equals(other.getUserName())));
+                && (this.getTitleLevel() == null ? other.getTitleLevel() == null : this.getTitleLevel().equals(other.getTitleLevel()))
+                && (this.getTitleName()==null ? other.getTitleName() == null : this.getTitleName().equals(other.getTitleName()))
+                && (this.getUserName() == null ? other.getUserName() == null : this.getUserName().equals(other.getUserName()));
     }
 
     @Override
@@ -80,10 +79,25 @@ public class ThesisDefenseTeacher {
         int result = 1;
         result = prime * result + ((getTitleName() == null) ? 0 : getTitleName().hashCode());
         result = prime * result + ((getUserName() == null) ? 0 : getUserName().hashCode());
-        result = prime * result + ((getTitleLevel() == null) ? 0 : getTitleLevel().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getTeacherid() == null) ? 0 : getTeacherid().hashCode());
+        result = prime * result + ((getTitleLevel() == null) ? 0 : getTitleLevel().hashCode());
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "ThesisDefenseTeacher{" +
+                "teacherid=" + teacherid +
+                ", account='" + account + '\'' +
+                ", userName='" + userName + '\'' +
+                ", titleName='" + titleName + '\'' +
+                ", titleLevel=" + titleLevel +
+                '}';
+    }
+
+    @Override
+    public int compareTo(ThesisDefenseTeacher o) {
+        return this.account.compareTo(o.getAccount());
+    }
 }
