@@ -20,8 +20,9 @@ public class DefenseTask extends BaseModel {
 
     private Integer nums;
 
-    private Timestamp defensetime;
+    private Integer excelnums;
 
+    private Timestamp defensetime;
 
     private String teachers;
 
@@ -36,6 +37,14 @@ public class DefenseTask extends BaseModel {
      * 添加此字段作为前端显示已答辩人数所用
      */
     private Integer AllotNum;
+
+    public Integer getExcelnums() {
+        return excelnums;
+    }
+
+    public void setExcelnums(Integer excelnums) {
+        this.excelnums = excelnums;
+    }
 
     public Long getProjectid() {
         return projectid;

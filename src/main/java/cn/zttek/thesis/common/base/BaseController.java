@@ -1,10 +1,7 @@
 package cn.zttek.thesis.common.base;
 
 import cn.zttek.thesis.common.converter.StringToTimeConverter;
-import cn.zttek.thesis.modules.enums.AdviceTarget;
-import cn.zttek.thesis.modules.enums.DefenseStatus;
-import cn.zttek.thesis.modules.enums.TitleLevel;
-import cn.zttek.thesis.modules.enums.UserType;
+import cn.zttek.thesis.modules.enums.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.UnknownSessionException;
@@ -118,6 +115,18 @@ public class BaseController {
 
                 }
                 setValue(AdviceTarget.getById(val));
+            }
+        });
+        binder.registerCustomEditor(DefenseGroupType.class, new PropertyEditorSupport(){
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                int val = 0;
+                try {
+                    val = Integer.parseInt(text);
+                }catch (Exception ex){
+
+                }
+                setValue(DefenseGroupType.getById(val));
             }
         });
     }

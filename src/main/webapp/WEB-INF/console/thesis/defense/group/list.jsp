@@ -115,6 +115,16 @@
             }
         });
     }
+    function autogroup() {
+        $("#dlg").dialog({
+            title:"自动分组",
+            width: 620,
+            height: 390,
+            href:'${ctx}/console/thesis/defense/group/autogroup?taskid=${taskid}',
+            maximizable:true,
+            modal:true
+        });
+    }
 </script>
 </body>
 </html>

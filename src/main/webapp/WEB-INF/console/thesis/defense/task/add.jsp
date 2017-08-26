@@ -85,7 +85,13 @@
                         <tr>
                             <td align="right"><label>请输入答辩小组组数：</label></td>
                             <td>
-                                <input type="text" id="nums" class="easyui-textbox" style="width:250px;">
+                                <input type="text" id="nums" class="easyui-numberbox" style="width:250px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right"><label>请输入争优组组数：</label></td>
+                            <td>
+                                <input type="text" id="excelnums" class="easyui-numberbox" style="width:250px;">
                             </td>
                         </tr>
                         <tr>
@@ -97,7 +103,7 @@
                         <tr>
                             <td align="right"><label>备注：</label></td>
                             <td>
-                                <textarea name="remark" id="remark" cols="38" rows="7"></textarea>
+                                <textarea name="remark" id="remark" cols="38" rows="5"></textarea>
                             </td>
                         </tr>
                     </table>
@@ -178,6 +184,7 @@
                         <input type="hidden" id="form-president" name="president"/>
                         <input type="hidden" id="form-contact" name="contact"/>
                         <input type="hidden" id="form-nums" name=" nums"/>
+                        <input type="hidden" id="form-excelnums" name=" excelnums"/>
                         <input type="hidden" id="form-remark" name="remark"/>
                         <input type="hidden" id="form-defensetime" name="defensetime"/>
                         <input type="hidden" id="form-students" name="students"/>
@@ -304,13 +311,18 @@
                 var president=$("#president").textbox("getValue");
                 var contact=$("#contact").textbox("getValue");
                 var defensetime=$("#defensetime").datebox("getValue");
-                var nums=$("#nums").textbox('getValue');
+                var nums=$("#nums").numberbox('getValue');
+                var excelnums=$("#excelnums").numberbox('getValue');
                 var remark=$("#remark").val();
-                if (defensename == ""||president==""||contact==""||defensetime==""||nums=="") {
+                if (defensename == ""||president==""||contact==""||defensetime==""||nums==""||excelnums=="") {
                     // set isStepValid = false if has errors
                     isStepValid = false;
                     $('#wizard').smartWizard('showError', stepnumber);
                     $('#wizard').smartWizard('showMessage', '请先输入答辩任务名称/答辩主席/联系人/答辩小组组数/答辩时间！');
+                }else if(Number(excelnums)>Number(nums)){
+                    isStepValid = false;
+                    $('#wizard').smartWizard('showError', stepnumber);
+                    $('#wizard').smartWizard('showMessage', '争优组组数不得大过总组数！请重新设置');
                 } else {
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
@@ -322,6 +334,7 @@
                             $("#form-defensename").val(defensename);
                             $("#form-contact").val(contact);
                             $("#form-nums").val(nums);
+                            $("#form-excelnums").val(excelnums);
                             $("#form-defensetime").val(defensetime);
                             $("#form-president").val(president);
                             $("#form-remark").val(remark);
@@ -329,7 +342,7 @@
                             $(".president").text(president);
                             $(".contact").text(contact);
                             $(".defensetime").text(defensetime);
-                            $(".nums").text(nums);
+                            $(".nums").text(nums+"组(争优"+excelnums+"组)");
                         }else{
                             isStepValid = false;
                             $('#wizard').smartWizard('showError',1);
@@ -360,9 +373,16 @@
                     for(var key in total){
                         studentclass+=key+":"+total[key]+"名 ";
                     }
+                    total={};
+                    for(var i=0;i<rows.length;i++){
+                        if(total[rows[i].defenseStatus]==null){
+                            total[rows[i].defenseStatus]=1;
+                        }else {
+                            total[rows[i].defenseStatus]++;
+                        }
+                    }
                     $(".studentclass").text(studentclass);
-                    $(".studentnum").text(rows.length+"名");
-                    alert(JSON.stringify(rows));
+                    $(".studentnum").text(rows.length+"名"+"(争优"+total["争优答辩"]+"名)");
                     $("#form-students").val(JSON.stringify(rows));
                     //检验是否为json
                     $("#dg2").datagrid({
@@ -406,7 +426,6 @@
                     }
                     $(".teacherclass").text(teacherclass);
                     $(".teachernum").text(rows.length+"名");
-                    alert(JSON.stringify(rows));
                     $("#form-teachers").val(JSON.stringify(rows));
                 }
             }
@@ -419,6 +438,7 @@
             var contact =$("#form-contact").val();
             var remark =$("#form-remark").val();
             var nums=$("#form-nums").val();
+            var excelnums=$("#form-excelnums").val();
             var defensetime=$("#form-defensetime").val();
             var students=$("#form-students").val();
             var teachers=$("#form-teachers").val();
@@ -426,7 +446,8 @@
             ||president==null || president==""
             ||contact==null || contact==""
             ||defensetime==null||defensetime==""
-            ||nums==null||nums=="") {
+            ||nums==null||nums==""
+            ||excelnums==null||excelnums=="") {
                 $('#wizard').smartWizard('showError', 1);
                 $('#wizard').smartWizard('showMessage', '您还没有填完整答辩任务基本信息！');
                 return false;
@@ -442,7 +463,7 @@
                 return false;
             }
             var params = {'name': defensename, 'president': president,
-            'contact':contact,'remark':remark,'nums':nums,
+            'contact':contact,'remark':remark,'nums':nums,'excelnums':excelnums,
             'defensetime':defensetime,'students':students,'teachers':teachers};
             $.ajaxSetup({
                 async: false

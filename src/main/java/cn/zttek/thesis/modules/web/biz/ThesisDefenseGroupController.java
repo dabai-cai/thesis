@@ -5,6 +5,7 @@ import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
@@ -25,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -90,6 +92,13 @@ public class ThesisDefenseGroupController extends BaseController{
     @RequestMapping(value = "/view", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String view(Model model) throws Exception{
         return "console/thesis/defense/group/view";
+    }
+    @RequestMapping(value = "/autogroup", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String autogroup(Model model,Long taskid) throws Exception{
+        model.addAttribute("defenseTask",defenseTaskService.queryById(taskid));
+        model.addAttribute("titles", TitleLevel.values());
+        model.addAttribute("grouptypes", DefenseGroupType.values());
+        return "console/thesis/defense/group/autogroup";
     }
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -253,5 +262,76 @@ public class ThesisDefenseGroupController extends BaseController{
         }
         return result;
     }
+    @RequestMapping(value ="/autogroup", produces = "application/json;charset=utf-8", method = RequestMethod.POST)
+    @ResponseBody
+    public EUResult autogroup(Long taskid,TitleLevel leaderLevel,TitleLevel secretaryLevel,DefenseGroupType grouptype,HttpServletRequest request) throws Exception{
+        EUResult result = new EUResult();
+        if(leaderLevel!=null&&secretaryLevel!=null&&grouptype!=null){
+            DefenseTask defenseTask=defenseTaskService.queryById(taskid);
+            if(defenseTask.getTeachers()!=null){
+                List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(defenseTask.getTeachers(),ThesisDefenseTeacher.class);
+                //每组参加教师人数
+                Integer groupTeacherNum=teachers.size()/defenseTask.getNums()-2;
+                //去除另外一个类型已有答辩小组的教师,答辩秘书和答辩组长
+                List<DefenseGroup> groups=defenseGroupService.listAll(taskid);
+                for(DefenseGroup group:groups){
+                    if(!group.getGrouptype().equals(grouptype)){
+                        if(group.getTeachers()!=null){
+                            teachers.removeAll(JsonUtils.jsonToList(group.getTeachers(),ThesisDefenseTeacher.class));
+                        }
+                        if(group.getSecretaryid()!=null){
+                            teachers.remove(defenseGroupService.getTeacherById(group.getSecretaryid()));
+                        }
+                        if(group.getLeaderid()!=null){
+                            teachers.remove(defenseGroupService.getTeacherById(group.getLeaderid()));
+                        }
+                    }
+                }
+                List<ThesisDefenseTeacher> leaders=defenseTaskService.getTeachersByTitle(teachers,leaderLevel);
+                List<ThesisDefenseTeacher> secretarys=defenseTaskService.getTeachersByTitle(teachers,secretaryLevel);
+                //获取组数
+                Integer groupnum=null;
+                if(grouptype.equals(DefenseGroupType.NORMAL)){
+                    groupnum=defenseTask.getNums()-defenseTask.getExcelnums();
+                }else if(grouptype.equals(DefenseGroupType.EXCEL)){
+                    groupnum=defenseTask.getExcelnums();
+                }
+                // 检查答辩秘书组长人数是否符合分配要求
+                if(leaders.size()>=groupnum){
+                    if(secretaryLevel!=leaderLevel&&secretarys.size()>=groupnum
+                            ||secretaryLevel==leaderLevel&&secretarys.size()>=2*groupnum){
+                        //检查答辩教师是否足够分配
+                        if(teachers.size()-2*groupnum>=groupTeacherNum){
+                            //开始自动分组
+                            try{
+                                List<DefenseGroup> newgroups=defenseGroupService.autoGroup(groups,groupnum,groupTeacherNum,grouptype,leaders,secretarys,teachers,defenseTask);
+                                result.setStatus(EUResult.OK);
+                                result.setMsg("已经成功为您分配答辩小组共"+newgroups.size()+"组!");
+                            }catch (Exception e){
+                                result.setStatus(EUResult.FAIL);
+                                result.setMsg("自动分组时发生异常！"+e.getMessage());
+
+                            }
+                        }else{
+                            result.setStatus(EUResult.FAIL);
+                            result.setMsg("参加教师不足以分配！");
+                        }
+                    }else{
+                        result.setStatus(EUResult.FAIL);
+                        result.setMsg("符合等级条件的答辩秘书只有"+secretarys.size()+"名！");
+                    }
+                }else{
+                    result.setStatus(EUResult.FAIL);
+                    result.setMsg("符合等级条件的答辩组长只有"+leaders.size()+"名！");
+                }
+            }
+
+        }else{
+            result.setStatus(EUResult.FAIL);
+            result.setMsg("存在未填写的字段，请填写完毕后再提交！");
+        }
+        return result;
+    }
+
 
 }

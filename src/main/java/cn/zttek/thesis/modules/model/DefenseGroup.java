@@ -1,9 +1,9 @@
 package cn.zttek.thesis.modules.model;
 
 import cn.zttek.thesis.common.base.BaseModel;
+import cn.zttek.thesis.modules.enums.DefenseGroupType;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public class DefenseGroup extends BaseModel {
@@ -13,7 +13,7 @@ public class DefenseGroup extends BaseModel {
 
     private Integer groupno;
 
-    private String grouptype;
+    private DefenseGroupType grouptype;
 
     private Long leaderid;
 
@@ -76,12 +76,12 @@ public class DefenseGroup extends BaseModel {
         this.groupno = groupno;
     }
 
-    public String getGrouptype() {
+    public DefenseGroupType getGrouptype() {
         return grouptype;
     }
 
-    public void setGrouptype(String grouptype) {
-        this.grouptype = grouptype == null ? null : grouptype.trim();
+    public void setGrouptype(DefenseGroupType grouptype) {
+        this.grouptype = grouptype;
     }
 
     public Long getLeaderid() {

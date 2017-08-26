@@ -9,6 +9,7 @@
     <result column="contact" property="contact" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="nums" property="nums" jdbcType="INTEGER" />
+    <result column="excelnums" property="excelnums" jdbcType="INTEGER" />
     <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
     <result column="cdate" property="cdate" jdbcType="TIMESTAMP" />
     <result column="teachers" property="teachers" jdbcType="LONGVARCHAR" />
@@ -21,11 +22,11 @@
   <insert id="insert" parameterType="cn.zttek.thesis.modules.model.DefenseTask" >
     insert into defense_task (id, projectid, name, 
       president, contact, remark, 
-      nums, defensetime, cdate, 
+      nums,excelnums, defensetime, cdate,
       teachers, students)
     values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
       #{president,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{nums,jdbcType=INTEGER}, #{defensetime,jdbcType=TIMESTAMP}, #{cdate,jdbcType=TIMESTAMP}, 
+      #{nums,jdbcType=INTEGER},#{excelnums,jdbcType=INTEGER}, #{defensetime,jdbcType=TIMESTAMP}, #{cdate,jdbcType=TIMESTAMP},
       #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.DefenseTask" >
@@ -36,6 +37,7 @@
       contact = #{contact,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       nums = #{nums,jdbcType=INTEGER},
+      excelnums = #{excelnums,jdbcType=INTEGER},
       defensetime = #{defensetime,jdbcType=TIMESTAMP},
       cdate = #{cdate,jdbcType=TIMESTAMP},
       teachers = #{teachers,jdbcType=LONGVARCHAR},
@@ -43,13 +45,13 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, projectid, name, president, contact, remark, nums, defensetime, cdate, 
+    select id, projectid, name, president, contact, remark, nums,excelnums, defensetime, cdate,
     teachers, students
     from defense_task
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, projectid, name, president, contact, remark, nums, defensetime, cdate, 
+    select id, projectid, name, president, contact, remark, nums,excelnums, defensetime, cdate,
     teachers, students
     from defense_task
   </select>
@@ -71,12 +73,12 @@
     <result column="level" property="titleLevel" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler"/>
   </resultMap>
   <select id="listByProj" resultMap="BaseResultMap" >
-    select id , projectid, name, president, contact, remark, nums, defensetime, cdate,
+    select id , projectid, name, president, contact, remark, nums,excelnums, defensetime, cdate,
     teachers, students
     from defense_task WHERE projectid = #{projid,jdbcType=BIGINT}
   </select>
   <select id="selectByName" resultMap="BaseResultMap" >
-    select id , projectid, name, president, contact, remark, nums, defensetime, cdate,
+    select id , projectid, name, president, contact, remark, nums,excelnums, defensetime, cdate,
     teachers, students
     from defense_task WHERE name = #{name}
   </select>

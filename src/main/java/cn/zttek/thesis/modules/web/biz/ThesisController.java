@@ -50,7 +50,6 @@ public class ThesisController extends BaseController {
             return new Thesis();
         }
     }
-
     @RequestMapping(value = "/listAll", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String listAll(Model model) throws Exception{
         Org org = ThesisParam.getCurrentOrg();

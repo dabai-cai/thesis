@@ -60,7 +60,7 @@
         return val+"名";
     }
     function formatGroup(val, row){
-        return val+"组";
+        return val+"组(争优"+row.excelnums+"组)";
     }
     //    function formatDate(val, row){
     //        return val.split(" ")[0];

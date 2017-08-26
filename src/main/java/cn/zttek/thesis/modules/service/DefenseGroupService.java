@@ -2,6 +2,7 @@ package cn.zttek.thesis.modules.service;
 
 import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
@@ -9,15 +10,21 @@ import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.mapper.DefenseGroupMapper;
 import cn.zttek.thesis.modules.mapper.DefenseTaskMapper;
+import cn.zttek.thesis.modules.mapper.RoleMapper;
+import cn.zttek.thesis.modules.mapper.UserMapper;
 import cn.zttek.thesis.modules.model.DefenseGroup;
 import cn.zttek.thesis.modules.model.DefenseTask;
+import cn.zttek.thesis.modules.model.Role;
 import cn.zttek.thesis.modules.model.Thesis;
+import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.StringUtil;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +41,22 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
     @Autowired
     private DefenseTaskMapper defenseTaskMapper;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
     public PageInfo<DefenseGroup> listAll(Integer page, Integer rows, Long taskid) throws Exception{
         log.info("===查询答辩任务下所有答辩小组列表===");
         PageHelper.startPage(page, rows);
         List<DefenseGroup> list =defenseGroupMapper.selectByTask(taskid);
         PageInfo<DefenseGroup> pageInfo = new PageInfo<DefenseGroup>(list);
         return pageInfo;
+    }
+    public List<DefenseGroup>  listAll( Long taskid) throws Exception{
+        log.info("===查询答辩任务下所有答辩小组列表===");
+        return defenseGroupMapper.selectByTask(taskid);
     }
 
     public void deleteById(Long id) throws  Exception{
@@ -170,6 +187,9 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
         log.info("转化后的json"+JsonUtils.objectToJson(defenseGroupMapper.selectTeacherByUserId(teacherid)));
         return JsonUtils.objectToJson(defenseGroupMapper.selectTeacherByUserId(teacherid));
     }
+    public ThesisDefenseTeacher getTeacherById(Long teacherid) throws Exception{
+        return defenseGroupMapper.selectTeacherByUserId(teacherid);
+    }
     public List<ThesisDefenseTeacher> existTeacherFilter(List<ThesisDefenseTeacher> teacherlist) throws  Exception{
         List<DefenseGroup> groups=defenseGroupMapper.selectAll();
         for(DefenseGroup group:groups){
@@ -202,5 +222,94 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
             if(table[i]!=1)index=i;
         }
         return index;
+    }
+
+    public List<DefenseGroup> autoGroup(List<DefenseGroup> groups,Integer groupnum,Integer groupTeacherNum, DefenseGroupType grouptype,List<ThesisDefenseTeacher> leaders, List<ThesisDefenseTeacher> secretarys, List<ThesisDefenseTeacher> teachers, DefenseTask defenseTask) throws  Exception{
+        log.info("===开始自动分组===");
+        log.info("===删除对应类型的已经存在的分组===");
+        for(DefenseGroup group:groups){
+            if(group.getGrouptype().equals(grouptype)){
+                defenseGroupMapper.deleteByPrimaryKey(group.getId());
+            }
+        }
+        log.info("===自动分组答辩任务初始化===");
+        List<DefenseGroup> newgroups=new ArrayList<DefenseGroup>();
+        for(int i=0;i<groupnum;i++){
+            newgroups.add(new DefenseGroup());
+        }
+        log.info("===按照工号顺序分配答辩秘书===");
+        log.info(""+secretarys);
+        Collections.sort(secretarys);
+        log.info(""+secretarys);
+        for(int i=0;i<groupnum;i++){
+            ThesisDefenseTeacher secretary=secretarys.get(i);
+            newgroups.get(i).setSecretaryid(secretary.getTeacherid());
+            teachers.remove(secretary);
+            leaders.remove(secretary);
+        }
+        log.info("===按照工号顺序分配答辩组长===");
+        Collections.sort(leaders);
+        for(int i=0;i<groupnum;i++){
+            ThesisDefenseTeacher leader=leaders.get(i);
+            newgroups.get(i).setLeaderid(leader.getTeacherid());
+            teachers.remove(leader);
+        }
+        log.info("===按工号顺序分配参加教师===");
+        Collections.sort(teachers);
+        int teachersSize=teachers.size();
+        //循环遍历每一个组按工号顺序分配参加教师
+        for(int i=0;i<groupnum;i++){
+            List<ThesisDefenseTeacher> teacher=new ArrayList<ThesisDefenseTeacher>();
+            for(int j=0;j<groupTeacherNum;j++){
+                int index=i*groupTeacherNum+j;
+                if(index<teachersSize){
+                    teacher.add(teachers.get(index));
+                }
+            }
+            newgroups.get(i).setTeachers(JsonUtils.objectToJson(teacher));
+        }
+        log.info("===按学号顺序分配参加学生===");
+        List<ThesisDefenseStudent> students=new ArrayList<ThesisDefenseStudent>();
+        if(defenseTask.getStudents()!=null){
+            students=JsonUtils.jsonToList(defenseTask.getStudents(),ThesisDefenseStudent.class);
+        }
+        //保留对应类型的学生
+        for(int i=students.size()-1;i>=0;i--){
+            ThesisDefenseStudent student=students.get(i);
+            if(!student.getDefenseStatus().getId().equals(grouptype.getId())){
+                students.remove(student);
+            }
+        }
+        //获取每组学生人数
+        Integer groupStuNums=null;
+        int studentsSize=students.size();
+        if(students.size()%groupnum==0){
+            groupStuNums=studentsSize/groupnum;
+        }else{
+            groupStuNums=studentsSize/groupnum+1;
+        }
+        Collections.sort(students);
+        //循环遍历每一个组按学号顺序分配学生
+        for(int i=0;i<groupnum;i++){
+            List<ThesisDefenseStudent> stu=new ArrayList<ThesisDefenseStudent>();
+            for(int j=0;j<groupStuNums;j++){
+                int index=i*groupStuNums+j;
+                if(index<studentsSize){
+                    stu.add(students.get(index));
+                }
+            }
+            newgroups.get(i).setStudents(JsonUtils.objectToJson(stu));
+        }
+        log.info("===自动分组-将分配好的所有小组插入数据库===");
+        for(int i=0;i<groupnum;i++){
+            DefenseGroup group=newgroups.get(i);
+            group.setGroupno(getGroupno(defenseTask.getId()));
+            group.setProjectid(ThesisParam.getCurrentProj().getId());
+            group.setGrouptype(grouptype);
+            group.setDefensetime(defenseTask.getDefensetime());
+            group.setTaskid(defenseTask.getId());
+            defenseGroupMapper.insert(newgroups.get(i));
+        }
+        return newgroups;
     }
 }

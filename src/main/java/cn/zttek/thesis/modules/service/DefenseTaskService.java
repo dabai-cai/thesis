@@ -70,6 +70,22 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
         msg="答辩任务删除成功";
         return msg;
     }
+    public String deleteCheck(DefenseTask defenseTask,List<Long> ids) throws Exception{
+        List<ThesisDefenseTeacher> teachers=new ArrayList<ThesisDefenseTeacher>();
+        List<DefenseGroup> groups=defenseGroupMapper.selectByTask(defenseTask.getId());
+        for(DefenseGroup group:groups){
+            if(group.getSecretaryid()!=null){
+                teachers.add(defenseGroupMapper.selectTeacherByUserId(group.getSecretaryid()));
+            }
+            if(group.getLeaderid()!=null){
+                teachers.add(defenseGroupMapper.selectTeacherByUserId(group.getLeaderid()));
+            }
+            if(group.getTeachers()!=null){
+                teachers.addAll(JsonUtils.jsonToList(group.getTeachers(),ThesisDefenseTeacher.class));
+            }
+        }
+        return "St";
+    }
     public void deleteStudentByJSON(String jsondata,DefenseTask defenseTask) throws Exception{
         log.info("===删除答辩任务下的参与学生====");
         if(defenseTask.getStudents()!=null){
@@ -114,7 +130,7 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
     }
     public PageInfo<ThesisDefenseStudent> listStudent(Integer page, Integer rows, Long projid, ThesisResult thesisResult) throws Exception {
         log.info("===查询论文工作下所有未分配的学生===");
-        List<ThesisDefenseStudent> studentlist=defenseTaskMapper.studentlistByProj(projid,null,null,null,thesisResult.getStuno());
+        List<ThesisDefenseStudent> studentlist=defenseTaskMapper.studentlistByProj(projid,thesisResult.getMajor(),thesisResult.getGrade(),thesisResult.getClazz(),thesisResult.getStuno());
         //List<ThesisDefenseStudent> studentsList=defenseTaskMapper.selectNotAllotedStudent(orgid,thesisResult.getMajor(),thesisResult.getGrade(),thesisResult.getClazz(),thesisResult.getStuno());
         //获取已经分配的所有学生
         List<DefenseTask> tasks=defenseTaskMapper.listByProj(projid);
@@ -147,7 +163,7 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
             List<DefenseTask> tasks=defenseTaskMapper.listByProj(p.getId());
             for(DefenseTask task:tasks){
                 //不同论文工作，只去除答辩时间相同的老师
-                if(defensetime.equals(task.getDefensetime())){
+                if(task.getDefensetime().equals(defensetime)){
                     List<ThesisDefenseTeacher> groupTeacherList=JsonUtils.jsonToList(task.getTeachers(),ThesisDefenseTeacher.class);
                     if(groupTeacherList!=null){
                         teacherList.removeAll(groupTeacherList);
@@ -162,5 +178,16 @@ public class DefenseTaskService extends BaseService<DefenseTask>{
 
     public DefenseTask getByName(String name){
         return defenseTaskMapper.selectByName(name);
+    }
+
+    public List<ThesisDefenseTeacher> getTeachersByTitle(List<ThesisDefenseTeacher> teachers,TitleLevel titleLevel){
+        log.info("===========根据titlelevel获得教师列表==========");
+        List<ThesisDefenseTeacher> teacherList=new ArrayList<ThesisDefenseTeacher>();
+        for(ThesisDefenseTeacher teacher:teachers){
+            if(teacher.getTitleLevel().equals(titleLevel)){
+                teacherList.add(teacher);
+            }
+        }
+        return teacherList;
     }
 }

@@ -57,7 +57,6 @@ public class PermissionService extends BaseService<Permission> {
         }
         return false;
     }
-
     /**
      * 新增权限后，为超级管理员添加此权限
      * @param record

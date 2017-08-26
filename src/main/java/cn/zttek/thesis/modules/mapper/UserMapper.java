@@ -106,4 +106,21 @@ public interface UserMapper extends BaseMapper<User> {
      * @param stuno
      */
     User getByProjectAndAccount(@Param("projid") Long projid, @Param("stuno") String stuno) throws Exception;
+
+//    /**
+//     * 根据uid和rid删除用户对应的角色
+//     * @param uid
+//     * @param rid
+//     * @throws Exception
+//     */
+//    void deleteUserRole(@Param("uid") Long uid,@Param("rid")Long rid)throws Exception;
+//
+//    /**
+//     * 根据uid和rid增加用户对应的角色
+//     * @param uid
+//     * @param rid
+//     * @throws Exception
+//     */
+//    void addUserRole(@Param("uid") Long uid,@Param("rid")Long rid)throws Exception;
+
 }

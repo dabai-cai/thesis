@@ -100,8 +100,8 @@
                         rownumbers:true,
                         pagination:true,
                         pageNumber:1,
-                        pageSize : 10,
-                        pageList : [ 10, 20, 30, 40, 50 ],
+                        pageSize : 15,
+                        pageList : [ 15, 20, 30, 40, 50 ],
                         singleSelect:false
                     ">
         <thead>

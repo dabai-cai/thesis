@@ -410,7 +410,7 @@
                 }else{
                     $('#wizard').smartWizard('hideError', stepnumber);
                     $('#wizard').smartWizard('hideMessage');
-                    $("#form-grouptype").val(grouptype==0?"正常答辩":"争优答辩");
+                    $("#form-grouptype").val(grouptype);
                     $("#form-leaderid").val(leader.teacherid);
                     $("#form-secretaryid").val(secretary.teacherid);
                     $("#form-defensetime").val(defensetime);

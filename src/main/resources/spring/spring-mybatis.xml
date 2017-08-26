@@ -51,6 +51,7 @@
             <tx:method name="insert*" propagation="REQUIRED"/>
             <tx:method name="update*" propagation="REQUIRED"/>
             <tx:method name="batch*" propagation="REQUIRED"/>
+            <tx:method name="autoGroup" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
 </beans>

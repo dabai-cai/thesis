@@ -6,7 +6,7 @@
     <result column="projectid" property="projectid" jdbcType="BIGINT" />
     <result column="taskid" property="taskid" jdbcType="BIGINT" />
     <result column="groupno" property="groupno" jdbcType="INTEGER" />
-    <result column="grouptype" property="grouptype" jdbcType="VARCHAR" />
+    <result column="grouptype" property="grouptype" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler" />
     <result column="leaderid" property="leaderid" jdbcType="BIGINT" />
     <result column="secretaryid" property="secretaryid" jdbcType="BIGINT" />
     <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />
@@ -25,7 +25,7 @@
       defensetime, defenseroom, cdate, 
       teachers, students)
     values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT},#{groupno,jdbcType=INTEGER},
-      #{grouptype,jdbcType=VARCHAR}, #{leaderid,jdbcType=BIGINT}, #{secretaryid,jdbcType=BIGINT},
+      #{grouptype,typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler}, #{leaderid,jdbcType=BIGINT}, #{secretaryid,jdbcType=BIGINT},
       #{defensetime,jdbcType=TIMESTAMP}, #{defenseroom,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP}, 
       #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
   </insert>
@@ -34,7 +34,7 @@
     set projectid = #{projectid,jdbcType=BIGINT},
       taskid = #{taskid,jdbcType=BIGINT},
       groupno = #{groupno,jdbcType=INTEGER},
-      grouptype = #{grouptype,jdbcType=VARCHAR},
+      grouptype = #{grouptype,typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler},
       leaderid = #{leaderid,jdbcType=BIGINT},
       secretaryid = #{secretaryid,jdbcType=BIGINT},
       defensetime = #{defensetime,jdbcType=TIMESTAMP},
@@ -63,7 +63,7 @@
     <result column="projectid" property="projectid" jdbcType="BIGINT" />
     <result column="taskid" property="taskid" jdbcType="BIGINT" />
     <result column="groupno" property="groupno" jdbcType="INTEGER" />
-    <result column="grouptype" property="grouptype" jdbcType="VARCHAR" />
+    <result column="grouptype" property="grouptype" typeHandler="cn.zttek.thesis.common.mybatis.EnumHandler" />
     <result column="leaderid" property="leaderid" jdbcType="BIGINT" />
     <result column="secretaryid" property="secretaryid" jdbcType="BIGINT" />
     <result column="defensetime" property="defensetime" jdbcType="TIMESTAMP" />

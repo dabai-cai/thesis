@@ -151,6 +151,7 @@ public class ThesisDefenseTaskController extends BaseController {
                 defenseTaskService.update(defenseTask);
             } else {
                 //如果是添加
+                //TODO 验证冲突
                 defenseTask.setProjectid(ThesisParam.getCurrentProj().getId());
                 defenseTaskService.insert(defenseTask);
             }
@@ -240,6 +241,27 @@ public class ThesisDefenseTaskController extends BaseController {
             result.setStatus(EUResult.FAIL);
             result.setMsg("请选择要添加的"+("student".equals(type)?"学生":"教师")+"！");
 
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/{type}-deletecheck", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public EUResult deleteCheck(String ids,@ModelAttribute DefenseTask defenseTask){
+        EUResult result = new EUResult();
+        if (StringUtils.isNotEmpty(ids)) {
+            List<Long> idsArry = Arrays.asList(CommonUtils.getIdsArray(ids));
+            try {
+                result.setStatus(EUResult.OK);
+                String msg = defenseTaskService.deleteCheck(defenseTask,idsArry);
+                result.setMsg(msg);
+            } catch (Exception e) {
+                result.setStatus(EUResult.FAIL);
+                result.setMsg("检查是否冲突时发生异常！" + e.getMessage());
+            }
+        } else {
+            result.setStatus(EUResult.FAIL);
+            result.setMsg("请选择要删除的答辩任务！");
         }
         return result;
     }
