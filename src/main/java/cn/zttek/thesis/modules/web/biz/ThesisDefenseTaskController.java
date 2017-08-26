@@ -10,8 +10,7 @@ import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
-import cn.zttek.thesis.modules.holder.TitleHolder;
-import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.modules.model.DefenseTask;
 import cn.zttek.thesis.modules.service.DefenseTaskService;
 import cn.zttek.thesis.modules.service.TitleService;
 import cn.zttek.thesis.modules.service.UserService;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.json.Json;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Arrays;

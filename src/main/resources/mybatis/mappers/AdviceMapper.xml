@@ -12,6 +12,7 @@
         <result column="top" property="top" jdbcType="BIT" />
         <result column="mdate" property="mdate" jdbcType="TIMESTAMP" />
         <result column="content" property="content" jdbcType="LONGVARCHAR" />
+        <result column="username" property="creatorname"  jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List" >
         id, orgid, topic, target, creator, cdate, valid, top, mdate
@@ -72,8 +73,8 @@
             order by a.mdate desc
     </select>
     <select id="listByUserType" resultMap="BaseResultMap">
-        select a.id,a.orgid,a.topic,a.content,a.target,a.creator,a.valid,a.top,a.mdate,a.cdate
-        from advice a
+        select a.id,a.orgid,a.topic,a.content,a.target,a.creator,a.valid,a.top,a.mdate,a.cdate,u.username as creatorname
+        from advice a left join user u on a.creator=u.id
         <where>
                 a.valid = 1
                 <if test="keywords!=null and keywords != ''">

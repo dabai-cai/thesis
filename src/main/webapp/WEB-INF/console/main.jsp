@@ -14,6 +14,9 @@
     <meta charset="utf-8"/>
     <title>管理控制台</title>
     <%@include file="/inc/header.jsp" %>
+    <style>
+        .wrap{margin:0 auto;width:960px;}
+    </style>
 </head>
 <body class="easyui-layout">
 <div id="loading" style="position: fixed;top: -50%;left: -50%;width: 200%;height: 200%;background: #fff;z-index: 100;overflow: hidden;">
@@ -23,6 +26,10 @@
 <div class="ui-header" data-options="region:'north',border:false,split:true">
     <div class="ui-header-left">
         <h1><img src="${ctx}/resources/img/logo.png" height="40px" style="vertical-align: middle;"/>毕业论文选题系统</h1>
+    </div>
+    <div align="center" >
+        <p><strong>${currentOrg.name}</strong><a href="#"  class="" >[切换]</a><strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')">[切换]</a></p>
+        </h2>
     </div>
     <div class="ui-header-right">
         <p><strong>${currentUser.username}</strong>，欢迎您！
@@ -56,20 +63,25 @@
                     <li><a href="${ctx}/console/tmidcheck/list">论文中期检查</a></li>
                     <li><a href="${ctx}/console/tscore/list1">指导教师自评</a></li>
                     <li><a href="${ctx}/console/tscore/list2">评阅教师评分</a></li>
-                    <li><a href="${ctx}/console/tupload/list">论文上传</a></li>
+                    <li><a href="${ctx}/console/tupload/list/">论文上传</a></li>
+                    <li><a href="${ctx}/console/gooddelay/teacher">争优/延期确认</a></li>
+                    <li><a href="/console/thesis/defense/group/teacherview">查看分组</a></li>
+                    <li><a href="${ctx}/console/tscore/list3">录入答辩成绩</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() eq 1}">
                     <li><a href="${ctx}/console/project/list">论文工作管理</a></li>
-                    <li><a href="${ctx}/console/project/users">参与用户管理</a></li>
+                    <li><a href="${ctx}/console/project/teachers">参与老师管理</a></li>
+                    <li><a href="${ctx}/console/project/students">参与学生管理</a></li>
+
                     <li><a href="${ctx}/console/tcount/list">教师出题情况</a></li>
                     <li><a href="${ctx}/console/tcheck/list">论文题目审核</a></li>
                     <li><a href="${ctx}/console/tadjust/list">学生选题调整</a></li>
                     <li><a href="${ctx}/console/tresult/list">论文选题结果</a></li>
-                    <li><a href="${ctx}/console/thesis/defense/task/list">答辩任务管理</a></li>
+                    <li><a href="${ctx}/console/gooddelay/org">争优/延期确认</a></li>
                     <li><a href="${ctx}/console/advice/admin-list">公告管理</a></li>
+                    <li><a href="${ctx}/console/thesis/defense/task/list">答辩任务管理</a></li>
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() le 1}">
-
                     <li><a href="${ctx}/console/attr/list">基础数据管理</a></li>
                     <li><a href="${ctx}/console/arch/list-admin">管理员管理</a></li>
                     <li><a href="${ctx}/console/arch/list-teacher">教师管理</a></li>
@@ -92,8 +104,31 @@
 <!-- begin of main -->
 <div class="ui-main" data-options="region:'center'">
     <div id="ui-tabs" class="easyui-tabs" data-options="border:false,fit:true">
-        <div title="首页" data-options="border:false, closable:false,iconCls:'icon-tip',cls:'pd3'">
-            <h1>管理控制台</h1>
+        <div  id="console" title="首页" data-options="border:false, closable:false,cls:'pd3'">
+            <div class="wrap">
+                <div id="p" class="easyui-panel" title="公告" style="width: 760px ;height: 560px" data-options=" closable:false,iconCls:'icon-tip'">
+                    <table>
+                        <c:forEach items="${advices}" var="advice">
+                            <tr>
+                                <td>
+                                    <c:if test="${advice.top eq true}">
+                                        <span style="color: red">置顶</span>
+                                    </c:if>
+                                    <a href="#" onclick="view('${advice.id}',null)">${advice.topic}</a>
+                                </td>
+                                <td>
+                                       <span style="float: right">
+                                <fmt:formatDate value="${advice.cdate}" pattern="yyyy.MM.dd"/>
+                        </span>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <div style="text-align: right">
+                        <a href="#"  onclick="more()"  data-options="iconCls:'icon-ok'"  style="color: #0f74a8;font-size: large">更多>></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -103,6 +138,12 @@
     &copy; 2016 ZhouTian Tech. All Rights Reserved
 </div>
 <!-- end of footer -->
+<div id="dlg">
+</div>
+
+
+
+
 <script type="text/javascript">
     $(function(){
         $('.ui-side-tree a').bind("click",function(){
@@ -221,6 +262,78 @@
             window.top.reload_thesis_list.call();
         }
     }
+
+    //切换论文工作
+    function switchProj(orgid) {
+        d=$("#dlg").dialog({
+            title: '切换论文工作',
+            width: 300,
+            height: 400,
+            href:'${ctx}/console/switchproj?orgid='+orgid,
+            maximizable:true,
+            modal:true
+        });
+    }
+
+
+    //切换组织机构
+    function switchOrg(){
+        d=$("#dlg").dialog({
+            title: '切换组织机构',
+            width: 300,
+            height: 375,
+            href:'${ctx}/console/switchorg',
+            maximizable:true,
+            modal:true
+        });
+    }
+
+
+
+
+
+
+
+    /**
+     *公告
+     */
+    function formatTopic(value, row, index){
+        if(row.top==true){
+            return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+"【置顶】"+value+'</div></a>';
+        }else if(row.top==false){
+            return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+value+'</div></a>';
+        }
+    }
+    function formatView(val, row){
+        return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;点击查看</div></a>';
+    }
+    function view(id, event){
+        window.top.addTab("公告详情", '${ctx}/console/advice/view?id=' + id, null, true);
+        event.stopPropagation();
+        return false;
+    }
+
+    function doSearch(){
+        $("#dg").datagrid("load",{
+            keywords:$("#keywords").val()
+        });
+        return false;
+    }
+
+    /**
+     *查看更多公告
+     */
+    function more() {
+        window.top.addTab("公告", '${ctx}/console/home', null, true);
+        event.stopPropagation();
+        return false
+    }
+
+    $(function(){
+
+    });
+
+
 </script>
 </body>
 </html>

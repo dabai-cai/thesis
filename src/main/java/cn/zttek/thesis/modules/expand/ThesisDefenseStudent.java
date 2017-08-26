@@ -1,9 +1,6 @@
 package cn.zttek.thesis.modules.expand;
 
 import cn.zttek.thesis.modules.enums.DefenseStatus;
-import cn.zttek.thesis.modules.model.Thesis;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Created by Mankind on 2017/8/15.

@@ -55,5 +55,4 @@ public interface ProjectMapper extends BaseMapper<Project> {
      * @throws Exception
      */
     List<Project> listByOrgAndYear(@Param("orgid") Long orgid,@Param("year")Integer year) throws Exception;
-
 }

@@ -2,6 +2,7 @@ package cn.zttek.thesis.modules.mapper;
 
 import cn.zttek.thesis.common.base.BaseMapper;
 import cn.zttek.thesis.modules.expand.ThesisCountExpand;
+import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.model.Thesis;
 import org.apache.ibatis.annotations.Param;
@@ -99,5 +100,20 @@ public interface ThesisMapper extends BaseMapper<Thesis> {
      * @throws Exception
      */
     List<Thesis> listNotSelected(@Param("projid")Long projid, @Param("teacherid") Long teacherid, @Param("keywords") String keywords) throws Exception;
+
+
+    /**
+     * 查询老师在当前论文工作下的上传论文列表
+     * @param  projid
+     * @param  teacherid
+     * *@return
+     * @throws Exception
+     */
+    List<ThesisExpand> listByTeacher(@Param("projid") Long projid, @Param("teacherid") Long teacherid) throws Exception;
+
+
+
+
+
 
 }

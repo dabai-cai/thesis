@@ -325,7 +325,6 @@
     $(function(){
         $("#defensetime").datebox('setValue', '${defenseTask.defensetime}');
     });
-
 </script>
 </body>
 </html>

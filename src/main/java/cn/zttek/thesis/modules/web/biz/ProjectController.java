@@ -134,9 +134,16 @@ public class ProjectController extends BaseController {
 
     /********************************以下为论文工作参与用户的管理功能************************************/
 
-    @RequestMapping(value = "/users", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
-    public String listUsers() throws Exception {
-        return "console/project/users";
+
+
+    @RequestMapping(value = "/students", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String listStudents() throws Exception {
+        return "console/project/students";
+    }
+
+    @RequestMapping(value = "/teachers", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String listTeachers() throws Exception {
+        return "console/project/teachers";
     }
 
     @RequestMapping(value = "/users-{userType}.json", produces = "application/json;charset=utf-8")

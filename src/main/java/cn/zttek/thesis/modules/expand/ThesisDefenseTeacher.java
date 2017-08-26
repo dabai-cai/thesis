@@ -1,9 +1,6 @@
 package cn.zttek.thesis.modules.expand;
 
 import cn.zttek.thesis.modules.enums.TitleLevel;
-import cn.zttek.thesis.modules.model.Title;
-
-import java.util.*;
 
 /**
  * Created by Mankind on 2017/8/15.

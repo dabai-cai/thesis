@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table width="100%"  class="form-table" >
+    <tbody>
+    <tr>
+        <td rowspan="10" width="50">成绩评定标准</td>
+        <td colspan="3" align="center" width="300">评分项目</td>
+        <td  align="center" width="20">分值</td>
+        <td  align="center" width="20">得分</td>
+    </tr>
+    <tr>
+        <td rowspan="3" width="20">选题质量20%</td>
+        <td>1</td>
+        <td align="center" >专业培养目标</td>
+        <td align="center">5</td>
+        <td > <input class="easyui-numberbox" id="mark1" name="mark1"  required="true" value="${score.mark1}" >
+        </td>
+    </tr>
+    <tr><td>2</td>
+        <td  align="center" width="250">课题难易度与工作量</td>
+        <td align="center">10</td>
+        <td><input class="easyui-numberbox"  id="score2" name="score2"   data-options="required:true" /></td>
+    </tr>
+    <tr><td>3</td>
+        <td align="center">理论意义或生产实践意义</td>
+        <td align="center">5</td>
+        <td><input class="easyui-numberbox" id="score3" name="score3"   data-options="required:true" /></td>
+    </tr>
+    <tr>
+        <td rowspan="4" width="20">能力水平40%</td>
+        <td>4</td>
+        <td  align="center">查询文献资料与综合运用知识能力</td>
+        <td align="center">10</td>
+        <td><input class="easyui-numberbox"   id="score4" name="score4"   data-options="required:true" /></td>
+
+    </tr>
+    <tr> <td>5</td>
+        <td align="center" >研究方案的设计能力</td>
+        <td align="center">10</td>
+        <td><input class="easyui-numberbox"  id="score5" name="score5"   data-options="required:true" /></td>
+
+    </tr>
+    <tr> <td>6</td>
+        <td align="center" >研究方法和手段的运用能力</td>
+        <td align="center">10</td>
+        <td><input  class="easyui-numberbox"  id="score6" name="score6"  data-options="required:true" /></td>
+
+    </tr>
+    <tr> <td>7</td>
+        <td align="center" >外文应用能力</td>
+        <td align="center">10</td>
+        <td><input  class="easyui-numberbox"  id="score7" name="score7"  data-options="required:true" /></td>
+
+    </tr>
+    <tr>
+        <td rowspan="2" width="20" >成果质量40%</td>
+        <td >8</td>
+        <td align="center" > 写作水平与写作规范</td>
+        <td align="center">20</td>
+        <td><input class="easyui-numberbox" id="score8" name="score8"   data-options="required:true" /></td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td align="center" >研究结果的理论或实际应用价值</td>
+        <td align="center">20</td>
+        <td><input class="easyui-numberbox" name="score9"  data-options="required:true" /></td>
+    </tr>
+    <tr>
+        <td><label>评阅教师评语</label></td>
+        <td colspan="5">
+            <input class="easyui-textbox" data-options="multiline:true, required:true" id="comment2" name="comment2" value="${score.comment2}"  style="width:100%;height:140px" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

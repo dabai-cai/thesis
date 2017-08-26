@@ -12,26 +12,17 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>指导教师自评</title>
+    <title>指导老师论文上传</title>
     <%@include file="/inc/header.jsp" %>
 </head>
 <body class="easyui-layout">
 <div data-options="region:'north',split:true, border:false" height="60px">
     <div id="p" class="easyui-panel" title="管理提示" style="padding:5px;" iconCls="myicon-information">
         <span class="myicon-tick" style="width: 16px; height: 16px;display: inline-block;margin-right: 4px;">&nbsp;&nbsp;</span>
-        ${currentProj.title}，你一共有<strong>&nbsp;${expands.size()}&nbsp;</strong>道论文题目需要评定成绩
+        ${currentProj.title}，你一共有<strong>&nbsp;${expands.size()}&nbsp;</strong>道论文题目需要上传论文
     </div>
 </div>
 <div data-options="region:'center',split:true, border:false,title:'论文成绩列表', iconCls:'myicon-table-go'">
-    <div id="ui-toolbar">
-        <div class="ui-toolbar-button">
-            <form action="/console/tupload/upload" method="post" enctype="multipart/form-data">
-                <h2>文件上传</h2>
-                文件:<input type="file" name="uploadFile"/><br/><br/>
-                <button type="submit"  class="easyui-linkbutton" iconCls="icon-add">论文上传</button>
-            </form>
-        </div>
-    </div>
     <table id="dg" class="easyui-datagrid"
            data-options="
                         idField: 'id',
@@ -50,7 +41,7 @@
             <th data-options="field:'viewerid'" width="60" hidden="true">评阅教师ID</th>
             <th data-options="field:'viewer'" width="100">评阅教师</th>
             <th data-options="field:'scoreid'" width="60" hidden="true">成绩ID</th>
-            <th data-options="field:'mark'" width="60">指导教师自评分</th>
+            <th data-options="field:'mark'" width="80">最近上传时间</th>
             <th data-options="field:'action'"  align="left" width="200">操作</th>
         </tr>
         </thead>
@@ -64,14 +55,10 @@
                 <td>${thesisEx.viewerid}</td>
                 <td>${thesisEx.viewer}</td>
                 <td>${thesisEx.scoreid}</td>
-                <td>${thesisEx.mark}</td>
+                <td><fmt:formatDate value="${thesisEx.lastuptime}"/></td>
                 <td>
-                    <c:if test="${currentProj.mark1allowed}">
-                        <a name="edit" href="#" onclick="edit('${thesisEx.id}', '${thesisEx.scoreid}')">编辑自评成绩</a>
-                    </c:if>
-                    <c:if test="${thesisEx.scoreid gt 0}">
-                        &nbsp;&nbsp;|&nbsp;&nbsp;<a name="view" href="${ctx}/console/tscore/view?id=${thesisEx.scoreid}" target="_blank">查看成绩单</a>
-                    </c:if>
+                        <a name="download" href="/console/tupload/download?thesisid=${thesisEx.id}" >下载论文</a>
+                        <a name="edit" href="#" onclick="edit('${thesisEx.uploadid}')">上传论文</a>
                 </td>
             </tr>
         </c:forEach>
@@ -80,28 +67,11 @@
 </div>
 <input type="hidden" id="teacherid" value="${currentUser.id}" />
 <div id="dlg"></div>
-<div id="dlg-dlg" style="display: none;">
-    <div id="ui-toolbar2">
-        <div class="ui-toolbar-search">
-            <div class="ui-toolbar-search">
-                <label>关键词：</label><input class="wu-text easyui-textbox" id="keywords" style="width:100px">
-                <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">开始检索</a>
-            </div>
-        </div>
-    </div>
-    <table id="dg2">
-    </table>
-    <div style="padding:5px;" class="dialog-button">
-        <a href="javascript:void(0)" id="ok" class="easyui-linkbutton" onclick="saveSelected()" iconCls="icon-ok">确定选择</a>
-        <a href="javascript:void(0)" id="cancel" class="easyui-linkbutton" onclick="cancelSelect()" iconCls="icon-cancel">取消选择</a>
-    </div>
-</div>
 <script>
     function onLoadSuccess(data){
-        <c:if test="${currentProj.mark1allowed}">
-        $("a[name='edit']").linkbutton({text:'编辑自评成绩',plain:true, iconCls:'icon-edit', width:100});
-        </c:if>
-        $("a[name='view']").linkbutton({text:'查看成绩单',plain:true, iconCls:'icon-search', width:100});
+
+        $("a[name='edit']").linkbutton({text:'上传论文',plain:true, iconCls:'icon-add', width:100});
+        $("a[name='download']").linkbutton({text:'下载论文',plain:true, iconCls:'icon-download', width:100});
         $("#dg").datagrid("resize");
     }
     var d;
@@ -116,25 +86,22 @@
         });
         return false;
     }
-
     function viewTopic(id, event){
         window.top.addTab("论文题目详情", '${ctx}/console/thesis/view?id=' + id, null, true);
         event.stopPropagation();
         return false;
     }
 
-    function edit(thesisid, scoreid){
+    function edit(uploadid){
         d=$("#dlg").dialog({
-            title: '编辑自评成绩',
+            title: '上传论文',
             width: 860,
             height: 500,
-            href:'${ctx}/console/tscore/edit-mark1?id=' + scoreid + '&thesisid=' + thesisid,
+            href:'${ctx}/console/tupload/upload?id='+uploadid,
             maximizable:true,
             modal:true
         });
     }
-
-
     var dlg_dlg =$('#dlg-dlg').dialog({
         modal : true,
         title : '选择评阅教师',
@@ -147,102 +114,7 @@
     });
     var dg2 = null;
 
-    function uploadThesis(){
-        var sel = $("#dg2").datagrid("getSelected");
-        if(sel){
-            var viewerid = sel.id;
-            if(viewerid == $("#teacherid").val()){
-                $.messager.alert("错误", "不能选择自己本人作为评阅教师！");
-                return ;
-            }
-            var ids = getSelectedIds($("#dg"));
-            $.post("${ctx}/console/tscore/assign", {"viewerid": viewerid, "ids":ids}, function(data){
-                if(data.status == 200){
-                    $("#dlg-dlg").dialog('close');
-                    location.reload();
-                }else{
-                    $.messager.alert("提示", data.msg, "error");
-                }
-            });
-        }else{
-            $.messager.alert("提示", "请先选择一个教师！");
-            return ;
-        }
 
-    }
-
-    function openDlg(){
-        $("#search").linkbutton({text:'开始检索',iconCls:'icon-search', width:100});
-        $("#ok").linkbutton({text:'确定选择',iconCls:'icon-ok', width:100});
-        $("#cancel").linkbutton({text:'取消选择',iconCls:'icon-cancel', width:100});
-        $("#keywords").textbox();
-        $("#keywords").textbox("setValue","");
-        if(dg2 == null){
-            $("#dg2").datagrid({
-                url: '${ctx}/console/project/users-teacher.json',
-                method: 'get',
-                idField: 'id',
-                toolbar: '#ui-toolbar2',
-                fit:true,
-                fitColumns:true,
-                pagination:true,
-                rownumbers:true,
-                pageNumber:1,
-                pageSize : 20,
-                pageList : [ 10, 20, 30, 40, 50 ],
-                singleSelect:true,
-                striped:true,
-                columns:[[
-                    {field:'id',title:'选择', checkbox: true, width:40},
-                    {field:'account',title:'工号',width:150},
-                    {field:'username',title:'姓名',width:150},
-                    {field:'info.title',title:'职称',width:150, formatter:function(v,r,i){return formatColumn('info.title',v,r,i);}}
-                ]],
-                dataPlain: true
-            });
-        }else{
-            $("#dg2").datagrid("clearSelections");
-            $("#dg2").datagrid("load", {});
-        }
-    }
-
-    function closeDlg(){
-        $("#dg2").datagrid('loadData', { total: 0, rows: [] });
-    }
-
-    function doSearch(){
-        $("#dg2").datagrid("load",{
-            keywords:$("#keywords").val()
-        });
-    }
-
-    function saveSelected(){
-        var sel = $("#dg2").datagrid("getSelected");
-        if(sel){
-            var viewerid = sel.id;
-            if(viewerid == $("#teacherid").val()){
-                $.messager.alert("错误", "不能选择自己本人作为评阅教师！");
-                return ;
-            }
-            var ids = getSelectedIds($("#dg"));
-            $.post("${ctx}/console/tscore/assign", {"viewerid": viewerid, "ids":ids}, function(data){
-                if(data.status == 200){
-                    $("#dlg-dlg").dialog('close');
-                    location.reload();
-                }else{
-                    $.messager.alert("提示", data.msg, "error");
-                }
-            });
-        }else{
-            $.messager.alert("提示", "请先选择一个教师！");
-            return ;
-        }
-
-    }
-
-    function cancelSelect(){
-        $("#dlg-dlg").dialog("close");
-    }
 </script>
 </body>
 </html>

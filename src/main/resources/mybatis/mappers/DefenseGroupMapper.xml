@@ -26,7 +26,7 @@
       teachers, students)
     values (#{id,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT}, #{taskid,jdbcType=BIGINT},#{groupno,jdbcType=INTEGER},
       #{grouptype,typeHandler=cn.zttek.thesis.common.mybatis.EnumHandler}, #{leaderid,jdbcType=BIGINT}, #{secretaryid,jdbcType=BIGINT},
-      #{defensetime,jdbcType=TIMESTAMP}, #{defenseroom,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP}, 
+      #{defensetime,jdbcType=TIMESTAMP}, #{defenseroom,jdbcType=VARCHAR}, #{cdate,jdbcType=TIMESTAMP},
       #{teachers,jdbcType=LONGVARCHAR}, #{students,jdbcType=LONGVARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.DefenseGroup" >
@@ -110,4 +110,9 @@
     from user a,user_info ui,title t
     WHERE  a.id=ui.uid and ui.tid=t.id and a.id=#{userid}
   </select>
+
+  <select id="listBySecretary" resultMap="BaseResultMap">
+    select * from defense_group where projectid=#{projid} and secretaryid=#{secretaryid}
+  </select>
+
 </mapper>

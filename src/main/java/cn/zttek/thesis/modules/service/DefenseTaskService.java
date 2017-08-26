@@ -2,7 +2,6 @@ package cn.zttek.thesis.modules.service;
 
 import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.common.utils.JsonUtils;
-import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
@@ -10,7 +9,9 @@ import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.mapper.DefenseGroupMapper;
 import cn.zttek.thesis.modules.mapper.DefenseTaskMapper;
 import cn.zttek.thesis.modules.mapper.ProjectMapper;
-import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.modules.model.DefenseGroup;
+import cn.zttek.thesis.modules.model.DefenseTask;
+import cn.zttek.thesis.modules.model.Project;
 import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Mankind on 2017/8/16.

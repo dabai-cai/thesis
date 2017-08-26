@@ -3,7 +3,6 @@ package cn.zttek.thesis.modules.model;
 import cn.zttek.thesis.common.base.BaseModel;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @SuppressWarnings("serial")
 public class DefenseTask extends BaseModel {

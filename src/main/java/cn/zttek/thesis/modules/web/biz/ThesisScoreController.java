@@ -3,6 +3,8 @@ package cn.zttek.thesis.modules.web.biz;
 import cn.zttek.thesis.common.base.BaseController;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
+import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.holder.TitleHolder;
 import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.modules.service.ScoreService;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,6 +66,14 @@ public class ThesisScoreController extends BaseController {
         return "console/thesis/score/list2";
     }
 
+    @RequestMapping(value="/list3", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String list3(Model model)throws Exception{
+        User secretary = ThesisParam.getCurrentUser();
+        Project project = ThesisParam.getCurrentProj();
+        model.addAttribute("expands", scoreService.listBySecretary(project.getId(),secretary.getId()));
+        return "console/thesis/score/list3";
+    }
+
     private void loadData(Score score, Model model) throws Exception {
         Thesis thesis = thesisService.queryById(score.getThesisid());
         //指导老师资料
@@ -84,6 +95,9 @@ public class ThesisScoreController extends BaseController {
     @RequestMapping(value = {"/view"}, produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String view(@ModelAttribute Score score, Model model) throws Exception{
         loadData(score, model);
+        model.addAttribute("general",scoreService.general(score));
+        model.addAttribute("level",scoreService.thesisLevel(score));
+        model.addAttribute("agree",scoreService.agree(score));
         return "console/thesis/score/view";
     }
 
@@ -100,6 +114,11 @@ public class ThesisScoreController extends BaseController {
         try {
 
             if(score.getId() != null && score.getId() > 0){
+                if(score.getMark2()!=null&&score.getMark3()==null){//指导老师，评阅老师登记成绩之后，更新论文答辩类型(正常答辩)
+                    Thesis thesis=thesisService.queryById(score.getThesisid());
+                    thesis.setDefensestatus(DefenseStatus.NORMAL);
+                    thesisService.update(thesis);
+                }
                 scoreService.update(score);
             }else{
                 scoreService.insert(score);

@@ -5,6 +5,7 @@ import cn.zttek.thesis.common.utils.JsonUtils;
 import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
+import cn.zttek.thesis.modules.expand.GuideStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
@@ -12,10 +13,7 @@ import cn.zttek.thesis.modules.mapper.DefenseGroupMapper;
 import cn.zttek.thesis.modules.mapper.DefenseTaskMapper;
 import cn.zttek.thesis.modules.mapper.RoleMapper;
 import cn.zttek.thesis.modules.mapper.UserMapper;
-import cn.zttek.thesis.modules.model.DefenseGroup;
-import cn.zttek.thesis.modules.model.DefenseTask;
-import cn.zttek.thesis.modules.model.Role;
-import cn.zttek.thesis.modules.model.Thesis;
+import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -312,4 +311,84 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
         }
         return newgroups;
     }
+//******************************** 合并区分用，以下是黄锦荣所写************************************************
+
+     public DefenseGroup getByStudent(Long projid,Long studentid) throws Exception {
+         DefenseGroup defenseGroup=null;
+         List<DefenseTask> defenseTasks=defenseTaskMapper.listByProj(projid);
+         User student=userMapper.selectByPrimaryKey(studentid);
+         for(DefenseTask defenseTask:defenseTasks){
+             String students=defenseTask.getStudents();
+             List<ThesisDefenseStudent> studentList=JsonUtils.jsonToList(students,ThesisDefenseStudent.class);
+             for(ThesisDefenseStudent thesisDefenseStudent:studentList){
+                 //检测到学生在该答辩任务
+                 if(thesisDefenseStudent.getStuname().equals(student.getUsername())){
+                     List<DefenseGroup> defenseGroups=defenseGroupMapper.selectByTask(defenseTask.getId());
+                     for(DefenseGroup defenseGroup1:defenseGroups){
+                         List<ThesisDefenseStudent> groupStudents=JsonUtils.jsonToList(defenseGroup1.getStudents(),ThesisDefenseStudent.class);
+                         //检测学生所在答辩分组
+                         for(ThesisDefenseStudent thesisDefenseStudent1:groupStudents){
+                             if(thesisDefenseStudent1.getStuname().equals(student.getUsername())){
+                                 defenseGroup=defenseGroup1;
+                             }
+                         }
+                     }
+                 }
+             }
+
+         }
+         return defenseGroup;
+     }
+
+
+     public HashMap getByTeacher(Long projid, Long teacherid) throws Exception {
+        HashMap hashMap=new HashMap();
+        User teacher=userMapper.selectByPrimaryKey(teacherid);
+        List<GuideStudent> studentsGroups=new ArrayList<GuideStudent>();//指导学生分组
+        List<DefenseGroup> teacherGroup=new ArrayList<DefenseGroup>();//指导老师本人的分组
+         List<DefenseTask> defenseTasks=defenseTaskMapper.listByProj(projid);//论文工作下所有答辩任务
+
+         //指导老师自己本身的分组
+         for(DefenseTask defenseTask:defenseTasks){
+             String teachers=defenseTask.getTeachers();//秘书和组长也是在里面的
+             List<ThesisDefenseTeacher> thesisDefenseTeachers=JsonUtils.jsonToList(teachers,ThesisDefenseTeacher.class);
+             //检测指导老师所在答辩任务
+             for(ThesisDefenseTeacher thesisDefenseTeacher:thesisDefenseTeachers){
+                 if(thesisDefenseTeacher.getUserName().equals(teacher.getUsername())){
+                     List<DefenseGroup> defenseGroups=defenseGroupMapper.selectByTask(defenseTask.getId());
+                     for(DefenseGroup defenseGroup:defenseGroups){
+                         //指导老师所在答辩小组
+                         List<ThesisDefenseTeacher> groupTeachers=JsonUtils.jsonToList(defenseGroup.getTeachers(),ThesisDefenseTeacher.class);
+                         for(ThesisDefenseTeacher thesisDefenseTeacher1:groupTeachers){
+                             if(thesisDefenseTeacher1.getUserName().equals(teacher.getUsername())){
+                                 teacherGroup.add(defenseGroup);//找到教师所在答辩小组,添加
+                             }
+                         }
+                     }
+                 }
+             }
+
+         }
+
+         //检索教师指导学生的答辩小组
+        List<GuideStudent> students=userMapper.listStudentByGuide(projid,teacherid);//查询指导老师所带的学生列表
+         for(GuideStudent student:students){
+             DefenseGroup studentGroup=getByStudent(projid,student.getId());
+             if(null!=studentGroup){
+                 student.setDefenseRoom(studentGroup.getDefenseroom());
+                 student.setDefenseTime(studentGroup.getDefensetime());
+                 student.setDefenseType(studentGroup.getGrouptype());
+                 student.setGroupid(studentGroup.getId());
+                 student.setSecretary(studentGroup.getSecretaryName());
+                 student.setGroupno(studentGroup.getGroupno());
+                 student.setLeader(studentGroup.getLeaderName());
+                 studentsGroups.add(student);//校测到学生已经分组，添加到分组列表
+             }
+         }
+
+         hashMap.put("students",studentsGroups);
+         hashMap.put("teacher",teacherGroup);
+        return hashMap;
+     }
+
 }

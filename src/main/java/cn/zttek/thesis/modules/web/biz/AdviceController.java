@@ -5,9 +5,9 @@ import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.modules.enums.AdviceTarget;
-import cn.zttek.thesis.modules.enums.UserType;
-import cn.zttek.thesis.modules.holder.TitleHolder;
-import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.modules.model.Advice;
+import cn.zttek.thesis.modules.model.Org;
+import cn.zttek.thesis.modules.model.User;
 import cn.zttek.thesis.modules.service.AdviceService;
 import cn.zttek.thesis.modules.service.OrgService;
 import cn.zttek.thesis.modules.service.UserService;
@@ -66,9 +66,8 @@ public class AdviceController extends BaseController {
 
         if(orgid==null||orgid==-1){
 //            orgid=(org.getId()==0?null:org.getId());
-              orgid=ThesisParam.getCurrentUser().getOrgid();
+              orgid= ThesisParam.getCurrentUser().getOrgid();
         }
-
         PageInfo<Advice> pageInfo = adviceService.listAdvice(page, rows,orgid, keywords);
         result.setTotal(pageInfo.getTotal());
         result.setRows(pageInfo.getList());

@@ -103,7 +103,7 @@
                         <tr>
                             <td align="right"><label>备注：</label></td>
                             <td>
-                                <textarea name="remark" id="remark" cols="38" rows="5"></textarea>
+                                <textarea name="remark" id="remark" cols="38" rows="7"></textarea>
                             </td>
                         </tr>
                     </table>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zttek.thesis.modules.mapper.UploadMapper" >
+  <resultMap id="BaseResultMap" type="cn.zttek.thesis.modules.model.Upload" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="studentid" property="studentid" jdbcType="BIGINT" />
+    <result column="teacherid" property="teacherid" jdbcType="BIGINT" />
+    <result column="thesisid" property="thesisid" jdbcType="BIGINT" />
+    <result column="projectid" property="projectid" jdbcType="BIGINT" />
+    <result column="cdate" jdbcType="TIMESTAMP" property="cdate" />
+    <result column="mdate" jdbcType="TIMESTAMP" property="mdate" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,path,studentid, teacherid, projectid,thesisid,cdate,mdate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from upload
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from upload
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.zttek.thesis.modules.model.Upload" >
+    insert into upload (path,
+      studentid, teacherid, projectid,cdate,mdate,thesisid
+      )
+    values ( #{path,jdbcType=VARCHAR},
+      #{studentid,jdbcType=BIGINT}, #{teacherid,jdbcType=BIGINT}, #{projectid,jdbcType=BIGINT},
+       #{cdate,jdbcType=TIMESTAMP}, #{mdate,jdbcType=TIMESTAMP}, #{thesisid,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.zttek.thesis.modules.model.Upload" >
+    update upload
+    set path = #{path,jdbcType=VARCHAR},
+      studentid = #{studentid,jdbcType=BIGINT},
+      teacherid = #{teacherid,jdbcType=BIGINT},
+      projectid = #{projectid,jdbcType=BIGINT},
+      cdate= #{cdate,jdbcType=TIMESTAMP},
+      mdate= #{mdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <!-- =========================以下为手动添加===================================== -->
+  <select id="listByTeacher" resultMap="cn.zttek.thesis.modules.mapper.ThesisExpandMapper.ThesisExpand">
+    select ts.id, ts.topic, ts.teacherid, ts.studentid, ts.account as stuno, ts.username as stuname, ts.viewerid
+    ,u.mdate as lastuptime ,u.id as uploadid
+    from thesis_student ts RIGHT JOIN upload u on ts.studentid = u.studentid
+    where u.teacherid = #{teacherid} and u.projectid = #{projid} and ts.teacherid = #{teacherid}
+  </select>
+
+  <select id="selectByStudent" resultType="cn.zttek.thesis.modules.model.Upload">
+    select *
+    from  upload  where  studentid= #{studentid} and thesisid = #{thesisid}
+  </select>
+
+  <select id="selectByThesis" resultType="cn.zttek.thesis.modules.model.Upload">
+    select *
+    from  upload  where  thesisid = #{thesisid}
+  </select>
+</mapper>

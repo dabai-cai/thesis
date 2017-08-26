@@ -42,7 +42,6 @@
     </div>
     <table id="dg1" class="easyui-datagrid"
            data-options="
-
                             method: 'get',
                             <c:if test="${type eq 'student'}">
                             url: '${ctx}/console/thesis/defense/task/${type}-list.json?id=${defenseTask.id}',

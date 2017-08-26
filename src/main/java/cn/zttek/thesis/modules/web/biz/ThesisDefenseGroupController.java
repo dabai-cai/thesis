@@ -8,12 +8,11 @@ import cn.zttek.thesis.common.utils.JsonUtils;
 import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
+import cn.zttek.thesis.modules.expand.GuideStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
-import cn.zttek.thesis.modules.model.DefenseGroup;
-import cn.zttek.thesis.modules.model.DefenseTask;
-import cn.zttek.thesis.modules.model.Title;
+import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.modules.service.DefenseGroupService;
 import cn.zttek.thesis.modules.service.DefenseTaskService;
 import cn.zttek.thesis.modules.service.TitleService;
@@ -26,10 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Mankind on 2017/8/20.
@@ -88,10 +84,6 @@ public class ThesisDefenseGroupController extends BaseController{
         model.addAttribute("titles", TitleLevel.values());
             model.addAttribute("defenseStatuses", DefenseStatus.values());
         return "console/thesis/defense/group/add";
-    }
-    @RequestMapping(value = "/view", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
-    public String view(Model model) throws Exception{
-        return "console/thesis/defense/group/view";
     }
     @RequestMapping(value = "/autogroup", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String autogroup(Model model,Long taskid) throws Exception{
@@ -333,5 +325,37 @@ public class ThesisDefenseGroupController extends BaseController{
         return result;
     }
 
+
+
+
+
+
+
+
+
+
+    //************************************合并分割线，下面是黄锦荣所写***************************************************
+
+    @RequestMapping(value = "/teacherview", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String teacherView(Model model) throws Exception {
+        Project currentProj=ThesisParam.getCurrentProj();
+        User teacher=ThesisParam.getCurrentUser();
+        HashMap groups=defenseGroupService.getByTeacher(currentProj.getId(),teacher.getId());
+        model.addAttribute("teacher",(ArrayList<DefenseGroup>)groups.get("teacher"));
+        model.addAttribute("students",(ArrayList<GuideStudent>)groups.get("students"));
+        return "/console/thesis/defense/group/teacherview";
+    }
+
+    @RequestMapping(value = "/view", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String view(@ModelAttribute DefenseGroup defenseGroup, Model model) throws Exception{
+
+        List<ThesisDefenseStudent> students=JsonUtils.jsonToList(defenseGroup.getStudents(),ThesisDefenseStudent.class);
+        List<ThesisDefenseTeacher> teachers= JsonUtils.jsonToList(defenseGroup.getTeachers(),ThesisDefenseTeacher.class);
+
+        model.addAttribute("students",students);
+        model.addAttribute("teachers",teachers);
+        model.addAttribute("defeseGroup",defenseGroup);
+        return "console/thesis/defense/group/view";
+    }
 
 }

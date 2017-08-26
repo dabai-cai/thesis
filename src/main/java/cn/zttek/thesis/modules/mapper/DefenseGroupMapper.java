@@ -33,4 +33,15 @@ public interface DefenseGroupMapper extends BaseMapper<DefenseGroup> {
      * @throws Exception
      */
     ThesisDefenseTeacher selectTeacherByUserId(@Param("userid") Long id)throws  Exception;
+
+
+    /**
+     * 查询答辩教师在当前论文工作下的答辩成绩列表
+     * @param projid
+     * @param secretaryid
+     * @return
+     * @throws Exception
+     */
+    DefenseGroup listBySecretary(@Param("projid") Long projid, @Param(("secretaryid")) Long secretaryid) throws Exception;
+
 }

@@ -50,7 +50,7 @@ public class RequestUtil {
     public static <T> List<T> getParamObjectList(HttpServletRequest request, Class<T> clz){
         Map<String, String[]> reqMap = request.getParameterMap();
         Set<String> keySet = reqMap.keySet();
-        List<T> list = new ArrayList<>();
+        List<T> list = new ArrayList<T>();
         T t = null;
         try {
             for(String key : keySet){

@@ -12,7 +12,8 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>评阅教师评分</title>
+    <title>指导教师自评</title>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/table.css">
     <%@include file="/inc/header.jsp" %>
 </head>
 <body class="easyui-layout">
@@ -28,19 +29,20 @@
                         idField: 'id',
                         fit:true,
                         fitColumns:true,
+                        toolbar:'#ui-toolbar',
                         rownumbers:true,
                         onLoadSuccess:onLoadSuccess,
                         singleSelect:false">
         <thead>
         <tr>
-            <th data-options="field:'id'" hidden="true">论文ID</th>
+            <th data-options="field:'id', checkbox:true">论文ID</th>
             <th data-options="field:'topic'" width="200">论文题目</th>
             <th data-options="field:'stuname'" width="80">选题学生</th>
             <th data-options="field:'stuno'" width="60" hidden="true">学生学号</th>
-            <th data-options="field:'teacherid'" width="60" hidden="true">指导老师ID</th>
-            <th data-options="field:'teacher'" width="100">指导老师</th>
+            <th data-options="field:'viewerid'" width="60" hidden="true">评阅教师ID</th>
+            <th data-options="field:'viewer'" width="100">指导教师</th>
             <th data-options="field:'scoreid'" width="60" hidden="true">成绩ID</th>
-            <th data-options="field:'mark'" width="60">评阅老师评分</th>
+            <th data-options="field:'mark'" width="60">评阅教师自评分</th>
             <th data-options="field:'action'"  align="left" width="200">操作</th>
         </tr>
         </thead>
@@ -48,7 +50,7 @@
         <c:forEach items="${expands}" var="thesisEx">
             <tr>
                 <td>${thesisEx.id}</td>
-                <td><a href="#" onclick="viewTopic(${thesisEx.id},event);">${thesisEx.topic}</a></td>
+                <td><a href="#" onclick="viewTopic(${thesisEx.id}, event);">${thesisEx.topic}</a></td>
                 <td><a href="#" onclick="viewStudent(${thesisEx.studentid});">${thesisEx.stuname}</a></td>
                 <td>${thesisEx.stuno}</td>
                 <td>${thesisEx.teacherid}</td>
@@ -59,6 +61,9 @@
                     <c:if test="${currentProj.mark2allowed}">
                         <a name="edit" href="#" onclick="edit('${thesisEx.id}', '${thesisEx.scoreid}')">编辑评阅成绩</a>
                     </c:if>
+                    <c:if test="${thesisEx.scoreid gt 0}">
+                        &nbsp;&nbsp;|&nbsp;&nbsp;<a name="view" href="${ctx}/console/tscore/view?id=${thesisEx.scoreid}" target="_blank">查看成绩单</a>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>
@@ -67,11 +72,28 @@
 </div>
 <input type="hidden" id="teacherid" value="${currentUser.id}" />
 <div id="dlg"></div>
+<div id="dlg-dlg" style="display: none;">
+    <div id="ui-toolbar2">
+        <div class="ui-toolbar-search">
+            <div class="ui-toolbar-search">
+                <label>关键词：</label><input class="wu-text easyui-textbox" id="keywords" style="width:100px">
+                <a href="#" id="search" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">开始检索</a>
+            </div>
+        </div>
+    </div>
+    <table id="dg2">
+    </table>
+    <div style="padding:5px;" class="dialog-button">
+        <a href="javascript:void(0)" id="ok" class="easyui-linkbutton" onclick="saveSelected()" iconCls="icon-ok">确定选择</a>
+        <a href="javascript:void(0)" id="cancel" class="easyui-linkbutton" onclick="cancelSelect()" iconCls="icon-cancel">取消选择</a>
+    </div>
+</div>
 <script>
     function onLoadSuccess(data){
         <c:if test="${currentProj.mark2allowed}">
-        $("a[name='edit']").linkbutton({text:'编辑评阅成绩',plain:true, iconCls:'icon-edit', width:100});
+        $("a[name='edit']").linkbutton({text:'编辑自评成绩',plain:true, iconCls:'icon-edit', width:100});
         </c:if>
+        $("a[name='view']").linkbutton({text:'查看成绩单',plain:true, iconCls:'icon-search', width:100});
         $("#dg").datagrid("resize");
     }
     var d;
@@ -95,13 +117,27 @@
 
     function edit(thesisid, scoreid){
         d=$("#dlg").dialog({
-            title: '编辑自评成绩',
+            title: '编辑评阅成绩',
             width: 860,
             height: 500,
             href:'${ctx}/console/tscore/edit-mark2?id=' + scoreid + '&thesisid=' + thesisid,
             maximizable:true,
             modal:true
         });
+    }
+
+
+
+    function doSearch(){
+        $("#dg2").datagrid("load",{
+            keywords:$("#keywords").val()
+        });
+    }
+
+
+
+    function cancelSelect(){
+        $("#dlg-dlg").dialog("close");
     }
 </script>
 </body>

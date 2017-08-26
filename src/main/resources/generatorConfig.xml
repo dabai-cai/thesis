@@ -4,8 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <!--导入属性配置-->
-    <properties resource="generator.properties"></properties>
+    <!--导入属性配置 -->
 
     <!--指定特定数据库的jdbc驱动jar包的位置-->
     <classPathEntry location="${jdbc.driverLocation}"/>
@@ -23,26 +22,29 @@
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true" />
         </commentGenerator>
-
-        <!--jdbc的数据库连接 -->
-        <jdbcConnection
-                driverClass="${jdbc.driverClass}"
-                connectionURL="${jdbc.connectionURL}"
-                userId="${jdbc.userId}"
-                password="${jdbc.password}">
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <!--<jdbcConnection driverClass="${jdbc.driver}"-->
+        <!--connectionURL="${jdbc.url}"-->
+        <!--userId="${jdbc.username}"-->
+        <!--password="${jdbc.password}">-->
+        <!--</jdbcConnection>-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/thesis?characterEncoding=UTF-8"
+                        userId="hjr"
+                        password="asd456++">
         </jdbcConnection>
 
-
-        <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+            NUMERIC 类型解析为java.math.BigDecimal -->
         <javaTypeResolver>
-            <property name="forceBigDecimals" value="false"/>
+            <property name="forceBigDecimals" value="false" />
         </javaTypeResolver>
 
 
         <!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
-            targetPackage     指定生成的model生成所在的包名
-            targetProject     指定在该项目下所在的路径
-        -->
+    targetPackage     指定生成的model生成所在的包名
+    targetProject     指定在该项目下所在的路径
+-->
         <javaModelGenerator targetPackage="cn.zttek.thesis.modules.model"
                             targetProject="src/main/java">
             <property name="constructorBased" value="false"/>
@@ -59,10 +61,12 @@
             <property name="rootClass" value="cn.zttek.thesis.common.base.BaseModel"/>
         </javaModelGenerator>
 
-        <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
+        <!-- targetProject:mapper映射文件生成的位置 -->
         <sqlMapGenerator targetPackage="mybatis.mappers"
                          targetProject="src\main\resources">
-            <property name="enableSubPackages" value="false"/>
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+            <property name="rootClass" value="cn.zttek.thesis.common.base.BaseMapper"/>
         </sqlMapGenerator>
 
         <!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
@@ -83,6 +87,5 @@
             <property name="rootClass" value="cn.zttek.thesis.common.base.BaseModel"/>
             <columnOverride column="cdate" jdbcType="TIMESTAMP"/>
         </table>
-
     </context>
 </generatorConfiguration>

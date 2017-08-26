@@ -6,13 +6,10 @@ import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.model.DefenseTask;
-import cn.zttek.thesis.modules.model.Thesis;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * 由MyBatis Generator工具自动生成
