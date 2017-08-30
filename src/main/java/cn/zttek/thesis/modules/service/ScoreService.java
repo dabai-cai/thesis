@@ -74,23 +74,23 @@ public class ScoreService extends BaseService<Score>{
 
     /**
      * 查询答辩秘书在当前论文工作下的录入成绩列表
-     * @param projid
-     * @param secretaryid
+     * @param groupid
+
      * @return
      * @throws Exception
      */
-    public List<ThesisExpand> listBySecretary(Long projid, Long secretaryid) throws Exception{
+    public List<ThesisExpand> listBySecretary(Long groupid) throws Exception{
         log.info("===查询答辩秘书在当前论文工作下的录入成绩列表===");
-        DefenseGroup defenseGroup = defenseGroupMapper.listBySecretary(projid, secretaryid);
+        DefenseGroup defenseGroup = defenseGroupMapper.listBySecretary(groupid);
         List<ThesisExpand> list=new ArrayList<>();
         if(null!=defenseGroup){
             List<ThesisDefenseStudent> students= JsonUtils.jsonToList(defenseGroup.getStudents(),ThesisDefenseStudent.class);//转换为pojo
             Long[] studentids=new Long[students.size()];
-            System.out.println("学生人数"+students.size());
             for(int i=0;i<students.size();i++){
                 studentids[i]=students.get(i).getStudentid();
             }
-            list=scoreMapper.listByStudent(projid,studentids);
+            Project project=ThesisParam.getCurrentProj();
+            list=scoreMapper.listByStudent(project.getId(),studentids);
         }
         return list;
     }

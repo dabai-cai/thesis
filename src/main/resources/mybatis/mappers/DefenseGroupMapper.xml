@@ -112,7 +112,7 @@
   </select>
 
   <select id="listBySecretary" resultMap="BaseResultMap">
-    select * from defense_group where projectid=#{projid} and secretaryid=#{secretaryid}
+    select * from defense_group where defense_group.id=#{groupid}
   </select>
 
 </mapper>

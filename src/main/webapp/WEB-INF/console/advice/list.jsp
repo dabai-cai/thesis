@@ -60,8 +60,7 @@
     <thead>
     <tr>
         <%--<th data-options="field:'id'" width="60">ID</th>--%>
-        <th data-options="field:'view', formatter: formatView", width="100">查看详细</th>
-        <th data-options="field:'topic'" width="200" align="left">公告标题</th>
+        <th data-options="field:'topic',formatter: formatView" width="200" align="left">公告标题</th>
         <th data-options="field:'valid',formatter:format01" width="80">发布状态</th>
         <th data-options="field:'top',formatter:format01" width="80">是否置顶</th>
         <th data-options="field:'target'" width="80">公告对象</th>
@@ -72,7 +71,7 @@
 <div id="dlg"></div>
 <script>
     function formatView(val, row){
-        return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;点击查看</div></a>';
+        return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+val+'</div></a>';
     }
     function view(id, event){
         window.top.addTab("公告详情", '${ctx}/console/advice/view?id=' + id, null, true);

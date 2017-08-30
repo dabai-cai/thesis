@@ -42,6 +42,10 @@
 </table>
 <table width="700" align="center" border="1" cellspacing="0" bordercolor="#666666">
     <tr>
+        <td colspan="3" height="40" align="justify" width="80">论文题目</td>
+        <td colspan="11" height="40" align="left" width="340">${thesis.topic}</td>
+    </tr>
+    <tr>
         <td colspan="3" height="40" align="justify" width="40">学号</td>
         <td colspan="2" height="40" align="left" width="80">${student.account}</td>
         <td colspan="2" height="40" align="justify" width="60">姓名</td>
@@ -49,10 +53,7 @@
         <td colspan="3" height="40" align="justify" width="40">专业</td>
         <td colspan="2" height="40" align="left" width="80">${student.info.grade}级${student.info.clazz}</td>
     </tr>
-    <tr>
-        <td colspan="3" height="40" align="justify" width="80">论文题目</td>
-        <td colspan="11" height="40" align="left" width="340">${thesis.topic}</td>
-    </tr>
+
     <tr>
         <td colspan="3" height="40" align="justify" width="90">指导老师</td>
         <td colspan="2" height="40" align="left" width="80">${teacher.username}</td>
@@ -75,7 +76,7 @@
     </tr>
     <tr>
         <td colspan="3" height="40" align="justify" width="90">答辩组长</td>
-        <td colspan="2" height="40" align="justify" width="60"></td>
+        <td colspan="2" height="40" align="justify" width="60">${defenseGroup.leaderName}</td>
         <td colspan="2" height="40" align="justify" width="60">职 称</td>
         <td colspan="2" height="40" align="left" width="80">${viewer.info.title}</td>
         <td colspan="2" height="40" align="justify" width="100">评分</td>
@@ -95,13 +96,13 @@
     </tr>
 
     <tr>
-        <td colspan="16" width="640" align="left">
+        <td colspan="16" width="640" align="left" height="300">
             <span style="font-weight:bold;">指导教师评语</span><br/>
             <pre>${score.comment1}</pre>
         </td>
     </tr>
     <tr>
-        <td colspan="16" width="640" align="left">
+        <td colspan="16" width="640" align="left" height="300">
             <span style="font-weight:bold;">评阅教师评语</span><br/>
             <pre>${score.comment2}</pre>
         </td>

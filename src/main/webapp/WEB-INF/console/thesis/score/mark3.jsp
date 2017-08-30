@@ -17,7 +17,7 @@
             <tbody>
             <tr>
                 <td width="120"><label>论文标题</label></td>
-                <td colspan="3">${thesis.topic}</td>
+                <td colspan="3" style="text-align: left;">${thesis.topic}</td>
                 <td><label>指导教师</label></td>
                 <td>${teacher.username}&nbsp;&nbsp;${teacher.info.title}</td>
             </tr>
@@ -47,10 +47,10 @@
             <tbody>
             <tr>
                 <td rowspan="8" width="20" >答辩委员会意见与成绩评定</td>
-                <td  rowspan="2">评分项目</td>
-                <td  rowspan="2" >具体要求(A级标准)</td>
+                <td  rowspan="2" >评分项目</td>
+                <td  rowspan="2" style="text-align: left;">具体要求(A级标准)</td>
                 <td  rowspan="2" align="center" width="40">最高分</td>
-                <td  colspan="5"  align="center">评分</td>
+                <td  colspan="5"  style="text-align: center;">评分</td>
             </tr>
             <tr><td align="center" width="30">A</td>
                 <td align="center"  width="30">B</td>
@@ -59,12 +59,12 @@
                 <td  width="30">E</td>
             </tr>
             <tr>
-                <td rowspan="2">论文质量</td>
-                <td rowspan="2">论文(设计)结构严谨，逻辑性强;<br>
+                <td rowspan="2" style="text-align: left;">论文质量</td>
+                <td rowspan="2" style="text-align: left;">论文(设计)结构严谨，逻辑性强;<br>
                     有一定的学术价值或实用价值;<br>
                     文字表达准确流畅；论文格式规范;<br>
                     图表(或图纸)规范、符合要求。</td>
-                <td rowspan="2" align="center" width="40">60</td>
+                <td rowspan="2" style="text-align: center;" width="40">60</td>
                 <td  width="30">55-60</td>
                 <td  width="30">49-54</td>
                 <td  width="30">43-48</td>
@@ -77,11 +77,11 @@
                     <input  class="easyui-numberbox"  id="score1" name="score1"  data-options="required:true"  precision="2" min="0" max="60" style="width:100px;"/></td>
             </tr>
             <tr>
-                <td rowspan="2"> 论文报告、讲解</td>
+                <td rowspan="2" style="text-align: left;"> 论文报告、讲解</td>
                 <td rowspan="2">思路清晰:概念清楚,重点(创新点);<br>
                     突出;语言表达准确;报告时间、<br>
                     节奏掌握好。</td>
-                <td rowspan="2" align="center" width="40">20</td>
+                <td rowspan="2" style="text-align: center;" width="40">20</td>
                 <td  width="30">19-20</td>
                 <td  width="30">17-18</td>
                 <td  width="30">15-16</td>
@@ -94,10 +94,10 @@
 
             </tr>
             <tr>
-                <td rowspan="2"> 答辩情况</td>
-                <td rowspan="2">答辩态度认真,能准确回答问题;<br>
+                <td rowspan="2" style="text-align: left;"> 答辩情况</td>
+                <td rowspan="2" >答辩态度认真,能准确回答问题;<br>
                     </td>
-                <td rowspan="2" align="center" width="40">20</td>
+                <td rowspan="2" style="text-align: center;" width="40">20</td>
                 <td  width="30">19-20</td>
                 <td  width="30">17-18</td>
                 <td  width="30">15-16</td>

@@ -31,8 +31,10 @@
         <thead>
         <tr>
             <th data-options="field:'studentid',hidden:'true'" , width="40">ID</th>
+            <th data-options="field:'thesisid',hidden:'true'">论文id</th>
+            <th data-options="field:'topic'"  width="200" >论文</th>
             <th data-options="field:'stuname'" width="50">学生姓名</th>
-            <th data-options="field:'stuno'," width="50">学生学号</th>
+            <th data-options="field:'stuno'," width="80">学生学号</th>
             <th data-options="field:'clazz'" width="100">年级班级</th>
             <th data-options="field:'defenseStatus'" >论文答辩类型</th>
         </tr>
@@ -40,11 +42,13 @@
         <tbody>
         <c:forEach items="${students}" var="student">
             <tr>
-                <td></td>
+                <td>${student.studentid}</td>
+                <td>${student.thesisid}</td>
+                <td><a href="#" onclick="viewTopic(${student.thesisid}, event);">${student.topic}</a></td>
                 <td><a href="#" onclick="viewStudent(${student.studentid});">${student.stuname}</a></td>
                 <td>${student.stuno}</td>
                 <td>${student.clazz}</td>
-                <td>${defenseGroup.grouptype}</td>
+                <td>${defenseGroup.grouptype.label}</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -76,7 +80,7 @@
                 <td>${teacher.account}</td>
                 <td>${teacher.userName}</td>
                 <td>${teacher.titleName}</td>
-                <td>${teacher.titleLevel}</td>
+                <td>${teacher.titleLevel.label}</td>
             </tr>
 
         </c:forEach>
@@ -88,7 +92,11 @@
 </body>
 </html>
 <script>
-
+    function viewTopic(id, event){
+        window.top.addTab("论文题目详情", '${ctx}/console/thesis/view?id=' + id, null, true);
+        event.stopPropagation();
+        return false;
+    }
     function viewStudent(studentid){
         d=$("#dlg").dialog({
             title: '查看学生信息',

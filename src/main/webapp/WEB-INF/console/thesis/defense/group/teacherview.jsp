@@ -24,25 +24,25 @@
                 <table width="100%" cellpadding="5" class="form-table">
                     <tbody>
                     <tr id="newTopic">
-                        <td width="120"><label>答辩组数</label></td>
+                        <td width="70" style="text-align: left"><label>答辩组数</label></td>
                         <td>
                             <span>第${denfenseGroup.groupno}组</span>
                         </td>
                     </tr>
                     <tr>
-                        <td><label>答辩组长</label></td>
+                        <td style="text-align: left"><label>答辩组长</label></td>
                         <td>
                             <span class="president">${denfenseGroup.leaderName}</span>
                         </td>
                     </tr>
                     <tr>
-                        <td><label>答辩秘书</label></td>
+                        <td style="text-align: left"><label>答辩秘书</label></td>
                         <td>
                             <span class="contact">${denfenseGroup.secretaryName}</span>
                         </td>
                     </tr>
                     <tr>
-                        <td><label>答辩时间</label></td>
+                        <td style="text-align: left"><label>答辩时间</label></td>
                         <td>
                             <span>
                                 <fmt:formatDate value="${denfenseGroup.defensetime}" pattern="yyyy.MM.dd"/>
@@ -50,22 +50,25 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><label>答辩地点</label></td>
+                        <td style="text-align: left"><label>答辩地点</label></td>
                         <td><span>
                                 ${denfenseGroup.defenseroom}
                         </span>
                         </td>
                     </tr>
                     <tr>
-                        <td><label>答辩类型</label></td>
+                        <td style="text-align: left"><label>答辩类型</label></td>
                         <td><span>
-                                ${denfenseGroup.grouptype}
+                                ${denfenseGroup.grouptype.label}
                         </span>
                         </td>
                     </tr>
-                    <tr><td><label>操作</label></td>
+                    <tr><td style="text-align: left"><label>操作</label></td>
                         <td><span>
                                <a href="#" onclick="more(${denfenseGroup.id});" class="easyui-linkbutton" iconCls="myicon-zoom">查看详情</a>
+                          <c:if test="${denfenseGroup.secretaryid == user.id}">
+                              <a href="${ctx}/console/tscore/list3?groupid=${denfenseGroup.id}"  class="easyui-linkbutton" iconCls="myicon-zoom">录入成绩</a>
+                          </c:if>
                         </span>
                         </td></tr>
                     </tbody>

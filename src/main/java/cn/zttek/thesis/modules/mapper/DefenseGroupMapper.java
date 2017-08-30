@@ -37,11 +37,10 @@ public interface DefenseGroupMapper extends BaseMapper<DefenseGroup> {
 
     /**
      * 查询答辩教师在当前论文工作下的答辩成绩列表
-     * @param projid
-     * @param secretaryid
+     * @param groupid
      * @return
      * @throws Exception
      */
-    DefenseGroup listBySecretary(@Param("projid") Long projid, @Param(("secretaryid")) Long secretaryid) throws Exception;
+    DefenseGroup listBySecretary(@Param(("groupid")) Long groupid) throws Exception;
 
 }

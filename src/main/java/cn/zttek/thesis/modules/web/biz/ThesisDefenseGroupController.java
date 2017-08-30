@@ -15,6 +15,7 @@ import cn.zttek.thesis.modules.expand.ThesisResult;
 import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.modules.service.DefenseGroupService;
 import cn.zttek.thesis.modules.service.DefenseTaskService;
+import cn.zttek.thesis.modules.service.ThesisService;
 import cn.zttek.thesis.modules.service.TitleService;
 import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageInfo;
@@ -42,6 +43,9 @@ public class ThesisDefenseGroupController extends BaseController{
 
     @Autowired
     private TitleService titleService;
+
+    @Autowired
+    private ThesisService thesisService;
 
     @ModelAttribute("defenseGroup")
     public DefenseGroup get(@RequestParam(required = false, value = "id") Long id) throws Exception {
@@ -341,8 +345,10 @@ public class ThesisDefenseGroupController extends BaseController{
         Project currentProj=ThesisParam.getCurrentProj();
         User teacher=ThesisParam.getCurrentUser();
         HashMap groups=defenseGroupService.getByTeacher(currentProj.getId(),teacher.getId());
+        model.addAttribute("user",teacher);
         model.addAttribute("teacher",(ArrayList<DefenseGroup>)groups.get("teacher"));
         model.addAttribute("students",(ArrayList<GuideStudent>)groups.get("students"));
+        ArrayList<DefenseGroup> test=(ArrayList<DefenseGroup>)groups.get("teacher");
         return "/console/thesis/defense/group/teacherview";
     }
 
@@ -351,7 +357,12 @@ public class ThesisDefenseGroupController extends BaseController{
 
         List<ThesisDefenseStudent> students=JsonUtils.jsonToList(defenseGroup.getStudents(),ThesisDefenseStudent.class);
         List<ThesisDefenseTeacher> teachers= JsonUtils.jsonToList(defenseGroup.getTeachers(),ThesisDefenseTeacher.class);
-
+        Project project=ThesisParam.getCurrentProj();
+        for (ThesisDefenseStudent student:students){
+            Thesis thesis=thesisService.getStudentThesis(project.getId(),student.getStudentid());
+            student.setTopic(thesis.getTopic());
+            student.setThesisid(thesis.getId());
+        }
         model.addAttribute("students",students);
         model.addAttribute("teachers",teachers);
         model.addAttribute("defeseGroup",defenseGroup);

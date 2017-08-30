@@ -28,7 +28,7 @@
         <h1><img src="${ctx}/resources/img/logo.png" height="40px" style="vertical-align: middle;"/>毕业论文选题系统</h1>
     </div>
     <div align="center" >
-        <p><strong>${currentOrg.name}</strong><a href="#"  class="" >[切换]</a><strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')">[切换]</a></p>
+        <p><strong>${currentOrg.name}</strong><a href="#" style="color: rgba(0,0,0,1)">[切换]</a><strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')" style="color: rgba(0,0,0,1)">[切换]</a></p>
         </h2>
     </div>
     <div class="ui-header-right">
@@ -83,6 +83,9 @@
                 </c:if>
                 <c:if test="${currentUser.type.ordinal() le 1}">
                     <li><a href="${ctx}/console/attr/list">基础数据管理</a></li>
+                    <li><a href="${ctx}/console/attr/list-direction">论文方向管理</a></li>
+                    <li><a href="${ctx}/console/attr/list-source">论文来源管理</a></li>
+                    <li><a href="${ctx}/console/attr/list-property">论文属性管理</a></li>
                     <li><a href="${ctx}/console/arch/list-admin">管理员管理</a></li>
                     <li><a href="${ctx}/console/arch/list-teacher">教师管理</a></li>
                     <li><a href="${ctx}/console/arch/list-student">学生管理</a></li>
@@ -110,13 +113,13 @@
                     <table>
                         <c:forEach items="${advices}" var="advice">
                             <tr>
-                                <td>
+                                <td style="width: 760px;margin: 10px" >
                                     <c:if test="${advice.top eq true}">
-                                        <span style="color: red">置顶</span>
+                                        <span style='background-color: rgb(255,0,60); padding: 4px;color:#ffffff'>置顶</span>
                                     </c:if>
-                                    <a href="#" onclick="view('${advice.id}',null)">${advice.topic}</a>
+                                    <a href="#" onclick="view('${advice.id}',null)" style='color:rgb(107,107,107)'>${advice.topic}</a>
                                 </td>
-                                <td>
+                                <td style="float: right">
                                        <span style="float: right">
                                 <fmt:formatDate value="${advice.cdate}" pattern="yyyy.MM.dd"/>
                         </span>
@@ -125,7 +128,7 @@
                         </c:forEach>
                     </table>
                     <div style="text-align: right">
-                        <a href="#"  onclick="more()"  data-options="iconCls:'icon-ok'"  style="color: #0f74a8;font-size: large">更多>></a>
+                        <a href="#"  onclick="more()"  data-options="iconCls:'icon-ok'"  style="color: rgb(0,0,0)">更多>></a>
                     </div>
                 </div>
             </div>
@@ -268,7 +271,7 @@
         d=$("#dlg").dialog({
             title: '切换论文工作',
             width: 300,
-            height: 400,
+            height: 380,
             href:'${ctx}/console/switchproj?orgid='+orgid,
             maximizable:true,
             modal:true
@@ -281,7 +284,7 @@
         d=$("#dlg").dialog({
             title: '切换组织机构',
             width: 300,
-            height: 375,
+            height: 400,
             href:'${ctx}/console/switchorg',
             maximizable:true,
             modal:true

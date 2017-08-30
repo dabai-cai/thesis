@@ -39,9 +39,9 @@
     <thead>
     <tr>
         <%--<th data-options="field:'id'" width="60">ID</th>--%>
-        <th data-options="field:'view', formatter: formatView", width="100">查看详细</th>
         <th data-options="field:'topic', formatter: formatTopic" width="200" align="left" >公告标题</th>
         <th data-options="field:'top'"  hidden="true">是否置顶</th>
+            <th data-options="field:'creatorname'" width="50">编辑人</th>
         <th data-options="field:'mdate',formatter:formatDate" width="220">发布时间</th>
     </tr>
     </thead>
@@ -50,13 +50,10 @@
 <script>
     function formatTopic(value, row, index){
         if(row.top==true){
-            return "<span style='padding: 4px; color:#FF0027'>【置顶公告】"+value+"</span>";
+            return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;<span style=" padding: 6px;color:#ff121a;margin: 1px,1px,1px,1px">【置顶】</span>'+value+'</div></a>';
         }else if(row.top==false){
-            return "<span style='padding: 4px;'>"+value+"</span>";
+            return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+value+'</div></a>';
         }
-    }
-    function formatView(val, row){
-        return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;点击查看</div></a>';
     }
     function view(id, event){
         window.top.addTab("公告详情", '${ctx}/console/advice/view?id=' + id, null, true);
