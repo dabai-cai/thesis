@@ -43,4 +43,6 @@ public interface DefenseGroupMapper extends BaseMapper<DefenseGroup> {
      */
     DefenseGroup listBySecretary(@Param(("groupid")) Long groupid) throws Exception;
 
+
+
 }

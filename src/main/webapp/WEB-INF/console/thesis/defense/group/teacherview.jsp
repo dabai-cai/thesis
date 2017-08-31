@@ -14,7 +14,7 @@
     <%@include file="/inc/header.jsp" %>
 </head>
 <body class="easyui-layout">
-<div data-options="region:'west',split:true, border:false,title:'答辩分组基本信息'" width="25%">
+<div data-options="region:'west',split:true, border:false,title:'答辩分组基本信息'" width="26%">
     <div style="padding:10px 10px 10px 10px">
         <div style="margin-bottom:20px;font-size:14px;border-bottom:1px solid #ccc; padding-bottom: 5px;">
             自身分组信息
@@ -24,7 +24,7 @@
                 <table width="100%" cellpadding="5" class="form-table">
                     <tbody>
                     <tr id="newTopic">
-                        <td width="70" style="text-align: left"><label>答辩组数</label></td>
+                        <td width="60" style="text-align: left"><label>答辩组数</label></td>
                         <td>
                             <span>第${denfenseGroup.groupno}组</span>
                         </td>
@@ -64,12 +64,11 @@
                         </td>
                     </tr>
                     <tr><td style="text-align: left"><label>操作</label></td>
-                        <td><span>
+                        <td>
                                <a href="#" onclick="more(${denfenseGroup.id});" class="easyui-linkbutton" iconCls="myicon-zoom">查看详情</a>
                           <c:if test="${denfenseGroup.secretaryid == user.id}">
-                              <a href="${ctx}/console/tscore/list3?groupid=${denfenseGroup.id}"  class="easyui-linkbutton" iconCls="myicon-zoom">录入成绩</a>
+                              <a href="#" onclick="score(${denfenseGroup.id})" class="easyui-linkbutton" iconCls="icon-edit">录入成绩</a>
                           </c:if>
-                        </span>
                         </td></tr>
                     </tbody>
                 </table>
@@ -84,14 +83,11 @@
            data-options="
                         idField: 'studentid',
                         <%--fit:true,--%>
-                        loadFilter: pagerFilter ,
+
                         height:'100%',
                         fitColumns:true,
                         rownumbers:true,
-                        pagination:true,
-                        pageNumber:1,
-                        pageSize : 15,
-                        pageList : [ 15, 20, 30, 40, 50 ],
+
                         singleSelect:true
                     ">
         <thead>
@@ -103,7 +99,7 @@
             <th data-options="field:'groupno'" width="30">小组</th>
             <th data-options="field:'leader'" width="50">答辩组长</th>
             <th data-options="field:'secretary'" width="50">答辩秘书</th>
-            <th data-options="field:'defenseStatus'" >论文答辩类型</th>
+            <th data-options="field:'defenseStatus'" >答辩类型</th>
             <th data-options="field:'defenseTime'">答辩时间</th>
             <th data-options="field:'defenseroom'">答辩地点</th>
         </tr>
@@ -134,6 +130,14 @@
 </body>
 </html>
 <script>
+
+    function score(id) {
+        window.top.addTab("录入成绩", '${ctx}/console/tscore/list3?groupid='+id, null, true);
+        event.stopPropagation();
+        return false
+    }
+
+
     function more(id) {
         window.top.addTab("分组详情", '${ctx}/console/thesis/defense/group/view?id='+id, null, true);
         event.stopPropagation();
@@ -156,36 +160,7 @@
         });
         return false;
     }
-    // 分页数据的操作
-    function pagerFilter(data) {
-        if (typeof data.length == 'number' && typeof data.splice == 'function') {   // is array
-            data = {
-                total: data.length,
-                rows: data
-            }
-        }
-        var dg = $(this);
-        var opts = dg.datagrid('options');
-        var pager = dg.datagrid('getPager');
-        pager.pagination({
-            onSelectPage: function (pageNum, pageSize) {
-                opts.pageNumber = pageNum;
-                opts.pageSize = pageSize;
-                pager.pagination('refresh', {
-                    pageNumber: pageNum,
-                    pageSize: pageSize
-                });
-                dg.datagrid('loadData', data);
-            }
-        });
-        if (!data.originalRows) {
-            data.originalRows = (data.rows);
-        }
-        var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-        var end = start + parseInt(opts.pageSize);
-        data.rows = (data.originalRows.slice(start, end));
-        return data;
-    }
+
     $(document).ready(function (){
         var students=JSON.parse('${defenseTask.students}');
         var teachers=JSON.parse('${defenseTask.teachers}');

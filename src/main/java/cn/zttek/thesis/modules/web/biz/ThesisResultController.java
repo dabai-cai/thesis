@@ -2,12 +2,13 @@ package cn.zttek.thesis.modules.web.biz;
 
 import cn.zttek.thesis.common.base.BaseController;
 import cn.zttek.thesis.common.easyui.EUDataGridResult;
+import cn.zttek.thesis.common.utils.JsonUtils;
 import cn.zttek.thesis.modules.excel.MyExcelView;
+import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
+import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
 import cn.zttek.thesis.modules.expand.ThesisResult;
-import cn.zttek.thesis.modules.model.Apply;
-import cn.zttek.thesis.modules.model.Project;
-import cn.zttek.thesis.modules.model.Thesis;
-import cn.zttek.thesis.modules.model.User;
+import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.modules.service.DefenseGroupService;
 import cn.zttek.thesis.modules.service.ResultService;
 import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageInfo;
@@ -40,6 +41,8 @@ public class ThesisResultController extends BaseController {
 
     @Autowired
     private ResultService resultService;
+    @Autowired
+    private DefenseGroupService defenseGroupService;
 
     @RequestMapping(value = "/list", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String list(Model model) throws Exception{
@@ -104,4 +107,6 @@ public class ThesisResultController extends BaseController {
         }
         return new MyExcelView(name, titles, list);
     }
+
+
 }

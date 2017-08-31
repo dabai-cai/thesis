@@ -8,6 +8,7 @@ import cn.zttek.thesis.common.utils.JsonUtils;
 import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
+import cn.zttek.thesis.modules.excel.MyExcelView;
 import cn.zttek.thesis.modules.expand.GuideStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -367,6 +369,80 @@ public class ThesisDefenseGroupController extends BaseController{
         model.addAttribute("teachers",teachers);
         model.addAttribute("defeseGroup",defenseGroup);
         return "console/thesis/defense/group/view";
+    }
+
+
+
+
+    @RequestMapping(value = "/exportGroup", method = RequestMethod.GET)
+    public ModelAndView exportGroup(Long groupid) throws Exception{
+        DefenseGroup results = defenseGroupService.queryById(groupid);
+        return new ModelAndView(getGroupExcelView(results));
+    }
+
+
+    @RequestMapping(value = "/exportAllGroup",method = RequestMethod.GET)
+    public ModelAndView exportAllGroup(@RequestParam Long id) throws Exception{
+       List<DefenseGroup> groups= defenseGroupService.listAll(id);
+        System.out.println("这么多组"+groups.size());
+       return new ModelAndView(getAllGroupExcelView(groups));
+    }
+
+
+
+    private MyExcelView getAllGroupExcelView(List<DefenseGroup> defenseGroups){
+        log.info("===创建Excel文件并输出===");
+        String name = "所有答辩分组";
+        String[] titles = {"答辩分组","答辩地点","答辩组成员","专业","学号","学生"};
+        List<Object[]> groups=new ArrayList<>();
+        for(int i=0;i<defenseGroups.size();i++){
+            List<ThesisDefenseStudent> students= JsonUtils.jsonToList(defenseGroups.get(i).getStudents(),ThesisDefenseStudent.class);
+            List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(defenseGroups.get(i).getTeachers(),ThesisDefenseTeacher.class);
+            List<Object[]> list=loadData(teachers,students,defenseGroups.get(i));
+            groups.addAll(list);
+            System.out.println("组数"+i);
+        }
+        return new MyExcelView(name, titles,groups);
+    }
+
+
+
+    private MyExcelView getGroupExcelView(DefenseGroup results){
+        log.info("===创建Excel文件并输出===");
+        String name = "答辩分组";
+        String[] titles = {"答辩分组","答辩地点","答辩组成员","专业","学号","学生"};
+        List<ThesisDefenseStudent> students= JsonUtils.jsonToList(results.getStudents(),ThesisDefenseStudent.class);
+        List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(results.getTeachers(),ThesisDefenseTeacher.class);
+        List<Object[]> list=loadData(teachers,students,results);
+        return new MyExcelView(name, titles,list);
+    }
+
+    private List<Object[]> loadData(List<ThesisDefenseTeacher> teachers,List<ThesisDefenseStudent> students,DefenseGroup results){
+        int size=students.size()>teachers.size()?students.size():teachers.size();
+        List<Object[]> list = new ArrayList<>(size);
+        for(int i=0;i<size;i++){
+            Object[] objects=new Object[10];
+            if(i==0){
+                objects[0]="第"+results.getGroupno()+"组";
+                objects[1]=results.getDefenseroom();
+                objects[2]="组长:"+results.getLeaderName();
+            }
+            else if(i==1){
+                objects[2]="秘书:"+results.getSecretaryName();
+            }else{
+                if(i<teachers.size()){
+                    objects[2]="答辩老师:"+teachers.get(i).getUserName();
+                }
+            }
+            if(i<students.size()){
+                objects[3]=students.get(i).getClazz();
+                objects[4]=students.get(i).getStuno();
+                objects[5]=students.get(i).getStuname();
+            }
+            list.add(objects);
+        }  Object[] objects=new Object[10];
+        list.add(objects);
+        return list;
     }
 
 }
