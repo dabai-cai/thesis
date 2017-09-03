@@ -44,61 +44,30 @@
 <!-- begin of sidebar -->
 <div class="ui-sidebar" data-options="region:'west',split:true,border:true,title:'导航菜单'">
     <div class="easyui-accordion" data-options="border:false,fit:true">
-        <div title="快捷菜单" data-options="iconCls:'icon-application-cascade'" style="padding:5px;">
-            <ul class="easyui-tree ui-side-tree">
-                <li><a href="${ctx}/console/resource/menu">菜单</a></li>
-                <li><a href="${ctx}/console/info/edit">编辑个人资料</a></li>
-                <c:if test="${currentUser.type.ordinal() eq 3}">
-                    <li><a href="${ctx}/console/tapply/list">论文题目申请</a></li>
-                    <li><a href="${ctx}/console/tapply/result">查看选题结果</a></li>
-                    <li><a href="${ctx}/console/twork/index">论文事务管理</a></li>
-                </c:if>
-                <c:if test="${currentUser.type.ordinal() eq 2}">
-                    <li><a href="${ctx}/console/thesis/listAll">历年题目管理</a></li>
-                    <li><a href="${ctx}/console/thesis/list">题目申报管理</a></li>
-                    <li><a href="${ctx}/console/treply/list">确定选题学生</a></li>
-                    <li><a href="${ctx}/console/ttask/list">论文任务书</a></li>
-                    <li><a href="${ctx}/console/tmidcheck/list">论文中期检查</a></li>
-                    <li><a href="${ctx}/console/tscore/list1">指导教师自评</a></li>
-                    <li><a href="${ctx}/console/tscore/list2">评阅教师评分</a></li>
-                    <li><a href="${ctx}/console/tupload/list/">论文上传</a></li>
-                    <li><a href="${ctx}/console/gooddelay/teacher">争优/延期确认</a></li>
-                    <li><a href="/console/thesis/defense/group/teacherview">查看分组</a></li>
-                    <li><a href="${ctx}/console/tscore/list3">录入答辩成绩</a></li>
-                </c:if>
-                <c:if test="${currentUser.type.ordinal() eq 1}">
-                    <li><a href="${ctx}/console/project/list">论文工作管理</a></li>
-                    <li><a href="${ctx}/console/project/teachers">参与老师管理</a></li>
-                    <li><a href="${ctx}/console/project/students">参与学生管理</a></li>
 
-                    <li><a href="${ctx}/console/tcount/list">教师出题情况</a></li>
-                    <li><a href="${ctx}/console/tcheck/list">论文题目审核</a></li>
-                    <li><a href="${ctx}/console/tadjust/list">学生选题调整</a></li>
-                    <li><a href="${ctx}/console/tresult/list">论文选题结果</a></li>
-                    <li><a href="${ctx}/console/gooddelay/org">争优/延期确认</a></li>
-                    <li><a href="${ctx}/console/advice/admin-list">公告管理</a></li>
-                    <li><a href="${ctx}/console/thesis/defense/task/list">答辩任务管理</a></li>
-                </c:if>
-                <c:if test="${currentUser.type.ordinal() le 1}">
-                    <li><a href="${ctx}/console/attr/list">基础数据管理</a></li>
-                    <li><a href="${ctx}/console/attr/list-direction">论文方向管理</a></li>
-                    <li><a href="${ctx}/console/attr/list-source">论文来源管理</a></li>
-                    <li><a href="${ctx}/console/attr/list-property">论文属性管理</a></li>
-                    <li><a href="${ctx}/console/arch/list-admin">管理员管理</a></li>
-                    <li><a href="${ctx}/console/arch/list-teacher">教师管理</a></li>
-                    <li><a href="${ctx}/console/arch/list-student">学生管理</a></li>
-                </c:if>
-                <c:if test="${currentUser.type.ordinal() eq 0}">
-                    <li><a href="${ctx}/console/advice/super-list">公告管理</a></li>
-                    <li><a href="${ctx}/console/title/list">职称管理</a></li>
-                    <li><a href="${ctx}/console/org/list">机构管理</a></li>
-                    <li><a href="${ctx}/console/user/list">用户管理</a></li>
-                    <li><a href="${ctx}/console/role/list">角色管理</a></li>
-                    <li><a href="${ctx}/console/perm/list">权限管理</a></li>
-                    <li><a href="${ctx}/console/resource/list">资源管理</a></li>
-                </c:if>
-            </ul>
-        </div>
+        <c:forEach items="${menuList}" var="menu">
+            <div title="${menu.name}" data-options="iconCls:'icon-application-cascade'"  style="padding:5px;" >
+                <ul class="ui-side-tree">
+                    <c:forEach items="${menu.sub}" var="subMenu">
+                        <c:if test="${subMenu.sub.size() eq 0}">
+                            <li ><a href="${ctx}${subMenu.url}">${subMenu.name}</a></li>
+                        </c:if>
+                        <c:if test="${subMenu.sub.size() ne 0}">
+                            <li>
+                                <span>${subMenu.name}</span>
+                                <ul>
+                                    <c:forEach items="${subMenu.sub}" var="sub">
+                                        <li ><a href="${ctx}${sub.url}">${sub.name}</a></li>
+                                    </c:forEach>
+                                </ul>
+                            </li>
+                        </c:if>
+                    </c:forEach>
+
+                </ul>
+            </div>
+        </c:forEach>
+
     </div>
 </div>
 <!-- end of sidebar -->
@@ -146,6 +115,7 @@
 
 
 <script type="text/javascript">
+
     $(function(){
         $('.ui-side-tree a').bind("click",function(){
             var title = $(this).text();
@@ -156,11 +126,9 @@
         });
         //转到首页
         <c:if test="${currentUser.type.ordinal() ne 0}">
-            $("#home").click();
+        $("#home").click();
         </c:if>
-
     })
-
     /**
      * Name 载入树形菜单
      */
@@ -175,12 +143,10 @@
             }
         }
     });
-
     //刷新当前标签Tabs
     function RefreshTab(currentTab) {
         currentTab.find("iframe")[0].contentWindow.location.reload();
     }
-
     /**
      * Name 选项卡初始化
      */

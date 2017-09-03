@@ -3,12 +3,10 @@ package cn.zttek.thesis.modules.web;
 import cn.zttek.thesis.common.base.BaseController;
 import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.modules.enums.UserType;
-import cn.zttek.thesis.modules.model.Advice;
-import cn.zttek.thesis.modules.model.Org;
-import cn.zttek.thesis.modules.model.Project;
-import cn.zttek.thesis.modules.model.User;
+import cn.zttek.thesis.modules.model.*;
 import cn.zttek.thesis.modules.service.AdviceService;
 import cn.zttek.thesis.modules.service.OrgService;
+import cn.zttek.thesis.modules.service.PermissionService;
 import cn.zttek.thesis.modules.service.ProjectService;
 import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageInfo;
@@ -40,6 +38,10 @@ public class ConsoleController extends BaseController {
     private ProjectService projectService;
     @Autowired
     private AdviceService adviceService;
+
+    @Autowired
+    private PermissionService permissionService;
+
     @RequiresAuthentication
     @RequestMapping(value = "/index", produces = "text/html;charset=utf-8")
     public String index(Model model, HttpSession session) throws Exception{
@@ -110,6 +112,8 @@ public class ConsoleController extends BaseController {
         User currentUser=ThesisParam.getCurrentUser();
         Org currentOrg=ThesisParam.getCurrentOrg();
         model.addAttribute("advices",adviceService.listByUserType(1,10,currentOrg.getId(),null,currentUser.getType()).getList());
+        List<Resource> menuList=permissionService.getUserPermTree(currentUser);
+        model.addAttribute("menuList",menuList);
         return "console/main";
     }
 
