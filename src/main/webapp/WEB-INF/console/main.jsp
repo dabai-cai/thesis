@@ -46,9 +46,7 @@
     <div class="easyui-accordion" data-options="border:false,fit:true">
         <div title="快捷菜单" data-options="iconCls:'icon-application-cascade'" style="padding:5px;">
             <ul class="easyui-tree ui-side-tree">
-                <c:if test="${currentUser.type.ordinal() ne 0}">
-                    <li id="home"><a href="${ctx}/console/home">首页链接</a></li>
-                </c:if>
+                <li><a href="${ctx}/console/resource/menu">菜单</a></li>
                 <li><a href="${ctx}/console/info/edit">编辑个人资料</a></li>
                 <c:if test="${currentUser.type.ordinal() eq 3}">
                     <li><a href="${ctx}/console/tapply/list">论文题目申请</a></li>

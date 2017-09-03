@@ -5,6 +5,7 @@ import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.common.utils.TimeUtils;
 import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
@@ -384,7 +385,6 @@ public class ThesisDefenseGroupController extends BaseController{
     @RequestMapping(value = "/exportAllGroup",method = RequestMethod.GET)
     public ModelAndView exportAllGroup(@RequestParam Long id) throws Exception{
        List<DefenseGroup> groups= defenseGroupService.listAll(id);
-        System.out.println("这么多组"+groups.size());
        return new ModelAndView(getAllGroupExcelView(groups));
     }
 
@@ -400,7 +400,6 @@ public class ThesisDefenseGroupController extends BaseController{
             List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(defenseGroups.get(i).getTeachers(),ThesisDefenseTeacher.class);
             List<Object[]> list=loadData(teachers,students,defenseGroups.get(i));
             groups.addAll(list);
-            System.out.println("组数"+i);
         }
         return new MyExcelView(name, titles,groups);
     }
@@ -410,7 +409,7 @@ public class ThesisDefenseGroupController extends BaseController{
     private MyExcelView getGroupExcelView(DefenseGroup results){
         log.info("===创建Excel文件并输出===");
         String name = "答辩分组";
-        String[] titles = {"答辩分组","答辩地点","答辩组成员","专业","学号","学生"};
+        String[] titles = {"答辩分组","答辩时间","答辩地点","答辩组成员","专业","学号","学生"};
         List<ThesisDefenseStudent> students= JsonUtils.jsonToList(results.getStudents(),ThesisDefenseStudent.class);
         List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(results.getTeachers(),ThesisDefenseTeacher.class);
         List<Object[]> list=loadData(teachers,students,results);
@@ -424,20 +423,21 @@ public class ThesisDefenseGroupController extends BaseController{
             Object[] objects=new Object[10];
             if(i==0){
                 objects[0]="第"+results.getGroupno()+"组";
-                objects[1]=results.getDefenseroom();
-                objects[2]="组长:"+results.getLeaderName();
+                objects[1]= TimeUtils.timestampToString(results.getDefensetime());
+                objects[2]=results.getDefenseroom();
+                objects[3]="组长:"+results.getLeaderName();
             }
             else if(i==1){
-                objects[2]="秘书:"+results.getSecretaryName();
+                objects[3]="秘书:"+results.getSecretaryName();
             }else{
                 if(i<teachers.size()){
-                    objects[2]="答辩老师:"+teachers.get(i).getUserName();
+                    objects[3]="答辩老师:"+teachers.get(i).getUserName();
                 }
             }
             if(i<students.size()){
-                objects[3]=students.get(i).getClazz();
-                objects[4]=students.get(i).getStuno();
-                objects[5]=students.get(i).getStuname();
+                objects[4]=students.get(i).getClazz();
+                objects[5]=students.get(i).getStuno();
+                objects[6]=students.get(i).getStuname();
             }
             list.add(objects);
         }  Object[] objects=new Object[10];

@@ -7,8 +7,10 @@ import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.modules.enums.UserType;
 import cn.zttek.thesis.modules.model.Resource;
 import cn.zttek.thesis.modules.model.User;
+import cn.zttek.thesis.modules.service.PermissionService;
 import cn.zttek.thesis.modules.service.ResourceService;
 import cn.zttek.thesis.modules.service.UserService;
+import cn.zttek.thesis.utils.ThesisParam;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class ResourceController extends BaseController {
 
     @Autowired
     private ResourceService resourceService;
+    @Autowired
+    private PermissionService permissionService;
 
     /**
      * 注入资源信息。<br/>
@@ -134,5 +138,14 @@ public class ResourceController extends BaseController {
             result.setMsg("请选择要删除的资源！");
         }
         return result;
+    }
+
+
+    @RequestMapping(value = "/menu")
+    public String menu(Model model) throws Exception {
+        User currentUser= ThesisParam.getCurrentUser();
+        List<Resource> menuList=permissionService.getUserPermTree(currentUser);
+        model.addAttribute("menuList",menuList);
+        return "/console/newMain";
     }
 }

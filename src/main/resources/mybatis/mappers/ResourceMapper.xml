@@ -92,4 +92,12 @@
   <select id="countChildren" resultType="java.lang.Long" parameterType="java.lang.Long">
     select count(id) from resource where valid = 1 and pid = #{pid}
   </select>
+
+  <select id="listByids" resultMap="BaseResultMap">
+    select * from resource where valid = 1 and id in (
+    <foreach collection="rids" item="rid" index="index" separator="," >
+      #{rid}
+    </foreach>
+    )
+  </select>
 </mapper>

@@ -60,7 +60,7 @@
     function exportGroup(){
         var id = getSelectedId($("#dg"));
         if(id == undefined || id == "" || id == null){
-            $.messager.alert('提示','必须选择一个答辩小组才能编辑!');
+            $.messager.alert('提示','必须选择一个答辩小组才能导出!');
             return ;
         }
         window.top.addTab("导出分组表", '${ctx}/console/thesis/defense/group/exportGroup?groupid='+id, null, true);

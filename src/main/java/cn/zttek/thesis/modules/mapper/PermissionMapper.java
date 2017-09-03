@@ -19,4 +19,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 
     Permission getByKeystr(@Param("keystr") String keystr) throws Exception;
 
+    List<Permission> listByRole(@Param("roleid") Long roleid) throws Exception;
+
 }
