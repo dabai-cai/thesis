@@ -132,14 +132,23 @@
     /**
      * Name 载入树形菜单
      */
-    $('#ui-side-tree').tree({
+    var trees = $('.ui-side-tree').tree({
         onClick:function(node){
-            var url = node.attributes['url'];
-            if(url==null || url == ""){
-                return false;
-            }
-            else{
-                addTab(node.text, url, '', true);
+            if($('.ui-side-tree').tree('isLeaf', node.target)) {
+                console.log(node.target);
+                var adom = node.text;
+                var url = $(adom).attr("href");
+                var title = $(adom).text();
+                var iconClass = node.iconCls;
+                if (url == null || url == "" || url == undefined) {
+                    return false;
+                }
+                else {
+                    addTab(title, url, iconClass, true);
+
+                }
+            }else {
+                $('.ui-side-tree').tree('toggle', node.target);
             }
         }
     });
