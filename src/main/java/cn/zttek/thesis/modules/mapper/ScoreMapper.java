@@ -56,7 +56,7 @@ public interface ScoreMapper extends BaseMapper<Score> {
      * @param thesisid
      * @throws Exception
      */
-    void queryByThesis(@Param("thesisid") Long thesisid)throws Exception;
+    Score queryByThesis(@Param("thesisid") Long thesisid)throws Exception;
 
 
     /**

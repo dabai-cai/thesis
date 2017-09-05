@@ -67,6 +67,8 @@ public class ThesisWorkController extends BaseController {
             model.addAttribute("goodDelay",goodDelay);
             DefenseGroup defenseGroup=defenseGroupService.getByStudent(project.getId(),currentUser.getId());
             model.addAttribute("defenseGroup",defenseGroup);
+            Score score=scoreService.queryByThesis(thesis.getId());
+            model.addAttribute("score",score);
             //TODO 加载答辩小组信息、评分情况等
         }
         return "console/thesis/work/index";

@@ -127,4 +127,9 @@
       #{item}
     </foreach>
   </select>
+
+  <select id="queryByThesis"  resultMap="BaseResultMap">
+    select * from score where thesisid=#{thesisid}
+  </select>
+
 </mapper>

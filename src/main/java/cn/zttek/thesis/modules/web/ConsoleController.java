@@ -89,6 +89,8 @@ public class ConsoleController extends BaseController {
         return "/console/switchproj";
     }
 
+
+
     @RequestMapping(value = "/listProject.json", produces = "application/json;charset=utf-8")
     @ResponseBody
     public EUDataGridResult listProject(Long orgid) throws Exception {
@@ -108,12 +110,13 @@ public class ConsoleController extends BaseController {
     //@RequiresAuthentication
     @RequestMapping(value = "/main", produces = "text/html;charset=utf-8",method = RequestMethod.GET)
     public String main(Model model) throws Exception {
-        //TODO 取出菜单
         User currentUser=ThesisParam.getCurrentUser();
         Org currentOrg=ThesisParam.getCurrentOrg();
-        model.addAttribute("advices",adviceService.listByUserType(1,10,currentOrg.getId(),null,currentUser.getType()).getList());
+        //TODO 取出菜单
         List<Resource> menuList=permissionService.getUserPermTree(currentUser);
         model.addAttribute("menuList",menuList);
+        model.addAttribute("advices",adviceService.listByUserType(1,10,currentOrg.getId(),null,currentUser.getType()).getList());
+
         return "console/main";
     }
 

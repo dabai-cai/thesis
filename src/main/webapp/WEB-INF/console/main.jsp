@@ -28,7 +28,12 @@
         <h1><img src="${ctx}/resources/img/logo.png" height="40px" style="vertical-align: middle;"/>毕业论文选题系统</h1>
     </div>
     <div align="center" >
-        <p><strong>${currentOrg.name}</strong><a href="#" style="color: rgba(0,0,0,1)">[切换]</a><strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')" style="color: rgba(0,0,0,1)">[切换]</a></p>
+        <p>
+            <c:if test="${currentUser.type.ordinal() eq 0}">
+                <strong>${currentOrg.name}</strong>
+                <a href="${ctx}/console/index" style="color: rgba(0,0,0,1)" >[切换]</a>
+            </c:if>
+            <strong>${currentProj.title}</strong><a name="edit" href="#" onclick="switchProj('${currentOrg.id}')" style="color: rgba(0,0,0,1)">[切换]</a></p>
         </h2>
     </div>
     <div class="ui-header-right">
@@ -244,7 +249,7 @@
         d=$("#dlg").dialog({
             title: '切换论文工作',
             width: 300,
-            height: 380,
+            height: 420,
             href:'${ctx}/console/switchproj?orgid='+orgid,
             maximizable:true,
             modal:true
@@ -256,8 +261,9 @@
     function switchOrg(){
         d=$("#dlg").dialog({
             title: '切换组织机构',
-            width: 300,
-            height: 400,
+            width: 500,
+            height: 395,
+            padding:5,
             href:'${ctx}/console/switchorg',
             maximizable:true,
             modal:true

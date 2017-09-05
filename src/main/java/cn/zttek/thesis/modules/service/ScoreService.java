@@ -106,6 +106,17 @@ public class ScoreService extends BaseService<Score>{
     }
 
 
+
+    /**
+     * 查询论文题目关联的成绩单
+     * @param thesisid
+     * @throws Exception
+     */
+    public Score queryByThesis(Long thesisid)throws Exception{
+        return scoreMapper.queryByThesis(thesisid);
+    };
+
+
     /**
      * 判断学生是否通过答辩
      * @param score
@@ -158,4 +169,9 @@ public class ScoreService extends BaseService<Score>{
         }
         return level;
      }
+
+
+
+
+
 }

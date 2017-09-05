@@ -140,12 +140,4 @@ public class ResourceController extends BaseController {
         return result;
     }
 
-
-    @RequestMapping(value = "/menu")
-    public String menu(Model model) throws Exception {
-        User currentUser= ThesisParam.getCurrentUser();
-        List<Resource> menuList=permissionService.getUserPermTree(currentUser);
-        model.addAttribute("menuList",menuList);
-        return "/console/newMain";
-    }
 }

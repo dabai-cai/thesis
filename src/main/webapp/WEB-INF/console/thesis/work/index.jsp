@@ -101,6 +101,42 @@
                    </div>
 
                </c:if>
+            <c:if test="${score ne null}">
+                <div title="论文成绩信息" data-options="iconCls:'myicon-page',collapsed:false,collapsible:false" style="padding:10px; height: 150px;">
+                    <table class="mini-table" style="width: 98%">
+                        <thead>
+                        <tr>
+                            <th>指导老师评分</th>
+                            <th>评分日期</th>
+                            <th>评阅老师评分</th>
+                            <th>评分日期</th>
+                            <th>答辩分数</th>
+                            <th>评分日期</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>${score.mark1}</td>
+                            <td>
+                                <fmt:formatDate value="${score.mark1date}" pattern="yyyy.MM.dd"/>
+                            </td>
+                            <td>${score.mark2}</td>
+                            <td>
+                                <fmt:formatDate value="${score.mark2date}" pattern="yyyy.MM.dd"/>
+                            </td>
+                            <td>${score.mark3}</td>
+                            <td>
+                                <fmt:formatDate value="${score.mark3date}" pattern="yyyy.MM.dd"/>
+                            </td>
+                            <td>
+                                <a name="view" href="${ctx}/console/tscore/view?id=${score.id}" target="_blank" iconCls="myicon-zoom" class="easyui-linkbutton">查看成绩单</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
     </div>
     </div>
 
@@ -381,6 +417,7 @@
                 modal:true
             });
         }
+
     </script>
 </body>
 </html>
