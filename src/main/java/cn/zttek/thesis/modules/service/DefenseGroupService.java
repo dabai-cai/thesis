@@ -321,13 +321,13 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
              List<ThesisDefenseStudent> studentList=JsonUtils.jsonToList(students,ThesisDefenseStudent.class);
              for(ThesisDefenseStudent thesisDefenseStudent:studentList){
                  //检测到学生在该答辩任务
-                 if(thesisDefenseStudent.getStudentid()==studentid){
+                 if(thesisDefenseStudent.getStudentid().equals(studentid)){
                      List<DefenseGroup> defenseGroups=defenseGroupMapper.selectByTask(defenseTask.getId());
                      for(DefenseGroup defenseGroup1:defenseGroups){
                          List<ThesisDefenseStudent> groupStudents=JsonUtils.jsonToList(defenseGroup1.getStudents(),ThesisDefenseStudent.class);
                          //检测学生所在答辩分组
                          for(ThesisDefenseStudent thesisDefenseStudent1:groupStudents){
-                             if(thesisDefenseStudent1.getStudentid()==studentid){
+                             if(thesisDefenseStudent1.getStudentid().equals(studentid)){
                                  defenseGroup=defenseGroup1;
                              }
                          }
@@ -352,23 +352,23 @@ public class DefenseGroupService extends BaseService<DefenseGroup>{
              List<ThesisDefenseTeacher> thesisDefenseTeachers=JsonUtils.jsonToList(teachers,ThesisDefenseTeacher.class);
              //检测指导老师所在答辩任务
              for(ThesisDefenseTeacher thesisDefenseTeacher:thesisDefenseTeachers){
-                 if(thesisDefenseTeacher.getTeacherid()==teacherid){
+                 if(thesisDefenseTeacher.getTeacherid().equals(teacherid)){
                      List<DefenseGroup> defenseGroups=defenseGroupMapper.selectByTask(defenseTask.getId());
                      for(DefenseGroup defenseGroup:defenseGroups){
 
                          //检测是否为组长或者秘书
                          Long leaderid=defenseGroup.getLeaderid();
                          Long secretaryid=defenseGroup.getSecretaryid();
-                         if(teacherid==leaderid){
+                         if(teacherid.equals(leaderid)){
                              teacherGroup.add(defenseGroup);//找到教师所在答辩小组,添加
                          }
-                         if(teacherid==secretaryid){
+                         if(teacherid.equals(secretaryid)){
                              teacherGroup.add(defenseGroup);//找到教师所在答辩小组,添加
                          }
                          //指导老师所在答辩小组
                          List<ThesisDefenseTeacher> groupTeachers=JsonUtils.jsonToList(defenseGroup.getTeachers(),ThesisDefenseTeacher.class);
                          for(ThesisDefenseTeacher thesisDefenseTeacher1:groupTeachers){
-                             if(thesisDefenseTeacher1.getTeacherid()==teacherid){
+                             if(thesisDefenseTeacher1.getTeacherid().equals(teacherid)){
                                  teacherGroup.add(defenseGroup);//找到教师所在答辩小组,添加
                              }
                          }
