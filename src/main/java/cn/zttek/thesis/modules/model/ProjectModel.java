@@ -1,5 +1,4 @@
 package cn.zttek.thesis.modules.model;
-
 /**
  * @描述: 组织机构下论文工作相关实体的基类
  * @作者: Pengo.Wen

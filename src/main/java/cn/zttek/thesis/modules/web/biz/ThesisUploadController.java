@@ -158,7 +158,8 @@ public class ThesisUploadController extends BaseController {
         HttpHeaders headers = new HttpHeaders();
             String path=uploadService.selectByThesis(thesisid).getPath();
             File file=new File(path);
-            headers.setContentDispositionFormData("attachment",file.getName());
+        String fileName=new String(file.getName().getBytes("utf-8"),"iso-8859-1"); //解决中文乱码问题
+            headers.setContentDispositionFormData("attachment",fileName);
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                     headers, HttpStatus.CREATED);

@@ -96,7 +96,7 @@
             <th data-options="field:'stuno'" width="100">学生学号</th>
             <th data-options="field:'stuname', formatter:formatStudent" width="80">学生姓名</th>
             <th data-options="field:'clazz', formatter:formatClazz" width="150">年级班级</th>
-            <th data-options="field:'topic', formatter:formatTopic" width="250">论文题目</th>
+                <th data-options="field:'topic', formatter:formatTopic" width="250">论文题目</th>
             <th data-options="field:'direction'" width="80">研究方向</th>
             <th data-options="field:'teacher', formatter:formatTeacher" width="80">指导教师</th>
             <th data-options="field:'account'" width="100">教师工号</th>

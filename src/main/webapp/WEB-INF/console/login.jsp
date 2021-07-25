@@ -22,7 +22,7 @@
                 <div class="login_main_top"></div>
                 <div class="login_main_errortip">&nbsp;${message}</div>
                 <div class="login_main_ln">
-                    <input type="text" id="account" name="account" value="admin" required/>
+                    <input type="text" id="account" name="account" value="deng" required/>
                 </div>
                 <div class="login_main_pw">
                     <input type="password" id="password" name="password" value="123456" required />

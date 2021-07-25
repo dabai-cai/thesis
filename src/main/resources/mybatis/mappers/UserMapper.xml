@@ -129,6 +129,13 @@
             (#{uid}, #{item})
         </foreach>
     </insert>
+    <!--<delete id="deleteUserRole">-->
+        <!--delete from user_role where uid = #{uid} and rid = #{rid}-->
+    <!--</delete>-->
+    <!--<insert id="addUserRole">-->
+        <!--insert into user_role(uid, rid)-->
+        <!--values (#{uid}, #{rid})-->
+    <!--</insert>-->
 
     <!-- =========================以下为用户信息的相关操作===================================== -->
     <resultMap id="InfoResultMap" type="cn.zttek.thesis.modules.model.User">

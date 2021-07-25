@@ -1,5 +1,6 @@
 package cn.zttek.thesis.modules.expand;
 
+import cn.zttek.thesis.modules.enums.DefenseGroupType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class GuideStudent implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String secretary;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private  String defenseType;
+    private DefenseGroupType defenseType;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Timestamp defenseTime;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -84,11 +85,11 @@ public class GuideStudent implements Serializable {
         this.secretary = secretary;
     }
 
-    public String getDefenseType() {
+    public DefenseGroupType getDefenseType() {
         return defenseType;
     }
 
-    public void setDefenseType(String defenseType) {
+    public void setDefenseType(DefenseGroupType defenseType) {
         this.defenseType = defenseType;
     }
 

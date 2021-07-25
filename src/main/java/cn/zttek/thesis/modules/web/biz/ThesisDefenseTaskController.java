@@ -5,6 +5,7 @@ import cn.zttek.thesis.common.easyui.EUDataGridResult;
 import cn.zttek.thesis.common.easyui.EUResult;
 import cn.zttek.thesis.common.utils.CommonUtils;
 import cn.zttek.thesis.common.utils.JsonUtils;
+import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.enums.TitleLevel;
 import cn.zttek.thesis.modules.expand.ThesisDefenseStudent;
 import cn.zttek.thesis.modules.expand.ThesisDefenseTeacher;
@@ -59,9 +60,9 @@ public class ThesisDefenseTaskController extends BaseController {
 
     @RequestMapping(value = "/list.json", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUDataGridResult list(Model model, Integer page, Integer rows) throws Exception{
+    public EUDataGridResult list(Model model,Integer page, Integer rows) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
-        PageInfo<DefenseTask> pageInfo =defenseTaskService.listAll(page, rows, ThesisParam.getCurrentProj().getId());
+        PageInfo<DefenseTask> pageInfo =defenseTaskService.listAll(page, rows,ThesisParam.getCurrentProj().getId());
         result.setTotal(pageInfo.getTotal());
         result.setRows(pageInfo.getList());
         return result;
@@ -109,11 +110,11 @@ public class ThesisDefenseTaskController extends BaseController {
     public EUDataGridResult addlist(Integer page, Integer rows, @PathVariable String type, ThesisResult thesisResult, TitleLevel titleLevel, Timestamp defensetime) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
         if("student".equals(type)){
-            PageInfo<ThesisDefenseStudent> pageInfo = defenseTaskService.listStudent(page,rows, ThesisParam.getCurrentProj().getId(),thesisResult);
+            PageInfo<ThesisDefenseStudent> pageInfo = defenseTaskService.listStudent(page,rows,ThesisParam.getCurrentProj().getId(),thesisResult);
             result.setTotal(pageInfo.getTotal());
             result.setRows(pageInfo.getList());
         }else if("teacher".equals(type)){
-            PageInfo<ThesisDefenseTeacher> pageInfo = defenseTaskService.listTeacher(page,rows, ThesisParam.getCurrentProj().getId(),titleLevel,thesisResult.getTeacher(),defensetime);
+            PageInfo<ThesisDefenseTeacher> pageInfo = defenseTaskService.listTeacher(page,rows,ThesisParam.getCurrentProj().getId(),titleLevel,thesisResult.getTeacher(),defensetime);
             result.setTotal(pageInfo.getTotal());
             result.setRows(pageInfo.getList());
         }
@@ -131,7 +132,7 @@ public class ThesisDefenseTaskController extends BaseController {
                     result = EUResult.build(EUResult.FAIL, "系统中已存在该答辩任务！");
                 }
                 else
-                    result= EUResult.build(EUResult.OK,"");
+                    result=EUResult.build(EUResult.OK,"");
             }else{
                 result = EUResult.build(EUResult.FAIL, "请输入答辩名称！");
             }
@@ -148,6 +149,7 @@ public class ThesisDefenseTaskController extends BaseController {
                 defenseTaskService.update(defenseTask);
             } else {
                 //如果是添加
+                //TODO 验证冲突
                 defenseTask.setProjectid(ThesisParam.getCurrentProj().getId());
                 defenseTaskService.insert(defenseTask);
             }
@@ -162,11 +164,11 @@ public class ThesisDefenseTaskController extends BaseController {
 
     @RequestMapping(value = "/{type}-showlist.json", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUDataGridResult showlist(Integer page, Integer rows, @PathVariable String type, @ModelAttribute DefenseTask defenseTask) throws Exception{
+    public EUDataGridResult showlist(Integer page, Integer rows,@PathVariable String type,@ModelAttribute DefenseTask defenseTask) throws Exception{
         EUDataGridResult result = new EUDataGridResult();
         if("student".equals(type)){
             if(defenseTask.getStudents()!=null){
-                List<ThesisDefenseStudent> students= JsonUtils.jsonToList(defenseTask.getStudents(),ThesisDefenseStudent.class);
+                List<ThesisDefenseStudent> students=JsonUtils.jsonToList(defenseTask.getStudents(),ThesisDefenseStudent.class);
                 Collections.sort(students);
                 PageInfo<ThesisDefenseStudent> pageInfo=new PageInfo<ThesisDefenseStudent>(students);
                 result.setTotal(pageInfo.getTotal());
@@ -174,7 +176,7 @@ public class ThesisDefenseTaskController extends BaseController {
             }
         }else if("teacher".equals(type)){
             if(defenseTask.getTeachers()!=null){
-                List<ThesisDefenseTeacher> teachers= JsonUtils.jsonToList(defenseTask.getTeachers(),ThesisDefenseTeacher.class);
+                List<ThesisDefenseTeacher> teachers=JsonUtils.jsonToList(defenseTask.getTeachers(),ThesisDefenseTeacher.class);
                 Collections.sort(teachers);
                 PageInfo<ThesisDefenseTeacher> pageInfo=new PageInfo<ThesisDefenseTeacher>(teachers);
                 result.setTotal(pageInfo.getTotal());
@@ -186,7 +188,7 @@ public class ThesisDefenseTaskController extends BaseController {
 
     @RequestMapping(value = "/delete-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUResult deleteStudentOrTeacher(String jsondata, @PathVariable String type, @ModelAttribute DefenseTask defenseTask){
+    public EUResult deleteStudentOrTeacher(String jsondata,@PathVariable String type,@ModelAttribute DefenseTask defenseTask){
         EUResult result = new EUResult();
         if (StringUtils.isNotEmpty(jsondata)) {
             try {
@@ -211,13 +213,13 @@ public class ThesisDefenseTaskController extends BaseController {
     @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.GET, produces = "text/html;charset=utf-8")
     public String addStudentOrTeacher(Model model,@PathVariable String type) throws Exception{
         if("teacher".equals(type)){
-            model.addAttribute("titles", TitleLevel.values());
+            model.addAttribute("titles",TitleLevel.values());
         }
         return "console/thesis/defense/task/edit-add";
     }
     @RequestMapping(value = "/edit-add-{type}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public EUResult addStudentOrTeacher(String jsondata, @PathVariable String type, @ModelAttribute DefenseTask defenseTask){
+    public EUResult addStudentOrTeacher(String jsondata,@PathVariable String type,@ModelAttribute DefenseTask defenseTask){
         EUResult result = new EUResult();
         if (StringUtils.isNotEmpty(jsondata)){
             try{
@@ -237,6 +239,27 @@ public class ThesisDefenseTaskController extends BaseController {
             result.setStatus(EUResult.FAIL);
             result.setMsg("请选择要添加的"+("student".equals(type)?"学生":"教师")+"！");
 
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/{type}-deletecheck", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public EUResult deleteCheck(String ids,@ModelAttribute DefenseTask defenseTask){
+        EUResult result = new EUResult();
+        if (StringUtils.isNotEmpty(ids)) {
+            List<Long> idsArry = Arrays.asList(CommonUtils.getIdsArray(ids));
+            try {
+                result.setStatus(EUResult.OK);
+                String msg = defenseTaskService.deleteCheck(defenseTask,idsArry);
+                result.setMsg(msg);
+            } catch (Exception e) {
+                result.setStatus(EUResult.FAIL);
+                result.setMsg("检查是否冲突时发生异常！" + e.getMessage());
+            }
+        } else {
+            result.setStatus(EUResult.FAIL);
+            result.setMsg("请选择要删除的答辩任务！");
         }
         return result;
     }

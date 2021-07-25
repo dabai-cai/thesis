@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
 /**
  * 由MyBatis Generator工具自动生成
  */
@@ -38,11 +37,12 @@ public interface DefenseGroupMapper extends BaseMapper<DefenseGroup> {
 
     /**
      * 查询答辩教师在当前论文工作下的答辩成绩列表
-     * @param projid
-     * @param secretaryid
+     * @param groupid
      * @return
      * @throws Exception
      */
-    DefenseGroup listBySecretary(@Param("projid") Long projid, @Param(("secretaryid")) Long secretaryid) throws Exception;
+    DefenseGroup listBySecretary(@Param(("groupid")) Long groupid) throws Exception;
+
+
 
 }

@@ -47,13 +47,11 @@ public class AdviceController extends BaseController {
         }
     }
 
-
-
     @RequestMapping(value = "/{type}-list", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String list(Model model, @PathVariable String type) throws Exception{
         model.addAttribute("type", type);
         if("admin".equals(type)){
-            model.addAttribute("orgid", ThesisParam.getCurrentOrg().getId());
+            model.addAttribute("orgid",ThesisParam.getCurrentOrg().getId());
         }else if("super".equals(type)){
             model.addAttribute("orgs",orgService.listAll());
         }
@@ -70,7 +68,6 @@ public class AdviceController extends BaseController {
 //            orgid=(org.getId()==0?null:org.getId());
               orgid= ThesisParam.getCurrentUser().getOrgid();
         }
-
         PageInfo<Advice> pageInfo = adviceService.listAdvice(page, rows,orgid, keywords);
         result.setTotal(pageInfo.getTotal());
         result.setRows(pageInfo.getList());
@@ -141,8 +138,6 @@ public class AdviceController extends BaseController {
         return "console/advice/view";
     }
 
-
-
     @RequestMapping(value = "/showlist.json", produces = "application/json;charset=utf-8")
     @ResponseBody
     public EUDataGridResult showlist(Integer page, Integer rows, String keywords) throws Exception{
@@ -154,6 +149,4 @@ public class AdviceController extends BaseController {
         result.setRows(pageInfo.getList());
         return result;
     }
-
-
 }

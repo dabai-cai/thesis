@@ -13,7 +13,6 @@
 <head>
     <meta charset="utf-8"/>
     <title>指导教师自评</title>
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/table.css">
     <%@include file="/inc/header.jsp" %>
 </head>
 <body class="easyui-layout">

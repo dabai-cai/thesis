@@ -7,13 +7,33 @@ import cn.zttek.thesis.modules.enums.DefenseStatus;
  */
 public class ThesisDefenseStudent implements Comparable<ThesisDefenseStudent>{
     /**
-     * ID、学号、姓名、班级、答辩类型
+     * ID、学号、姓名、班级、答辩类型、论文
      */
     private Long studentid;
     private String stuno;
     private String stuname;
     private String clazz;
     private DefenseStatus defenseStatus;
+    private String topic;
+
+    public Long getThesisid() {
+        return thesisid;
+    }
+
+    public void setThesisid(Long thesisid) {
+        this.thesisid = thesisid;
+    }
+
+    private Long thesisid;
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
     public Long getStudentid() {
         return studentid;
     }

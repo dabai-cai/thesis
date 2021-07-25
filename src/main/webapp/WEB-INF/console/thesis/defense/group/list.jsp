@@ -22,6 +22,8 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="edit()">修改答辩小组</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="del()">删除答辩小组</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="autogroup()">自动分组</a>
+        <a href="#" class="easyui-linkbutton" iconCls="myicon-page-excel" onclick="exportGroup()">导出分组</a>
+        <a href="${ctx}/console/thesis/defense/group/exportAllGroup?id=${taskid}" class="easyui-linkbutton" iconCls="myicon-page-excel">导出所有分组</a>
     </div>
 </div>
 <table id="dg" class="easyui-datagrid"
@@ -54,6 +56,18 @@
 </table>
 <div id="dlg"></div>
 <script>
+
+    function exportGroup(){
+        var id = getSelectedId($("#dg"));
+        if(id == undefined || id == "" || id == null){
+            $.messager.alert('提示','必须选择一个答辩小组才能导出!');
+            return ;
+        }
+        window.top.addTab("导出分组表", '${ctx}/console/thesis/defense/group/exportGroup?groupid='+id, null, true);
+        event.stopPropagation();
+        return false;
+    }
+
     function formatView(val, row){
         return '<a href="#" class="notselect" onclick="return view('+ row.id +',event);"><div class="myicon-zoom-in" style="width:16px;height:16px">&nbsp;&nbsp;&nbsp;&nbsp;'+val+'</div></a>';
     }
@@ -113,6 +127,16 @@
                     }
                 });
             }
+        });
+    }
+    function autogroup() {
+        $("#dlg").dialog({
+            title:"自动分组",
+            width: 620,
+            height: 390,
+            href:'${ctx}/console/thesis/defense/group/autogroup?taskid=${taskid}',
+            maximizable:true,
+            modal:true
         });
     }
 </script>

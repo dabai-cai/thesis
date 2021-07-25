@@ -488,6 +488,7 @@
             <artifactId>javax.mail</artifactId>
         </dependency>
     </dependencies>
+    <!--install mybatis-generator:generate -DconfigurationFile=generatorConfig.xml-->
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
@@ -541,6 +542,9 @@
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>
                 </configuration>
+                <dependencies>
+
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -552,7 +556,5 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>

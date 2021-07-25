@@ -1,9 +1,7 @@
 package cn.zttek.thesis.common.base;
 
 import cn.zttek.thesis.common.converter.StringToTimeConverter;
-import cn.zttek.thesis.modules.enums.DefenseStatus;
-import cn.zttek.thesis.modules.enums.TitleLevel;
-import cn.zttek.thesis.modules.enums.UserType;
+import cn.zttek.thesis.modules.enums.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.UnknownSessionException;
@@ -22,7 +20,6 @@ import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
-
 /**
  * Created by ztcms on 2015/10/18.
  */
@@ -106,6 +103,30 @@ public class BaseController {
 
                 }
                 setValue(DefenseStatus.getById(val));
+            }
+        });
+        binder.registerCustomEditor(AdviceTarget.class, new PropertyEditorSupport(){
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                int val = 0;
+                try {
+                    val = Integer.parseInt(text);
+                }catch (Exception ex){
+
+                }
+                setValue(AdviceTarget.getById(val));
+            }
+        });
+        binder.registerCustomEditor(DefenseGroupType.class, new PropertyEditorSupport(){
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                int val = 0;
+                try {
+                    val = Integer.parseInt(text);
+                }catch (Exception ex){
+
+                }
+                setValue(DefenseGroupType.getById(val));
             }
         });
     }

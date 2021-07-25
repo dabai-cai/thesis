@@ -101,4 +101,9 @@
     </if>
   </select>
 
+
+  <select id="listByRole" resultMap="BaseResultMap" >
+   select * FROM role_permission rp  RIGHT JOIN permission p on rp.pid=p.id WHERE rp.rid=#{roleid}
+  </select>
+
 </mapper>

@@ -19,7 +19,7 @@ public interface AdviceMapper extends BaseMapper<Advice> {
      * @param keywords
      * @return
      */
-    List<Advice> listByOrgAndKeywords(@Param("orgid") Long orgid, @Param("keywords") String keywords);
+    List<Advice> listByOrgAndKeywords(@Param("orgid") Long orgid,@Param("keywords") String keywords);
 
     /**
      * 根据用户类型查询首页显示的公告列表
@@ -28,6 +28,6 @@ public interface AdviceMapper extends BaseMapper<Advice> {
      * @param type
      * @return
      */
-        List<Advice> listByUserType(@Param("orgid") Long orgid, @Param("keywords") String keywords, @Param("type") UserType type);
+        List<Advice> listByUserType(@Param("orgid") Long orgid,@Param("keywords") String keywords,@Param("type")UserType type);
 
 }

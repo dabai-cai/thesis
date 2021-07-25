@@ -41,16 +41,19 @@
         </div>
     </div>
     <table id="dg1" class="easyui-datagrid"
-           data-options="url: '${ctx}/console/thesis/defense/task/${type}-list.json?id=${defenseTask.id}',
+           data-options="
                             method: 'get',
                             <c:if test="${type eq 'student'}">
+                            url: '${ctx}/console/thesis/defense/task/${type}-list.json?id=${defenseTask.id}',
                             idField: 'studentid',
                             </c:if>
-                            <c:if test="${type eq 'teacher'}">
+                            <c:if test="${type ne 'student'}">
+                            url: '${ctx}/console/thesis/defense/task/${type}-list.json?id=${defenseTask.id}&defensetime=${defenseTask.defensetime}',
                             idField: 'teacherid',
                             </c:if>
                             toolbar: '#ui-toolbar1',
                             <%--fit:true,--%>
+                            loadFilter:pagerFilter,
                             fitColumns:true,
                             height: '350',
                             width: '935',
@@ -85,6 +88,36 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" onclick="Form.clearForm()" iconCls="icon-cancel">取消</a>
 </div>
 <script type="text/javascript">
+    // 分页数据的操作
+    function pagerFilter(data) {
+        if (typeof data.length == 'number' && typeof data.splice == 'function') {   // is array
+            data = {
+                total: data.length,
+                rows: data
+            }
+        }
+        var dg = $(this);
+        var opts = dg.datagrid('options');
+        var pager = dg.datagrid('getPager');
+        pager.pagination({
+            onSelectPage: function (pageNum, pageSize) {
+                opts.pageNumber = pageNum;
+                opts.pageSize = pageSize;
+                pager.pagination('refresh', {
+                    pageNumber: pageNum,
+                    pageSize: pageSize
+                });
+                dg.datagrid('loadData', data);
+            }
+        });
+        if (!data.originalRows) {
+            data.originalRows = (data.rows);
+        }
+        var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+        var end = start + parseInt(opts.pageSize);
+        data.rows = (data.originalRows.slice(start, end));
+        return data;
+    }
     var name="学生";
     <c:if test="${type eq 'teacher'}">
     name="教师";

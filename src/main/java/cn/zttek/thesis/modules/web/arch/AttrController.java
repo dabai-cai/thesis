@@ -36,10 +36,12 @@ public class AttrController extends BaseController{
     @Autowired
     private AttrFactory attrFactory;
 
-    @RequestMapping(value = "/list", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
-    public String listView() {
-        return "console/attr/list";
+
+    @RequestMapping(value = "/list-{op}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String listView(@PathVariable String op) {
+        return "console/attr/"+op;
     }
+
 
     @RequestMapping(value = "/list-{op}.json", produces = "application/json;charset=utf-8")
     @ResponseBody

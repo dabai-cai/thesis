@@ -13,7 +13,7 @@
 <form id="myform" action="${ctx}/console/index" method="post">
     <input type="hidden" id="orgid" name="orgid" />
     <input type="hidden" id="projid" name="projid" />
-    <div class="easyui-layout" data-options="fit:true" style="height: 375px">
+    <div class="easyui-layout" data-options="fit:true" style="height: 345px">
         <div data-options="region:'center'">
             <table id="dg2"></table>
         </div>

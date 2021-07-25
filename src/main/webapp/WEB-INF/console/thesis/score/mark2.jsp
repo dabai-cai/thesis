@@ -17,8 +17,8 @@
         <table width="100%" cellpadding="5" class="form-table" style="margin:auto;">
             <tbody>
             <tr>
-                <td width="120"><label>论文标题</label></td>
-                <td colspan="3">${thesis.topic}</td>
+                <td  width="120"><label>论文标题</label></td>
+                <td colspan="3" style="width: 120px;text-align: left;">${thesis.topic}</td>
                 <td><label>指导教师</label></td>
                 <td>${teacher.username}&nbsp;&nbsp;${teacher.info.title}</td>
             </tr>
@@ -54,41 +54,41 @@
                    <tr>
                        <td rowspan="3" width="30">选题质量20%</td>
                        <td align="right">1</td>
-                       <td align="center" >专业培养目标</td>
+                       <td style="text-align: left;" >专业培养目标</td>
                        <td align="right">5</td>
                        <td > <input class="easyui-numberbox" id="score1" name="score1"  required="true"  precision="2" min="0" max="5" >
                        </td>
                    </tr>
                    <tr><td>2</td>
-                       <td  align="center">课题难易度与工作量</td>
+                       <td style="text-align: left;">课题难易度与工作量</td>
                        <td align="center">10</td>
                        <td><input class="easyui-numberbox"  id="score2" name="score2"   data-options="required:true"  precision="2" min="0" max="10" /></td>
                    </tr>
                    <tr><td>3</td>
-                       <td align="center">理论意义或生产实践意义</td>
+                       <td style="text-align: left;">理论意义或生产实践意义</td>
                        <td align="center">5</td>
                        <td><input class="easyui-numberbox" id="score3" name="score3"   data-options="required:true"   precision="2" min="0" max="5"/></td>
                    </tr>
                    <tr>
                        <td width="30" rowspan="4" >能力水平40%</td>
                        <td align="right">4</td>
-                       <td  align="center">查询文献资料与综合运用知识能力</td>
+                       <td  style="text-align: left;">查询文献资料与综合运用知识能力</td>
                        <td align="right">10</td>
                        <td><input class="easyui-numberbox"   id="score4" name="score4"   data-options="required:true"  precision="2" min="0" max="10"/></td>
 
                    </tr>
                    <tr> <td>5</td>
-                        <td align="center" >研究方案的设计能力</td>
+                        <td style="text-align: left;">研究方案的设计能力</td>
                        <td align="center">10</td>
                        <td><input class="easyui-numberbox"  id="score5" name="score5"   data-options="required:true"  precision="2" min="0" max="10"/></td>
                    </tr>
                    <tr> <td>6</td>
-                       <td align="center" >研究方法和手段的运用能力</td>
+                       <td style="text-align: left;">研究方法和手段的运用能力</td>
                        <td align="center">10</td>
                        <td><input  class="easyui-numberbox"  id="score6" name="score6"  data-options="required:true"  precision="2" min="0" max="10"/></td>
                    </tr>
                    <tr> <td>7</td>
-                       <td align="center" >外文应用能力</td>
+                       <td style="text-align: left;" >外文应用能力</td>
                        <td align="center">10</td>
                        <td><input  class="easyui-numberbox"  id="score7" name="score7"  data-options="required:true"  precision="2" min="0" max="10" /></td>
 
@@ -96,13 +96,13 @@
                    <tr>
                        <td rowspan="2" width="30" >成果质量40%</td>
                        <td align="right">8</td>
-                       <td align="center" > 写作水平与写作规范</td>
+                       <td style="text-align: left;"> 写作水平与写作规范</td>
                        <td align="right">20</td>
                        <td><input class="easyui-numberbox" id="score8" name="score8"   data-options="required:true"  precision="2" min="0" max="20"/></td>
                    </tr>
                    <tr>
                        <td>9</td>
-                       <td align="center" >研究结果的理论或实际应用价值</td>
+                       <td style="text-align: left;" >研究结果的理论或实际应用价值</td>
                        <td align="center">20</td>
                        <td><input class="easyui-numberbox" id="score9"   name="score9"  data-options="required:true"  precision="2" min="0" max="20"/></td>
                    </tr>

@@ -4,6 +4,8 @@ import cn.zttek.thesis.common.base.BaseService;
 import cn.zttek.thesis.modules.enums.UserType;
 import cn.zttek.thesis.modules.mapper.AdviceMapper;
 import cn.zttek.thesis.modules.model.Advice;
+import cn.zttek.thesis.modules.model.Apply;
+import cn.zttek.thesis.modules.model.Org;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by Mankind on 2017/8/11.
  */
 @Service
-public class AdviceService extends BaseService<Advice> {
+public class AdviceService extends BaseService<Advice>{
     @Autowired
     private AdviceMapper adviceMapper;
 
@@ -62,7 +64,7 @@ public class AdviceService extends BaseService<Advice> {
      * @return
      * @throws Exception
      */
-    public PageInfo<Advice> listByUserType(Integer page, Integer rows, Long orgid, String keywords, UserType userType) throws Exception{
+    public PageInfo<Advice> listByUserType(Integer page, Integer rows,Long orgid,String keywords,UserType userType) throws Exception{
         log.info("===查询首页的公告列表===");
         PageHelper.startPage(page, rows);
         List<Advice> list = adviceMapper.listByUserType(orgid,keywords,userType);

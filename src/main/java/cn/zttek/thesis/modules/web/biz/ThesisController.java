@@ -50,7 +50,6 @@ public class ThesisController extends BaseController {
             return new Thesis();
         }
     }
-
     @RequestMapping(value = "/listAll", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
     public String listAll(Model model) throws Exception{
         Org org = ThesisParam.getCurrentOrg();
@@ -112,7 +111,7 @@ public class ThesisController extends BaseController {
         if(thesis.getId() == null || thesis.getId() <= 0){
             Project currentProj = ThesisParam.getCurrentProj();
             thesis.setUploadtime(new Timestamp(currentProj.getSubmitdate().getTime()));
-        }
+    }
         model.addAttribute("thesis", thesis);
         return "console/thesis/edit";
     }

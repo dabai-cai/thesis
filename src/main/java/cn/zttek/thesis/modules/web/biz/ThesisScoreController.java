@@ -7,6 +7,7 @@ import cn.zttek.thesis.modules.enums.DefenseStatus;
 import cn.zttek.thesis.modules.expand.ThesisExpand;
 import cn.zttek.thesis.modules.holder.TitleHolder;
 import cn.zttek.thesis.modules.model.*;
+import cn.zttek.thesis.modules.service.DefenseGroupService;
 import cn.zttek.thesis.modules.service.ScoreService;
 import cn.zttek.thesis.modules.service.ThesisService;
 import cn.zttek.thesis.modules.service.UserService;
@@ -38,6 +39,8 @@ public class ThesisScoreController extends BaseController {
     private ThesisService thesisService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private DefenseGroupService defenseGroupService;
 
 
     @ModelAttribute
@@ -67,10 +70,8 @@ public class ThesisScoreController extends BaseController {
     }
 
     @RequestMapping(value="/list3", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
-    public String list3(Model model)throws Exception{
-        User secretary = ThesisParam.getCurrentUser();
-        Project project = ThesisParam.getCurrentProj();
-        model.addAttribute("expands", scoreService.listBySecretary(project.getId(),secretary.getId()));
+    public String list3(Long groupid,Model model)throws Exception{
+        model.addAttribute("expands", scoreService.listBySecretary(groupid));
         return "console/thesis/score/list3";
     }
 
@@ -98,6 +99,9 @@ public class ThesisScoreController extends BaseController {
         model.addAttribute("general",scoreService.general(score));
         model.addAttribute("level",scoreService.thesisLevel(score));
         model.addAttribute("agree",scoreService.agree(score));
+        Project project=ThesisParam.getCurrentProj();
+        User student=ThesisParam.getCurrentUser();
+        model.addAttribute("defenseGroup",defenseGroupService.getByStudent(project.getId(),student.getId()));
         return "console/thesis/score/view";
     }
 
